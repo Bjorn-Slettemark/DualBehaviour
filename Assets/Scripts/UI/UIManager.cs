@@ -6,6 +6,13 @@ public class UIManager : MonoBehaviour
     public GameObject victoryScreen;
     public GameObject mainMenuScreen;
 
+    public GameEventListener Listener;
+
+    private void Awake()
+    {
+        Listener.Response.AddListener(HandleUIEvent);
+    }
+
     private void Start()
     {
         gameOverScreen.SetActive(false);
@@ -26,14 +33,14 @@ public class UIManager : MonoBehaviour
 
     private void OnEnable()
     {
-        GameManager.PlayerIsDead += ShowGameOverScreen;
-        GameManager.PlayerWon += ShowVictoryScreen;
+        //GameManager.PlayerIsDead += ShowGameOverScreen;
+        //GameManager.PlayerWon += ShowVictoryScreen;
     }
 
     private void OnDisable()
     {
-        GameManager.PlayerIsDead -= ShowGameOverScreen;
-        GameManager.PlayerWon -= ShowVictoryScreen;
+        //GameManager.PlayerIsDead -= ShowGameOverScreen;
+        //GameManager.PlayerWon -= ShowVictoryScreen;
     }
 
     private void ShowGameOverScreen()
@@ -61,5 +68,19 @@ public class UIManager : MonoBehaviour
         // Check the current state of the main menu screen and toggle it
         bool isMainMenuActive = mainMenuScreen.activeSelf;
         ShowMainMenu(!isMainMenuActive);
+    }
+
+    private void HandleUIEvent(string eventName)
+    {
+        switch (eventName)
+        {
+            case "Test":
+                Debug.Log("Test pressed");
+                break;
+            case "SettingsOpened":
+                // Code to open settings
+                break;
+                // Add cases for other event names as needed
+        }
     }
 }

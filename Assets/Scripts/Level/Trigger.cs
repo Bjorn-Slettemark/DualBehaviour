@@ -1,4 +1,4 @@
-using UnityEditor;
+
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
@@ -20,18 +20,6 @@ public class Trigger : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmos()
-    {
-        // Visualize the trigger area
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireCube(transform.position, transform.localScale);
-        Vector3 textPosition = transform.position;
-        Handles.Label(textPosition, this.name, new GUIStyle()
-        {
-            normal = { textColor = Color.white },
-            alignment = TextAnchor.MiddleCenter,
-            fontSize = 14
-        });
-    }
+
 }
 

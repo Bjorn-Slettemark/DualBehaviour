@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEditor; // Required for the Handles class
 using System.Collections.Generic;
 
 public class WinPoint : MonoBehaviour
@@ -25,7 +24,7 @@ public class WinPoint : MonoBehaviour
     private int enemiesLeftToKill;
     private void Start()
     {
-        totalEnemiesToKill = GameManager.instance.totalEnemies.Count;
+       // totalEnemiesToKill = GameManager.Instance.totalEnemies.Count;
         
         if (winAfterTimelimit)
         {
@@ -34,7 +33,7 @@ public class WinPoint : MonoBehaviour
     }
     private void Update()
     {
-        enemiesLeftToKill = totalEnemiesToKill - GameManager.instance.enemiesKilled;
+        //enemiesLeftToKill = totalEnemiesToKill - GameManager.instance.enemiesKilled;
 
         if (!isLevelWon && CheckWinConditions())
         {
@@ -56,10 +55,10 @@ public class WinPoint : MonoBehaviour
     // Check if all enemies are killed
     private bool AreAllEnemiesKilled()
     {
-        if (GameManager.instance.enemiesKilled == GameManager.instance.totalEnemies.Count)
-        {
-            return true;
-        }
+        //if (GameManager.Instance.enemiesKilled == GameManager.instance.totalEnemies.Count)
+        //{
+        //    return true;
+        //}
 
         return false;
     }
@@ -90,7 +89,7 @@ public class WinPoint : MonoBehaviour
         {
             Debug.Log("Level Won!");
             isLevelWon = true;
-            GameManager.instance.OnPlayerWin();
+            //GameManager.Instance.OnPlayerWin();
             // Additional logic for handling level completion can be added here if needed
         }
     }
@@ -151,64 +150,5 @@ public class WinPoint : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmos()
-    {
 
-        // Visualize the win conditions
-        Handles.color = Color.green;
-        Vector3 startPos = transform.position + Vector3.up * 3;
-        Vector3 offset = Vector3.down * 0.2f;
-
-        Handles.Label(startPos + offset, "Win Conditions", new GUIStyle()
-        {
-            normal = { textColor = Color.white },
-            alignment = TextAnchor.MiddleCenter,
-            fontSize = 20
-        });
-
-        offset += Vector3.down * 0.4f;
-
-        if (enterTriggerToWin)
-        {
-            Handles.Label(startPos + offset, "- Enter Trigger to Win", new GUIStyle()
-            {
-                normal = { textColor = Color.white },
-                alignment = TextAnchor.MiddleCenter,
-                fontSize = 14
-            });
-            offset += Vector3.down * 0.4f;
-        }
-
-        if (killAllEnemiesToWin)
-        {
-            Handles.Label(startPos + offset, "- Kill All Enemies to Win", new GUIStyle()
-            {
-                normal = { textColor = Color.white },
-                alignment = TextAnchor.MiddleCenter,
-                fontSize = 14
-            });
-            offset += Vector3.down * 0.4f;
-        }
-
-        if (totalEnemiesToKill > 0)
-        {
-            Handles.Label(startPos + offset, "- Kill " + enemiesLeftToKill + " Enemies to Win", new GUIStyle()
-            {
-                normal = { textColor = Color.white },
-                alignment = TextAnchor.MiddleCenter,
-                fontSize = 14
-            });
-            offset += Vector3.down * 0.4f;
-        }
-
-        if (winAfterTimelimit)
-        {
-            Handles.Label(startPos + offset, "- Win within " + timeLimit + " seconds", new GUIStyle()
-            {
-                normal = { textColor = Color.white },
-                alignment = TextAnchor.MiddleCenter,
-                fontSize = 14
-            });
-        }
-    }
 }

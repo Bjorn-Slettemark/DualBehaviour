@@ -33,6 +33,18 @@ public class DynamicCameraFollow : MonoBehaviour
     private Camera m_Camera;
     private Vector3 lastValidMouseWorldPosition;
 
+    [Header("Event Channels")]
+    public GameEventChannelSO spawnEventChannel; // Assign in the inspector
+
+    private void OnEnable()
+    {
+        spawnEventChannel.RegisterListener(HandleEvent, "PlayerSpawned");
+    }
+
+    private void OnDisable()
+    {
+        spawnEventChannel.UnregisterListener(HandleEvent);
+    }
     private void Start()
     {
         m_Camera = Camera.main;
@@ -43,6 +55,8 @@ public class DynamicCameraFollow : MonoBehaviour
         // If you want to also set an initial Z Offset based on the max zoom, do it here
         float initialZoomFactor = (maxZoom - minZoom) / (maxZoom - minZoom); // This will be 1, but it's shown for consistency
         cameraOffset.z = Mathf.Lerp(minZOffset, maxZOffset, initialZoomFactor);
+
+
     }
 
 
@@ -125,5 +139,12 @@ public class DynamicCameraFollow : MonoBehaviour
         averagePosition = (target.position + mouseWorldPosition) / 2;
         return averagePosition;
     }
-
+    private void HandleEvent(string eventName)
+    {
+        if (eventName == "PlayerSpawned")
+        {
+            InitializeCamera(GameObject.FindGameObjectWithTag("Player").transform);
+        }
+        
+    }
 }

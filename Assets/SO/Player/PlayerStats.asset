@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6537eb6ebbbcba4aacc572f367c1f22, type: 3}
+  m_Name: PlayerStats
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  health: {fileID: 11400000, guid: d940ba3352a42694c925a3744428f60a, type: 2}
+  maxQuantumLevel: 100
+  quantumLevel: {fileID: 11400000, guid: c85f279067524314c8fa07022f30129c, type: 2}
+  maxSpeed: 3
+  sprintSpeedMultiplier: 2
+  deceleration: 5
+  acceleration: 10
+  dashForce: 10
+  dashDuration: 0.5
+  dashCooldown: 2
+  offensiveSlots: 1
+  defensiveSlots: 1
+  modifierSlots: 1
