@@ -3,18 +3,12 @@ using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
 {
-    public HealthSystem healthSystem; // Reference to the HealthSystem component of the player
+    public PlayerStatsSO playerStats; // Reference to the HealthSystem component of the player
     public RectTransform barFill; // Reference to the fill image of the health bar
 
     private void Start()
     {
-        if (healthSystem == null)
-        {
-            // If the health system reference is not set, try to find it on the player
-            healthSystem = GameManager.instance.player.GetComponent<HealthSystem>();
-        }
-
-        if (healthSystem == null)
+        if (playerStats == null)
         {
             Debug.LogError("HealthSystem component not found on the player!");
             return;
@@ -33,7 +27,7 @@ public class HealthBar : MonoBehaviour
     private void UpdateHealthBar()
     {
         // Calculate the fill amount based on the current health percentage
-        float fillAmount = healthSystem.currentHealth / healthSystem.maxHealth;
+        float fillAmount = playerStats.Health / playerStats.maxHealth;
 
         // Clamp the fill amount between 0 and 1
         fillAmount = Mathf.Clamp01(fillAmount);

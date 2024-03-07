@@ -1,0 +1,4 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/UI/IngameHUD.uss?fileID=7433441132597879392&amp;guid=c73e40e531e681a4aab58aebaf636dcd&amp;type=3#IngameHUD" />
+    <ui:ProgressBar value="22" title="my-progress" name="health-bar" style="visibility: visible; bottom: auto; opacity: 1; transform-origin: center; justify-content: flex-start; align-self: auto; flex-direction: column; position: relative; top: 548px; left: -1px;" />
+</ui:UXML>

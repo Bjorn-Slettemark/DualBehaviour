@@ -18,12 +18,11 @@ public class AISenseSystem : MonoBehaviour
     private bool playerInVisionRange = false; // Flag to track if player is within vision range
     private NavMeshAgent navMeshAgent;
 
+    [SerializeField]
+    private GameEventChannelSO playerEventChannel;
     private void Start()
     {
-        if (GameManager.instance != null && GameManager.instance.player != null)
-        {
-            player = GameManager.instance.player.transform;
-        }
+
         navMeshAgent = GetComponent<NavMeshAgent>();
     }
 
@@ -118,5 +117,24 @@ public class AISenseSystem : MonoBehaviour
         Debug.Log("blimp!");
             OnHitReceived?.Invoke();
      
+    }
+
+
+    private void HandlePlayerSpawnEvent(string eventName)
+    {
+        if (eventName == "PlayerSpawned")
+        {
+            player = GameObject.FindGameObjectWithTag("Player").transform;
+        }
+
+    }
+    private void OnEnable()
+    {
+        playerEventChannel.RegisterListener(HandlePlayerSpawnEvent, "PlayerSpawned");
+    }
+
+    private void OnDisable()
+    {
+        playerEventChannel.UnregisterListener(HandlePlayerSpawnEvent);
     }
 }

@@ -32,7 +32,6 @@ public class BulletController : MonoBehaviour
         HealthSystem healthSystem = hitInfo.GetComponent<HealthSystem>();
         if (healthSystem != null)
         {
-            Debug.Log("hithithit");
             // Damage the hit object
             healthSystem.TakeDamage(damage);
         }

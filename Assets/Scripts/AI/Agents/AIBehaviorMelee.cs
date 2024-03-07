@@ -25,7 +25,6 @@ public class AIBehaviorMelee : MonoBehaviour, IAIBehavior
 
     private NavMeshAgent navMeshAgent;
     private SwordController swordController;
-
     public bool aggressive { get; set; }
 
     private void Awake()
@@ -49,7 +48,7 @@ public class AIBehaviorMelee : MonoBehaviour, IAIBehavior
         swordController = GetComponentInChildren<SwordController>();
 
 
-        player = GameManager.instance.player.transform;
+       
 
         if (navMeshAgent == null)
         {

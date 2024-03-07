@@ -81,7 +81,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ece50e4607ff4304da63a6e8c29bf9e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 150
   currentHealth: 0
 --- !u!114 &4994558495266909023
 MonoBehaviour:
@@ -96,15 +96,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  speed: 3
+  speed: 4
   rotationSpeed: 12
   dodgeDuration: 2
   minPatrolDistance: 10
   maxPatrolDistance: 20
   idleDuration: 1
-  attackDuration: 5
+  attackDuration: 4
   attackCooldown: 5
-  attackRange: 5
+  attackRange: 15
   dodgingCirclingSpeed: 100
 --- !u!114 &3670680113575923061
 MonoBehaviour:
@@ -122,6 +122,7 @@ MonoBehaviour:
   playerPosition: {x: 0, y: 0, z: 0}
   visionRange: 10
   fieldOfView: 120
+  playerEventChannel: {fileID: 11400000, guid: 510691ba3e6849d448f33659328afb04, type: 2}
 --- !u!54 &-6858190480908929078
 Rigidbody:
   m_ObjectHideFlags: 0

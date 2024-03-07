@@ -28,7 +28,7 @@ public class HealthSystem : MonoBehaviour
     {
         if (this.CompareTag("Player"))
         {
-            GameManager.instance.PlayerDied();
+            //GameManager.Instance.PlayerDied();
         }
         else
         {

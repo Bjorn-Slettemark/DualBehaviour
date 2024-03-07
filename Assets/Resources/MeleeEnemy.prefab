@@ -52,14 +52,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  currentState: 2
-  chaseSpeed: 2
+  chaseSpeed: 5
   rotationSpeed: 1
   attackRange: 3
   attackCooldown: 1
-  cooldownColor: {r: 0, g: 0, b: 1, a: 1}
-  debugSphereDuration: 0.1
-  aggressive: 0
+  attackDuration: 3
 --- !u!114 &2651123226012827285
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -72,7 +69,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ece50e4607ff4304da63a6e8c29bf9e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 50
   currentHealth: 0
 --- !u!114 &8354902912892941299
 MonoBehaviour:
@@ -87,7 +84,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  lastKnownPosition: {x: 0, y: 0, z: 0}
+  playerPosition: {x: 0, y: 0, z: 0}
   visionRange: 10
   fieldOfView: 120
 --- !u!54 &-6858190480908929078

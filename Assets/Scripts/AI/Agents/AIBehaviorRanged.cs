@@ -15,9 +15,6 @@
             Cooldown
         }
 
-        [Header("Player Interaction")]
-        public Transform player;
-
         [Header("Movement Settings")]
         public float speed = 3f;
         public float rotationSpeed = 1f;
@@ -41,8 +38,8 @@
         private EnemyGunController enemyGunController;
 
         private StateMachine<States, Driver> fsm;
-        private bool isAttacking = false;
-        private bool isOnAttackCooldown = false;
+        //private bool isAttacking = false;
+        //private bool isOnAttackCooldown = false;
         private Vector3 patrolDestination;
 
         private void Awake()
@@ -61,7 +58,6 @@
 
             if (aggressive) { fsm.Driver.OnAggressive.Invoke(); }
 
-            player = GameManager.instance.player.transform;
             navMeshAgent = GetComponent<NavMeshAgent>();
             aiSense = GetComponent<AISenseSystem>();
             enemyGunController = GetComponentInChildren<EnemyGunController>();
@@ -117,9 +113,9 @@
 
         private void Chasing_Update()
         {
-            navMeshAgent.SetDestination(player.position);
+            navMeshAgent.SetDestination(aiSense.player.position);
 
-            if (Vector3.Distance(transform.position, player.position) <= attackRange)
+            if (Vector3.Distance(transform.position, aiSense.player.position) <= attackRange)
             {
                 fsm.ChangeState(States.Attacking);
             }

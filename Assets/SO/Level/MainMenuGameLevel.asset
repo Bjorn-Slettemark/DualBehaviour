@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33c8978686258f945a54327c51713eb5, type: 3}
+  m_Name: MainMenuGameLevel
+  m_EditorClassIdentifier: 
+  OnEnterState:
+    m_PersistentCalls:
+      m_Calls: []
+  OnExitState:
+    m_PersistentCalls:
+      m_Calls: []
+  levelEventChannel: {fileID: 11400000, guid: c1111422abca47c4094f29068d8f6f54, type: 2}
+  sceneName: MainMenu
+  loadingScreenPrefab: {fileID: 6296524129658548436, guid: 117be6921313892479060b2b488b1743, type: 3}
