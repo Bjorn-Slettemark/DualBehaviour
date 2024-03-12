@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: PlayerData
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 692386718098970793, guid: b50eaed3d7f6e4044a1f8d5ab80c97d4, type: 3}
+  playerPosition: {x: 0, y: 0, z: 0}
+  dataName: PlayerData

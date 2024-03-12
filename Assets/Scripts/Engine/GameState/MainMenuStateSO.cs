@@ -1,15 +1,23 @@
 
 using UnityEngine;
 
-public class MainMenuStateSO : GameStateSO
+[CreateAssetMenu(fileName = "New MainMenuState", menuName = "Game States/Main Menu")]
+public class MainMenuState : GameStateSO
 {
-    public override void StateUpdate()
-    {
-
-    }
     public override void EnterState()
     {
         base.EnterState();
-        Debug.Log("Entered mainmenu state");
+        // Specific actions to initialize the main menu
+    }
+
+    public override void ExitState()
+    {
+        base.ExitState();
+        // Clean up before leaving the main menu
+    }
+
+    public override void StateUpdate()
+    {
+        // Handle updates specific to the main menu state
     }
 }
