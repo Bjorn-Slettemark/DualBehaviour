@@ -1,16 +1,16 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using System.Collections.Generic;
 
+[Icon("Assets/Editor/Icons/LevelLoaderIcon.png")]
 public class LevelLoaderManager : MonoBehaviour
 {
     public static LevelLoaderManager Instance { get; private set; }
-    public GameObject loadingScreenPrefab;
     private GameObject instantiatedLoadingScreenPrefab;
     private GameLevelSO currentLevel;
-
-    [SerializeField] private GameEventChannelSO levelEventChannel;
-
+    [SerializeField]
+    private List<GameLevelSO> gameLevels;
     void Awake()
     {
         if (Instance == null)
@@ -22,24 +22,40 @@ public class LevelLoaderManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        EventChannelManager.Instance.RegisterChannel(this.gameObject, "LevelLoadEventManager", LoadLevelEvents);
     }
 
-    public void LoadLevel(GameLevelSO newLevel)
+    public void LoadLevelEvents(string eventName)
     {
-        if (currentLevel == newLevel) return; // Prevent re-loading the same level
-
-        if (loadingScreenPrefab != null && instantiatedLoadingScreenPrefab == null)
+        foreach (var gameLevel in gameLevels)
         {
-            instantiatedLoadingScreenPrefab = Instantiate(loadingScreenPrefab);
+            if (gameLevel.sceneName == eventName)
+            {
+                LoadLevel(gameLevel);
+                break; // Exit the loop once the matching level is found and initiated for loading
+            }
+        }
+    }
+
+    public void LoadLevel(GameLevelSO newLevel, bool fromSaveGame = false)
+    {
+        //if (currentLevel == newLevel) return; // Prevent re-loading the same level
+
+        if (newLevel.loadingScreenPrefab != null && instantiatedLoadingScreenPrefab == null)
+        {
+            instantiatedLoadingScreenPrefab = Instantiate(newLevel.loadingScreenPrefab);
         }
 
         currentLevel?.ExitLevel();
         currentLevel = newLevel;
-        StartCoroutine(LoadLevelAsync(newLevel.sceneName));
+            StartCoroutine(LoadLevelAsync(newLevel.sceneName));
     }
 
     private IEnumerator LoadLevelAsync(string levelName)
     {
+        EventChannelManager.Instance.RaiseEvent("LevelEventChannel", "LevelLoading");
+
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(levelName);
         asyncLoad.allowSceneActivation = false;
 
@@ -60,7 +76,7 @@ public class LevelLoaderManager : MonoBehaviour
         }
 
         // Notify the rest of the game that the level has loaded
-        levelEventChannel.RaiseEvent("LevelLoaded");
+        EventChannelManager.Instance.RaiseEvent("LevelEventChannel", "LevelLoaded");
 
         currentLevel.EnterLevel(); // Assume GameLevelSO has an EnterLevel method to initialize the level
     }

@@ -6,6 +6,8 @@ public abstract class GameLevelSO : ScriptableObject
 
     public string sceneName;
 
+    public string gameLevelName;
+
     public GameObject loadingScreenPrefab;
 
     public virtual GameObject GetLoadingScreenPrefab()
@@ -22,11 +24,11 @@ public abstract class GameLevelSO : ScriptableObject
     // Method to be called when exiting the state
     public virtual void ExitLevel()
     {
-        levelEventChannel.RaiseEvent($"ExitLevel");
+        EventChannelManager.Instance.RaiseEvent("LevelEventChannel", "ExitLevel");
         // Additional exit logic
     }
 
     // Abstract method for state-specific functionality
     public abstract void LevelUpdate();
-
+    // Abstract method for state-specific functionality
 }

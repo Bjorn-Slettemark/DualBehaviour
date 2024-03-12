@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelEventChannel: {fileID: 11400000, guid: c1111422abca47c4094f29068d8f6f54, type: 2}
   sceneName: SampleScene
+  gameLevelName: Level1
   loadingScreenPrefab: {fileID: 6296524129658548436, guid: 117be6921313892479060b2b488b1743, type: 3}
   playerData: {fileID: 11400000, guid: 1b3556cf7dd81f84799d7c819ad93e70, type: 2}
