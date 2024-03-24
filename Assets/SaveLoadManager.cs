@@ -26,9 +26,44 @@ public class SaveLoadManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        EventChannelManager.Instance.RegisterChannel(this.gameObject, "SaveEventChannel", SaveEvent);
+        EventChannelManager.Instance.RegisterChannel(this.gameObject, "LoadEventChannel", LoadEvent);
+
+
     }
 
+    public void SaveEvent(string eventName)
+    {
+        GameState previousGameState = GameStateManager.Instance.CurrentState.gameState;
+        if (eventName.ToLower() == "Save".ToLower())
+        {
+            GameStateManager.Instance.ChangeState(GameState.Saving);
+            SaveBlueprint(gameSaveBlueprintSO[0]);
+        }
+        if (eventName.ToLower() == "Done")
+        {
+            GameStateManager.Instance.ChangeState(previousGameState);
+        }
+    }
+    public void LoadEvent(string eventName)
+    {
+        GameState previousGameState = GameStateManager.Instance.CurrentState.gameState;
+        GameState nextGameState = GameState.Default;
 
+        if (eventName.ToLower() == "Load".ToLower())
+        {
+            GameStateManager.Instance.ChangeState(GameState.Loading);
+            LoadBlueprint(gameSaveBlueprintSO[0]);
+            nextGameState = gameSaveBlueprintSO[0].postLoadGameState;
+
+        }
+        if (eventName.ToLower() == "Done")
+        {
+
+            GameStateManager.Instance.ChangeState(nextGameState);
+
+        }
+    }
     // Save all game data using the SaveConfigSOs
     public void SaveBlueprint(SaveBlueprintSO saveConfig)
     {

@@ -12,5 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6bb29290ac3ae04a9c0d0d7a5635dc6, type: 3}
   m_Name: LoadingState
   m_EditorClassIdentifier: 
-  gameState: 0
-  stateName: 
+  gameState: 7

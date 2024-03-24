@@ -12,5 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44fec2459e58fa54aa1a4d570ab47be4, type: 3}
   m_Name: SavingState
   m_EditorClassIdentifier: 
-  gameState: 0
-  stateName: 
+  gameState: 6

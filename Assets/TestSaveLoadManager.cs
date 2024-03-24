@@ -9,13 +9,13 @@ public class TestSaveLoadManager : MonoBehaviour
         // Save player data when pressing '1'
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            EventChannelManager.Instance.RaiseEvent("SaveLoadEventChannel", "PlayerSave");
+            EventChannelManager.Instance.RaiseEvent("SaveEventChannel", "Save");
         }
 
         // Load player data when pressing '2'
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            EventChannelManager.Instance.RaiseEvent("SaveLoadEventChannel", "PlayerData");
+            EventChannelManager.Instance.RaiseEvent("LoadEventChannel", "Load");
 
         }
     }

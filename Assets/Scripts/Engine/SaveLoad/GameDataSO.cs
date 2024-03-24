@@ -16,6 +16,6 @@ public class GameDataSO : ScriptableObject, IGameData
     public virtual string UserId { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
     public virtual string SaveTimestamp { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
-    // Called when the script instance is being loaded
+
 
 }

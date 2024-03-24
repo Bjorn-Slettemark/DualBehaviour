@@ -107,8 +107,8 @@ public class EventChannelManagerEditor : Editor
                 bool isChannelSelected = (channelMask == -1) || ((channelMask & (1 << channelIndex)) != 0);
                 if (isChannelSelected)
                 {
-                    string timeOnly = history.Timestamp.ToString("HH:mm:ss");
-                    EditorGUILayout.LabelField($"Time: {timeOnly}, Channel: {history.ChannelName}, Event: {history.EventName}");
+                    string timeOnly = history.Timestamp.ToString("mm:ss");
+                    EditorGUILayout.LabelField($"{timeOnly}, {history.ChannelName}, {history.EventName}");
                 }
             }
         }

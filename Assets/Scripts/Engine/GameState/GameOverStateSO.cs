@@ -1,8 +1,8 @@
 
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New MainMenuState", menuName = "Game States/MainMenu")]
-public class MainMenuStateSO : GameStateSO
+[CreateAssetMenu(fileName = "New GameOverState", menuName = "Game States/GameOver")]
+public class GameOverStateSO : GameStateSO
 {
     public override void EnterState()
     {

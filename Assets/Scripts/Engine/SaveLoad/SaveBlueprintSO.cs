@@ -4,8 +4,9 @@ using UnityEngine;
 //[CreateAssetMenu(fileName = "NewSaveConfigSO", menuName = "Game/SaveConfigSO")]
 public class SaveBlueprintSO : ScriptableObject
 {
-    public List<GameDataSO> gameDataSO; // Reference to the specific game data
+    public List<GameDataSO> gameDataSOList; // Reference to the specific game data
 
+    public GameState postLoadGameState;
     // Define any other parameters necessary for saving/loading
 
     // Method to execute save logic

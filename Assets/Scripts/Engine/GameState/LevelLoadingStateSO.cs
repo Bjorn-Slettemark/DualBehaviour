@@ -1,8 +1,8 @@
 
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New MainMenuState", menuName = "Game States/MainMenu")]
-public class MainMenuStateSO : GameStateSO
+[CreateAssetMenu(fileName = "New LevelLoadingState", menuName = "Game States/LevelLoading")]
+public class LevelLoadingStateSO : GameStateSO
 {
     public override void EnterState()
     {

@@ -420,9 +420,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initialState: 2
   gameStates:
-  - {fileID: 11400000, guid: ce7a8ff07b0f0324fabf417eefdcb9ed, type: 2}
+  - {fileID: 11400000, guid: de3d891f6946bbb4b9ebbe2322a68034, type: 2}
   - {fileID: 11400000, guid: f2cc102749cc57a4ca4295d503c14d8c, type: 2}
-  defaultStateSO: {fileID: 0}
+  - {fileID: 11400000, guid: 845970cfe0790bc4fa579dbc49396737, type: 2}
+  - {fileID: 11400000, guid: c20b317780ac5ed42a6e8f8017f1ebc9, type: 2}
+  - {fileID: 11400000, guid: 7f63e79bc1d0f234db4fff53fed87abf, type: 2}
+  - {fileID: 11400000, guid: 3864fb9501377754f9f3cc081f855d5e, type: 2}
+  - {fileID: 11400000, guid: fb019c1d1212f7f41b153d050ab4d22b, type: 2}
+  - {fileID: 11400000, guid: 8989de6d7ee091f49b8ff5a43a7a1fb7, type: 2}
+  defaultStateSO: {fileID: 11400000, guid: 446a1f8a69022cf47be00c4701f85364, type: 2}
 --- !u!4 &1091187334
 Transform:
   m_ObjectHideFlags: 0
@@ -456,6 +462,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c1111422abca47c4094f29068d8f6f54, type: 2}
   - {fileID: 11400000, guid: 510691ba3e6849d448f33659328afb04, type: 2}
   - {fileID: 11400000, guid: 4d0235acd2989f442a7cd24894ea6e49, type: 2}
+  - {fileID: 11400000, guid: ece2ea1bed216934fa8c3cbc5c7e94d8, type: 2}
 --- !u!114 &1091187336
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -495,6 +502,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c0e5cf17369b494c8ac1544ace37b3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerData: {fileID: 11400000, guid: 1b3556cf7dd81f84799d7c819ad93e70, type: 2}
 --- !u!1 &1515504036
 GameObject:
   m_ObjectHideFlags: 0
