@@ -34,6 +34,7 @@ public class GameEventChannelSOEditor : Editor
             {
                 foreach (var listenerInfo in listenersInfo)
                 {
+
                     EditorGUILayout.LabelField($"Event: {listenerInfo.EventName}, Listener: {listenerInfo.Listener.Target.GetType()}.{listenerInfo.Listener.Method.Name}");
                 }
             }

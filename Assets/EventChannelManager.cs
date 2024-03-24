@@ -70,6 +70,20 @@ public class EventChannelManager : MonoBehaviour
         Debug.LogWarning($"EventChannelManager: Channel not found - {channelName}");
         return null;
     }
+    public void RegisterForAllChannels(GameObject subscriber, System.Action<string> callback)
+    {
+        foreach (var channelName in eventChannelDictionary.Keys)
+        {
+            RegisterChannel(subscriber, channelName, callback);
+        }
+    }
+    public void UnregisterForAllChannels(GameObject subscriber, System.Action<string> callback)
+    {
+        foreach (var channelName in eventChannelDictionary.Keys)
+        {
+            UnregisterChannel(subscriber, channelName);
+        }
+    }
 
     public void RegisterChannel(GameObject subscriber, string channelName, System.Action<string> callback)
     {

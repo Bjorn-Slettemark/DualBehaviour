@@ -26,7 +26,7 @@ public class GameStateManager : MonoBehaviour
     [SerializeField] private GameState initialState; // Use the enum for the initial state
     private GameStateSO currentState;
 
-    [SerializeField] private List<GameStateSO> gameStates;
+    [SerializeField] private List<GameStateSO> gameStates = new List<GameStateSO>();
 
     // This dictionary maps GameState enums to their corresponding GameStateSO instances.
     private Dictionary<GameState, GameStateSO> stateDictionary = new Dictionary<GameState, GameStateSO>();
@@ -59,6 +59,15 @@ public class GameStateManager : MonoBehaviour
         {
             ChangeState(initialState); // Change to initialState as usual
         }
+
+        EventChannelManager.Instance.RegisterForAllChannels(this.gameObject, eventCheck);
+
+
+
+    }
+
+    private void eventCheck(string eventName)
+    {
     }
 
     private void SetupSingleton()
@@ -76,20 +85,27 @@ public class GameStateManager : MonoBehaviour
 
     private void InitializeStateDictionary()
     {
+        if (gameStates == null)
+        {
+            Debug.LogError("gameStates list is null.");
+            return;
+        }
+
         foreach (var gameState in gameStates)
         {
-            if (!stateDictionary.ContainsKey(gameState.gameState)) // Assuming GameStateSO has a public GameState enum field
+            if (gameState == null)
+            {
+                Debug.LogError("Found a null GameStateSO in the gameStates list.");
+                continue;
+            }
+
+            if (!stateDictionary.ContainsKey(gameState.gameState))
             {
                 stateDictionary.Add(gameState.gameState, gameState);
             }
         }
-
-        // Optionally, log if the initialStateEnum is not in gameStates
-        if (!stateDictionary.ContainsKey(initialState))
-        {
-            Debug.LogError("Initial state enum value not found in gameStates list!");
-        }
     }
+
 
     public void ChangeState(GameState newStateEnum)
     {
@@ -109,5 +125,11 @@ public class GameStateManager : MonoBehaviour
     private void Update()
     {
         currentState?.StateUpdate();
+    }
+
+    private void OnDisable()
+    {
+        EventChannelManager.Instance.UnregisterForAllChannels(this.gameObject, eventCheck);
+
     }
 }

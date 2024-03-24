@@ -23,7 +23,6 @@ public class LevelLoaderManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        EventChannelManager.Instance.RegisterChannel(this.gameObject, "LevelLoadEventManager", LoadLevelEvents);
     }
 
     public void LoadLevelEvents(string eventName)

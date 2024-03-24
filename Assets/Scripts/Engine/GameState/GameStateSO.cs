@@ -7,14 +7,11 @@ public abstract class GameStateSO : ScriptableObject
 {
     public GameState gameState;
 
-    [SerializeField]
-    private string stateName;
-
     // Method to be called when entering the state
     public virtual void EnterState()
     {
-        EventChannelManager.Instance.RaiseEvent("GameStateEventChannel", stateName);
-
+        // Use gameState.ToString() to ensure dynamic state name is passed
+        EventChannelManager.Instance.RaiseEvent("GameStateEventChannel", gameState.ToString());
     }
 
     // Method to be called when exiting the state

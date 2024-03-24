@@ -1,13 +1,15 @@
+
+
 using UnityEngine;
 using UnityEditor;
 using System.IO;
 using UnityEditor.Compilation;
+using System;
+using System.Reflection;
 
 public class StateSoFactory : EditorWindow
 {
     string stateName = "NewState";
-    private static bool shouldCreateSO = false;
-    private static string pendingSOName = "";
 
     [MenuItem("Tools/State SO Factory")]
     public static void ShowWindow()
@@ -17,12 +19,10 @@ public class StateSoFactory : EditorWindow
 
     private void OnEnable()
     {
-        AssemblyReloadEvents.afterAssemblyReload += AfterAssemblyReload;
-    }
-
-    private void OnDisable()
-    {
-        AssemblyReloadEvents.afterAssemblyReload -= AfterAssemblyReload;
+        if (SessionState.GetBool("shouldCreateSO", false))
+        {
+            AssemblyReloadEvents.afterAssemblyReload += AfterAssemblyReload;
+        }
     }
 
     void OnGUI()
@@ -34,11 +34,11 @@ public class StateSoFactory : EditorWindow
         {
             GenerateStateScript(stateName);
             AssetDatabase.Refresh();
-            pendingSOName = stateName;
-            shouldCreateSO = true;
+            SessionState.SetString("pendingSOName", stateName);
+            SessionState.SetBool("shouldCreateSO", true);
+            AssemblyReloadEvents.afterAssemblyReload += AfterAssemblyReload; // Subscribe only when needed
         }
     }
-
     static void GenerateStateScript(string name)
     {
         string scriptPath = $"Assets/Scripts/Engine/GameState/{name}StateSO.cs";
@@ -77,34 +77,63 @@ public class {name}StateSO : GameStateSO
 
     private static void AfterAssemblyReload()
     {
-        if (shouldCreateSO)
+        // Proceed to check if SO should be created
+        if (SessionState.GetBool("shouldCreateSO", false))
         {
-            CreateSOInstance(pendingSOName);
-            shouldCreateSO = false;
-            pendingSOName = "";
+            CreateSOInstance(SessionState.GetString("pendingSOName", ""));
+            SessionState.SetBool("shouldCreateSO", false);
+            AssemblyReloadEvents.afterAssemblyReload -= AfterAssemblyReload; // Unsubscribe after use
         }
     }
-
     static void CreateSOInstance(string name)
     {
         string typeName = $"{name}StateSO";
+
+        Debug.Log($"Looking up type: {typeName}");
 
         System.Type type = System.Reflection.Assembly.GetAssembly(typeof(GameStateSO)).GetType(typeName);
         if (type != null && type.IsSubclassOf(typeof(ScriptableObject)))
         {
             ScriptableObject asset = ScriptableObject.CreateInstance(type);
+
+            // Assuming GameState is an enum or class with a static method/property to get its instance
+            GameState gameState = GetGameStateByName(name); // Implement this method based on your GameState definition
+
+            string stateNameWithoutSuffix = name.Replace("StateSO", ""); // Assuming the convention matches
+
+            // Use reflection to set private or protected fields, if necessary
+            type.GetField("gameState", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)?.SetValue(asset, gameState);
+            type.GetField("stateName", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)?.SetValue(asset, stateNameWithoutSuffix);
+
+            if (!AssetDatabase.IsValidFolder("Assets/SO"))
+                AssetDatabase.CreateFolder("Assets", "SO");
             if (!AssetDatabase.IsValidFolder("Assets/SO/GameState"))
-                AssetDatabase.CreateFolder("Assets", "SO/GameState");
+                AssetDatabase.CreateFolder("Assets/SO", "GameState");
+
             AssetDatabase.CreateAsset(asset, $"Assets/SO/GameState/{name}State.asset");
             AssetDatabase.SaveAssets();
-
+            AssetDatabase.Refresh(); // Ensure the AssetDatabase is refreshed
 
             EditorUtility.FocusProjectWindow();
             Selection.activeObject = asset;
+
+            Debug.Log($"Created and assigned values to {name}.");
         }
         else
         {
-            Debug.LogError("Type not found. Make sure the script compiles correctly and try again.");
+            Debug.LogError($"Type not found: {typeName}. Ensure the script has compiled and the type name is correct.");
         }
     }
+
+    // Example implementation if GameState is an enum
+    // Adjust this method to fit your actual GameState implementation
+    private static GameState GetGameStateByName(string name)
+    {
+        if (Enum.TryParse<GameState>(name, out GameState result))
+        {
+            return result;
+        }
+        return default; // Or a specific default value
+    }
+
 }

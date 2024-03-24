@@ -9,8 +9,7 @@ public class IngameGameLevelSO : GameLevelSO
     {
         base.EnterLevel();
         Debug.Log("Entering level" + gameLevelName + " , spawning player");
-        EventChannelManager.Instance.RaiseEvent("PlayerEventChannel", "SpawnPlayer");
-        //Instantiate(playerData.playerPrefab, Vector3.zero, Quaternion.identity);
+        EventChannelManager.Instance.RaiseEvent("GameStateEventChannel", "SpawnPlayer");
     }
     public override void LevelUpdate()
     {
