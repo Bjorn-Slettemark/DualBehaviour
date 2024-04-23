@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: LoadingState
   m_EditorClassIdentifier: 
   gameState: 7
+  gameStateEventChannel: {fileID: 11400000, guid: e308816050cc5474788703d53954bb52, type: 2}

@@ -15,6 +15,12 @@ public class SaveLoadManager : MonoBehaviour
 
     public List<SaveBlueprintSO> gameSaveBlueprintSO; // List to hold SaveConfigSO ScriptableObjects
 
+    [SerializeField]
+    GameEventChannelSO saveEventChannel;
+    [SerializeField]
+    GameEventChannelSO loadEventChannel;
+
+
     private void Awake()
     {
         if (Instance == null)
@@ -26,8 +32,8 @@ public class SaveLoadManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        EventChannelManager.Instance.RegisterChannel(this.gameObject, "SaveEventChannel", SaveEvent);
-        EventChannelManager.Instance.RegisterChannel(this.gameObject, "LoadEventChannel", LoadEvent);
+        EventChannelManager.Instance.RegisterChannel(this.gameObject, saveEventChannel, SaveEvent);
+        EventChannelManager.Instance.RegisterChannel(this.gameObject, loadEventChannel, LoadEvent);
 
 
     }

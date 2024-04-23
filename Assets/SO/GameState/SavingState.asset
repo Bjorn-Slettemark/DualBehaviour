@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: SavingState
   m_EditorClassIdentifier: 
   gameState: 6
+  gameStateEventChannel: {fileID: 11400000, guid: e308816050cc5474788703d53954bb52, type: 2}

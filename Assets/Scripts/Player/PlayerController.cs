@@ -13,6 +13,10 @@ public class PlayerController : MonoBehaviour
     private bool positionLoaded = false;
 
     [SerializeField]
+    private GameEventChannelSO saveEventChannel;
+    [SerializeField]
+    private GameEventChannelSO loadEventChannel;
+    [SerializeField]
     private PlayerDataSO playerData;
 
     private void Start()
@@ -22,9 +26,9 @@ public class PlayerController : MonoBehaviour
         // Subscribe to the event when game data is loaded. Adjust "GameEventChannel" and "GameDataLoaded" as needed.
         if (EventChannelManager.Instance != null)
         {
-            EventChannelManager.Instance.RegisterEvent(gameObject, "SaveLoadEventChannel", "PlayerSave", SavePlayerData);
+            EventChannelManager.Instance.RegisterEvent(gameObject, saveEventChannel, "PlayerSave", SavePlayerData);
 
-            EventChannelManager.Instance.RegisterEvent(gameObject, "SaveLoadEventChannel", "PlayerData", UpdatePlayerPositionFromEventData);
+            EventChannelManager.Instance.RegisterEvent(gameObject, loadEventChannel, "PlayerData", UpdatePlayerPositionFromEventData);
         }
     }
 

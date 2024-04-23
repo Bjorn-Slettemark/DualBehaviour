@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class SpawnNotifier : MonoBehaviour
 {
-    public GameEventChannelSO eventChannel; // Assign this in the inspector
     public string eventName = "ObjectSpawned"; // Default event name, can be overridden in the inspector for specific cases
-
+    [SerializeField]
+    private GameEventChannelSO playerEventChannel;
     // Use this for initialization
     void Start()
     {
@@ -13,9 +13,10 @@ public class SpawnNotifier : MonoBehaviour
 
     private void NotifySpawned()
     {
-        if (eventChannel != null)
+        if (playerEventChannel != null)
         {
-            eventChannel.RaiseEvent(eventName);
+            EventChannelManager.Instance.RaiseEvent(playerEventChannel, "PlayerSpawned");
+            //eventChannel.RaiseEvent(eventName);
             //Debug.Log($"{gameObject.name} has spawned, event {eventName} raised.");
         }
         else

@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: IngameState
   m_EditorClassIdentifier: 
   gameState: 2
-  stateName: Ingame
+  gameStateEventChannel: {fileID: 11400000, guid: e308816050cc5474788703d53954bb52, type: 2}

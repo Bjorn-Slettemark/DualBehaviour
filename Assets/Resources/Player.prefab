@@ -53,6 +53,8 @@ MonoBehaviour:
   moveSpeed: 3
   rotationSpeed: 2
   gunController: {fileID: 8847643173255438811}
+  saveEventChannel: {fileID: 11400000, guid: 4d0235acd2989f442a7cd24894ea6e49, type: 2}
+  loadEventChannel: {fileID: 11400000, guid: ece2ea1bed216934fa8c3cbc5c7e94d8, type: 2}
   playerData: {fileID: 11400000, guid: 1b3556cf7dd81f84799d7c819ad93e70, type: 2}
 --- !u!114 &2354498164421437581
 MonoBehaviour:
@@ -133,8 +135,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d0326b9a4fe56444ba6992f4dddc22d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eventChannel: {fileID: 11400000, guid: 510691ba3e6849d448f33659328afb04, type: 2}
   eventName: PlayerSpawned
+  playerEventChannel: {fileID: 11400000, guid: 510691ba3e6849d448f33659328afb04, type: 2}
 --- !u!1 &913068223119294697
 GameObject:
   m_ObjectHideFlags: 0
