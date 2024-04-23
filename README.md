@@ -1,2 +1,2 @@
 # Dual Behaviour Unity3D
-A rapid development framework
+A game framework for faster development
