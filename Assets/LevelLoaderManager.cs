@@ -11,18 +11,20 @@ public class LevelLoaderManager : MonoBehaviour
     private GameLevelSO currentLevel;
     [SerializeField]
     private List<GameLevelSO> gameLevels;
+
+    [SerializeField]
+    private GameEventChannelSO levelEventChannel;
     void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else if (Instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
+            return;
         }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
 
+        EventChannelManager.Instance.RegisterChannel(this.gameObject, levelEventChannel, LoadLevelEvents);
     }
 
     public void LoadLevelEvents(string eventName)
@@ -53,7 +55,8 @@ public class LevelLoaderManager : MonoBehaviour
 
     private IEnumerator LoadLevelAsync(string levelName)
     {
-        EventChannelManager.Instance.RaiseEvent("LevelEventChannel", "LevelLoading");
+        if (this == null) yield break;
+        EventChannelManager.Instance.RaiseEvent(levelEventChannel, "LevelLoading");
 
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(levelName);
         asyncLoad.allowSceneActivation = false;
@@ -75,8 +78,13 @@ public class LevelLoaderManager : MonoBehaviour
         }
 
         // Notify the rest of the game that the level has loaded
-        EventChannelManager.Instance.RaiseEvent("LevelEventChannel", "LevelLoaded");
+        EventChannelManager.Instance.RaiseEvent(levelEventChannel, "LevelLoaded");
 
         currentLevel.EnterLevel(); // Assume GameLevelSO has an EnterLevel method to initialize the level
+    }
+
+    void OnDestroy()
+    {
+        EventChannelManager.Instance.UnregisterChannel(this.gameObject, levelEventChannel);
     }
 }

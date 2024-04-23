@@ -9,8 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27a8c098f30d18d4190fb6f75d4d811c, type: 3}
-  m_Name: IntroState
+  m_Script: {fileID: 11500000, guid: 1e771bf476644c54f86e8bd4cc468a66, type: 3}
+  m_Name: AIState
   m_EditorClassIdentifier: 
-  gameState: 1
-  gameStateEventChannel: {fileID: 11400000, guid: e308816050cc5474788703d53954bb52, type: 2}
+  listenChannel: 0
+  triggerEventName: 
+  transitions:
+  - eventName: 
+    targetState: {fileID: 0}

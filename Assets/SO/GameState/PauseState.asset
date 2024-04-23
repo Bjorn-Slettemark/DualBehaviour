@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: PauseState
   m_EditorClassIdentifier: 
   gameState: 4
-  stateName: 
+  gameStateEventChannel: {fileID: 11400000, guid: e308816050cc5474788703d53954bb52, type: 2}

@@ -46,6 +46,9 @@ GameObject:
   - component: {fileID: -6858190480908929078}
   - component: {fileID: 5728203279210750284}
   - component: {fileID: 7118998666574267278}
+  - component: {fileID: 7711668641270169300}
+  - component: {fileID: 949120736614778353}
+  - component: {fileID: -1598163128217182205}
   m_Layer: 6
   m_Name: RangedEnemy
   m_TagString: Untagged
@@ -90,12 +93,11 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2396882793819228173}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 70a74d0c44618114783f6bc5f07df895, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
   speed: 4
   rotationSpeed: 12
   dodgeDuration: 2
@@ -193,6 +195,43 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 3.15, z: 1}
   m_Center: {x: 0, y: -0.09, z: 0}
+--- !u!114 &7711668641270169300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2396882793819228173}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13c593d059771ed4f86fc93015ec4921, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &949120736614778353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2396882793819228173}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82cb9dbe86f7fc74787c1a88d4f997ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentState: 0
+--- !u!114 &-1598163128217182205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2396882793819228173}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a353a51f0b42f2347a79ec7b3d2dae0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7841355054551153488
 GameObject:
   m_ObjectHideFlags: 0

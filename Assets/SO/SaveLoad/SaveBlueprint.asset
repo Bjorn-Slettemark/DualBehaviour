@@ -14,4 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameDataSOList:
   - {fileID: 11400000, guid: 1b3556cf7dd81f84799d7c819ad93e70, type: 2}
+  saveEventChannel: {fileID: 11400000, guid: 4d0235acd2989f442a7cd24894ea6e49, type: 2}
+  loadEventChannel: {fileID: 11400000, guid: ece2ea1bed216934fa8c3cbc5c7e94d8, type: 2}
   postLoadGameState: 3

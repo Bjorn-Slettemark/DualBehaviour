@@ -5,6 +5,10 @@ using UnityEngine;
 public class SaveBlueprintSO : ScriptableObject
 {
     public List<GameDataSO> gameDataSOList; // Reference to the specific game data
+    [SerializeField]
+    private GameEventChannelSO saveEventChannel;
+    [SerializeField]
+    private GameEventChannelSO loadEventChannel;
 
     public GameState postLoadGameState;
     // Define any other parameters necessary for saving/loading
@@ -13,7 +17,7 @@ public class SaveBlueprintSO : ScriptableObject
     public void Save()
     {
         // Custom save logic here
-        EventChannelManager.Instance.RaiseEvent("SaveLoadEventChannel", "PlayerSave");
+        EventChannelManager.Instance.RaiseEvent(saveEventChannel, "PlayerSave");
     }
 
     // Method to execute load logic
@@ -21,7 +25,7 @@ public class SaveBlueprintSO : ScriptableObject
     {
         // Custom load logic here
         // Example: SaveLoadManager.Instance.LoadGame(gameDataSO);
-        EventChannelManager.Instance.RaiseEvent("SaveLoadEventChannel", "PlayerData");
+        EventChannelManager.Instance.RaiseEvent(loadEventChannel, "PlayerData");
 
     }
 }

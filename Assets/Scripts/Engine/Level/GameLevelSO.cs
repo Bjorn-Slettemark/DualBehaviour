@@ -2,13 +2,16 @@ using UnityEngine;
 
 public abstract class GameLevelSO : ScriptableObject
 {
-    public GameEventChannelSO levelEventChannel;
+
 
     public string sceneName;
 
     public string gameLevelName;
 
     public GameObject loadingScreenPrefab;
+
+    [SerializeField]
+    private GameEventChannelSO levelEventChannel;
 
     public virtual GameObject GetLoadingScreenPrefab()
     {
@@ -17,14 +20,14 @@ public abstract class GameLevelSO : ScriptableObject
     // Method to be called when entering the state
     public virtual void EnterLevel()
     {
-        EventChannelManager.Instance.RaiseEvent("LevelEventChannel", "EnterLevel");
+        EventChannelManager.Instance.RaiseEvent(levelEventChannel, "EnterLevel");
         // Additional enter logic
     }
 
     // Method to be called when exiting the state
     public virtual void ExitLevel()
     {
-        EventChannelManager.Instance.RaiseEvent("LevelEventChannel", "ExitLevel");
+        EventChannelManager.Instance.RaiseEvent(levelEventChannel, "ExitLevel");
         // Additional exit logic
     }
 

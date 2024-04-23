@@ -17,7 +17,6 @@ public enum GameState
     // Add more states as needed
 }
 [Icon("Assets/Editor/Icons/GameManagerIcon.png")]
-
 public class GameStateManager : MonoBehaviour
 {
     public static GameStateManager Instance { get; private set; }
@@ -46,8 +45,16 @@ public class GameStateManager : MonoBehaviour
 
     private void Awake()
     {
-        SetupSingleton();
-        InitializeStateDictionary();
+        if (Instance != null && Instance != this)
+        {
+            DestroyImmediate(gameObject);
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        InitializeStateDictionary();  // Make sure to initialize it here to handle editor and play mode initialization
 
         // Set to default state if initialState isn't available
         if (!stateDictionary.ContainsKey(initialState))
@@ -65,13 +72,25 @@ public class GameStateManager : MonoBehaviour
 
 
     }
-
+    void OnEnable()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        // Additional setup as necessary, ensuring it's editor-friendly.
+    }
     private void eventCheck(string eventName)
     {
     }
 
     private void SetupSingleton()
     {
+        if (Instance != null && Instance != this)
+        {
+            DestroyImmediate(gameObject); // Use DestroyImmediate to handle cleanup directly in editor mode.
+            return;
+        }
         if (Instance == null)
         {
             Instance = this;
@@ -129,7 +148,10 @@ public class GameStateManager : MonoBehaviour
 
     private void OnDisable()
     {
-        EventChannelManager.Instance.UnregisterForAllChannels(this.gameObject, eventCheck);
-
+        EventChannelManager.Instance.UnregisterForAllChannels(this.gameObject);
+        if (Instance == this)
+        {
+            Instance = null;  // Clear the static instance if this object is disabled
+        }
     }
 }

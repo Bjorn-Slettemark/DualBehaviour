@@ -65,17 +65,17 @@ public class EventChannelManagerEditor : Editor
             selectedChannelIndexForRaisingEvent = EditorGUILayout.Popup("Event Channel:", selectedChannelIndexForRaisingEvent, channelNames.ToArray());
             eventNameToRaise = EditorGUILayout.TextField("Event Name:", eventNameToRaise);
 
-            if (GUILayout.Button("Raise Event", GUILayout.ExpandWidth(true)))
-            {
-                if (!string.IsNullOrEmpty(eventNameToRaise) && selectedChannelIndexForRaisingEvent >= 0 && selectedChannelIndexForRaisingEvent < channelNames.Count)
+                if (GUILayout.Button("Raise Event", GUILayout.ExpandWidth(true)))
                 {
-                    string channelName = channelNames[selectedChannelIndexForRaisingEvent];
-                    manager.RaiseEvent(channelName, eventNameToRaise);
-                    eventNameToRaise = "";
+                    if (!string.IsNullOrEmpty(eventNameToRaise) && selectedChannelIndexForRaisingEvent >= 0 && selectedChannelIndexForRaisingEvent < channelNames.Count)
+                    {
+                        GameEventChannelSO channel = manager.EventChannels[selectedChannelIndexForRaisingEvent];
+                        manager.RaiseEvent(channel, eventNameToRaise);
+                        eventNameToRaise = ""; // Clear the input field after raising the event
+                    }
                 }
-            }
 
-            EditorGUILayout.Space();
+                EditorGUILayout.Space();
 
 
                 channelMask = EditorGUILayout.MaskField("Filter Channels:", channelMask, channelNames.ToArray());
@@ -108,10 +108,11 @@ public class EventChannelManagerEditor : Editor
                 if (isChannelSelected)
                 {
                     string timeOnly = history.Timestamp.ToString("mm:ss");
-                    EditorGUILayout.LabelField($"{timeOnly}, {history.ChannelName}, {history.EventName}");
+                    EditorGUILayout.LabelField($"{timeOnly}, {history.ChannelName}, {history.EventName}, Sender: {history.SenderName}");
                 }
             }
         }
         EditorGUILayout.EndScrollView();
     }
+
 }

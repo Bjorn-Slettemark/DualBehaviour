@@ -5,6 +5,8 @@ using System;
 [CreateAssetMenu(fileName = "New GameEventChannel", menuName = "Events/Game Event Channel")]
 public class GameEventChannelSO : ScriptableObject
 {
+
+
     private const string AllEventsKey = "ALL"; // Special key for listeners interested in all events
     private Dictionary<Action<string>, string> listeners = new Dictionary<Action<string>, string>();
 
