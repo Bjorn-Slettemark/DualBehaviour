@@ -5,6 +5,7 @@ using System.Diagnostics;
 using UnityEngine;
 
 using XNode;
+using UnityEditor;
 
 public class AiGraph : NodeGraph
 {
@@ -52,7 +53,9 @@ public class AiGraph : NodeGraph
     }
     public void SetCurrentPriorityLevel(int level)
     {
-        currentPriorityLevel = level;
+        currentPriorityLevel = Mathf.Clamp(level, 1, 5);
+        EditorUtility.SetDirty(this);
+
     }
     public void UpdateNodes()
     {

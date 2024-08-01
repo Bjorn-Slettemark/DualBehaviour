@@ -1,6 +1,7 @@
 using UnityEngine;
 using XNode;
 using System.Collections.Generic;
+using UnityEditor;
 public class NodeAIEvent : NodeAI
 {
     [Input(ShowBackingValue.Never, ConnectionType.Multiple, TypeConstraint.None)]
@@ -57,11 +58,13 @@ public class NodeAIEvent : NodeAI
 
     private void TriggerEvent()
     {
-        // Always set the global priority to the node's priority, even when overriding
         aiGraph.SetCurrentPriorityLevel((int)priorityLevel);
         Debug.Log($"NodeAIEvent {name} triggered. New priority level: {(int)priorityLevel}");
         SignalInputComplete();
         TriggerOutputs();
+
+        // Notify Unity that the graph has changed
+        EditorUtility.SetDirty(aiGraph);
     }
     public override object GetValue(NodePort port)
     {
