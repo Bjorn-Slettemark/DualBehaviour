@@ -75,34 +75,33 @@ public struct EventHistory
         }
     }
 
-    // Publi an event to a specific channel
     public void Publish(LocalEventChannel channel, string eventName, string eventArg)
     {
-        EnsureEventRegistered(channel, eventName); // Ensure the event is registered before publishing
+        Debug.Log($"Publishing: Channel: {channel}, EventName: {eventName}, EventArg: {eventArg}");
 
-        if (channelDictionary.ContainsKey(channel))
+        if (channelDictionary.TryGetValue(channel, out var channelEvents))
         {
             // Notify specific event subscribers
-            if (channelDictionary[channel].ContainsKey(eventName))
+            if (channelEvents.TryGetValue(eventName, out var eventDelegate))
             {
-                channelDictionary[channel][eventName]?.Invoke(eventArg);
+                Debug.Log($"Invoking specific event: {eventName}");
+                eventDelegate?.Invoke(eventName);
             }
 
             // Notify subscribers to all events within the channel
-            if (channelDictionary[channel].ContainsKey(AllEventsKey))
+            if (channelEvents.TryGetValue(AllEventsKey, out var allEventsDelegate))
             {
-                channelDictionary[channel][AllEventsKey]?.Invoke(eventArg);
+                Debug.Log($"Invoking all events for channel: {channel}");
+                allEventsDelegate?.Invoke(eventName);
             }
 
             // Record the event in the history for debugging
-            // add timestamp to the event history
-            eventHistory.Add(new EventHistory(channel.ToString(), eventName, eventArg, DateTime.Now)); 
+            eventHistory.Add(new EventHistory(channel.ToString(), eventName, eventArg, DateTime.Now));
             Debug.Log($"Event recorded: {channel}, {eventName}, {eventArg}, Total Events: {eventHistory.Count}");
-
         }
         else
         {
-            Debug.Log("Publish called with unregistered channel or event name.");
+            Debug.LogWarning($"No events registered for channel: {channel}");
         }
     }
 
@@ -178,5 +177,19 @@ public struct EventHistory
             }
         }
     }
+    public void RegisterListener(LocalEventChannel channel, Action<string> listener)
+    {
+        // This method will subscribe the listener to all events in the specified channel
+        Debug.Log("Registerd");
+        SubscribeChannel(channel, listener);
+    }
 
+    public void UnregisterListener(LocalEventChannel channel, Action<string> listener)
+    {
+        // This method will unsubscribe the listener from all events in the specified channel
+        if (channelDictionary.ContainsKey(channel) && channelDictionary[channel].ContainsKey(AllEventsKey))
+        {
+            Unsubscribe(channel, AllEventsKey, listener);
+        }
+    }
 }
