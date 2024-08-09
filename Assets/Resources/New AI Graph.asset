@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-6999060396726554985
+--- !u!114 &-7326682562046563036
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9,46 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34acda2f985ab42468e2c1b7ab5c6d56, type: 3}
-  m_Name: Node AI Event
+  m_Script: {fileID: 11500000, guid: 9a762d753d07b294db378061e98222ef, type: 3}
+  m_Name: AiStateIdleSO
   m_EditorClassIdentifier: 
-  graph: {fileID: 11400000}
-  position: {x: -312, y: -456}
-  ports:
-    keys:
-    - input
-    - output
-    values:
-    - _fieldName: input
-      _node: {fileID: -6999060396726554985}
-      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
-        PublicKeyToken=b77a5c561934e089
-      connections: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: output
-      _node: {fileID: -6999060396726554985}
-      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
-        PublicKeyToken=b77a5c561934e089
-      connections:
-      - fieldName: input
-        node: {fileID: 4410918487832868532}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  aiGraph: {fileID: 11400000}
-  aiController: {fileID: 0}
-  input: 
-  output: 
-  eventChannel: {fileID: 11400000, guid: 510691ba3e6849d448f33659328afb04, type: 2}
-  eventName: A
-  priorityLevel: 5
-  overridePriority: 1
---- !u!114 &-6985048278815314394
+--- !u!114 &-3102492353339012125
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -58,101 +22,41 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 25f8c96a154405f419eb37a97419334f, type: 3}
-  m_Name: Attack
+  m_Name: Node AI State
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 872, y: -664}
+  position: {x: 72, y: -104}
   ports:
     keys:
     - input
     - output
     values:
     - _fieldName: input
-      _node: {fileID: -6985048278815314394}
+      _node: {fileID: -3102492353339012125}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
       connections:
       - fieldName: output
-        node: {fileID: 318105712377651316}
+        node: {fileID: 4362811649432775869}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
     - _fieldName: output
-      _node: {fileID: -6985048278815314394}
+      _node: {fileID: -3102492353339012125}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
       connections: []
       _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  aiGraph: {fileID: 11400000}
-  aiController: {fileID: 0}
-  input: 0
-  output: 
-  aiState: {fileID: -2464926481726365748}
---- !u!114 &-2464926481726365748
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55d529aa10f30bd4d9e5c2503b034547, type: 3}
-  m_Name: AiStateAttackSO
-  m_EditorClassIdentifier: 
---- !u!114 &-860106166207347782
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ff63bf0e8d27284291a5a77a4c3018d, type: 3}
-  m_Name: Node AI Local Event
-  m_EditorClassIdentifier: 
-  graph: {fileID: 11400000}
-  position: {x: -232, y: -264}
-  ports:
-    keys:
-    - output
-    - input
-    values:
-    - _fieldName: output
-      _node: {fileID: -860106166207347782}
-      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
-        PublicKeyToken=b77a5c561934e089
-      connections:
-      - fieldName: input
-        node: {fileID: 2769455620872592867}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: input
-      _node: {fileID: -860106166207347782}
-      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
-        PublicKeyToken=b77a5c561934e089
-      connections: []
-      _direction: 0
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
   aiGraph: {fileID: 11400000}
   aiController: {fileID: 0}
   input: 
-  output: 0
-  eventName: Test
-  eventChannel: 0
-  priorityLevel: 5
-  overridePriority: 1
+  output: 
+  aiState: {fileID: -7326682562046563036}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -166,16 +70,10 @@ MonoBehaviour:
   m_Name: New AI Graph
   m_EditorClassIdentifier: 
   nodes:
-  - {fileID: 3835885147562668996}
-  - {fileID: 2769455620872592867}
-  - {fileID: -860106166207347782}
-  - {fileID: 4410918487832868532}
-  - {fileID: 6280329781759930214}
-  - {fileID: 318105712377651316}
-  - {fileID: -6985048278815314394}
-  - {fileID: -6999060396726554985}
+  - {fileID: 4362811649432775869}
+  - {fileID: -3102492353339012125}
   - {fileID: 0}
---- !u!114 &318105712377651316
+--- !u!114 &4362811649432775869
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -188,131 +86,14 @@ MonoBehaviour:
   m_Name: Node AI Event
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 536, y: -648}
+  position: {x: -392, y: -104}
   ports:
     keys:
     - input
     - output
     values:
     - _fieldName: input
-      _node: {fileID: 318105712377651316}
-      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
-        PublicKeyToken=b77a5c561934e089
-      connections:
-      - fieldName: output
-        node: {fileID: 2769455620872592867}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: output
-      _node: {fileID: 318105712377651316}
-      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
-        PublicKeyToken=b77a5c561934e089
-      connections:
-      - fieldName: input
-        node: {fileID: -6985048278815314394}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  aiGraph: {fileID: 11400000}
-  aiController: {fileID: 0}
-  input: 
-  output: 
-  eventChannel: {fileID: 11400000, guid: 510691ba3e6849d448f33659328afb04, type: 2}
-  eventName: A
-  priorityLevel: 5
-  overridePriority: 1
---- !u!114 &2769455620872592867
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25f8c96a154405f419eb37a97419334f, type: 3}
-  m_Name: Attack
-  m_EditorClassIdentifier: 
-  graph: {fileID: 11400000}
-  position: {x: 248, y: -616}
-  ports:
-    keys:
-    - input
-    - output
-    values:
-    - _fieldName: input
-      _node: {fileID: 2769455620872592867}
-      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
-        PublicKeyToken=b77a5c561934e089
-      connections:
-      - fieldName: output
-        node: {fileID: 3835885147562668996}
-        reroutePoints: []
-      - fieldName: output
-        node: {fileID: -860106166207347782}
-        reroutePoints: []
-      - fieldName: output
-        node: {fileID: 6280329781759930214}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: output
-      _node: {fileID: 2769455620872592867}
-      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
-        PublicKeyToken=b77a5c561934e089
-      connections:
-      - fieldName: input
-        node: {fileID: 318105712377651316}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  aiGraph: {fileID: 11400000}
-  aiController: {fileID: 0}
-  input: 0
-  output: 
-  aiState: {fileID: -2464926481726365748}
---- !u!114 &3835885147562668996
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34acda2f985ab42468e2c1b7ab5c6d56, type: 3}
-  m_Name: Node AI Event
-  m_EditorClassIdentifier: 
-  graph: {fileID: 11400000}
-  position: {x: -216, y: -728}
-  ports:
-    keys:
-    - output
-    - input
-    values:
-    - _fieldName: output
-      _node: {fileID: 3835885147562668996}
-      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
-        PublicKeyToken=b77a5c561934e089
-      connections:
-      - fieldName: input
-        node: {fileID: 2769455620872592867}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: input
-      _node: {fileID: 3835885147562668996}
+      _node: {fileID: 4362811649432775869}
       _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
       connections: []
@@ -320,116 +101,23 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
+    - _fieldName: output
+      _node: {fileID: 4362811649432775869}
+      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections:
+      - fieldName: input
+        node: {fileID: -3102492353339012125}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
   aiGraph: {fileID: 11400000}
   aiController: {fileID: 0}
   input: 
-  output: 0
+  output: 
   eventChannel: {fileID: 11400000, guid: 510691ba3e6849d448f33659328afb04, type: 2}
   eventName: Test
-  priorityLevel: 1
-  overridePriority: 0
---- !u!114 &4410918487832868532
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25f8c96a154405f419eb37a97419334f, type: 3}
-  m_Name: Idle
-  m_EditorClassIdentifier: 
-  graph: {fileID: 11400000}
-  position: {x: 328, y: -344}
-  ports:
-    keys:
-    - input
-    - output
-    values:
-    - _fieldName: input
-      _node: {fileID: 4410918487832868532}
-      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
-        PublicKeyToken=b77a5c561934e089
-      connections:
-      - fieldName: output
-        node: {fileID: -6999060396726554985}
-        reroutePoints: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: output
-      _node: {fileID: 4410918487832868532}
-      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
-        PublicKeyToken=b77a5c561934e089
-      connections: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  aiGraph: {fileID: 11400000}
-  aiController: {fileID: 0}
-  input: 0
-  output: 
-  aiState: {fileID: 9038224042319493835}
---- !u!114 &6280329781759930214
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34acda2f985ab42468e2c1b7ab5c6d56, type: 3}
-  m_Name: Node AI Event
-  m_EditorClassIdentifier: 
-  graph: {fileID: 11400000}
-  position: {x: 8, y: -360}
-  ports:
-    keys:
-    - input
-    - output
-    values:
-    - _fieldName: input
-      _node: {fileID: 6280329781759930214}
-      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
-        PublicKeyToken=b77a5c561934e089
-      connections: []
-      _direction: 0
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-    - _fieldName: output
-      _node: {fileID: 6280329781759930214}
-      _typeQualifiedName: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
-        PublicKeyToken=b77a5c561934e089
-      connections:
-      - fieldName: input
-        node: {fileID: 2769455620872592867}
-        reroutePoints: []
-      _direction: 1
-      _connectionType: 0
-      _typeConstraint: 0
-      _dynamic: 0
-  aiGraph: {fileID: 11400000}
-  aiController: {fileID: 0}
-  input: 
-  output: 
-  eventChannel: {fileID: 11400000, guid: 510691ba3e6849d448f33659328afb04, type: 2}
-  eventName: B
   priorityLevel: 3
   overridePriority: 0
---- !u!114 &9038224042319493835
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a762d753d07b294db378061e98222ef, type: 3}
-  m_Name: AiStateIdleSO
-  m_EditorClassIdentifier: 

@@ -1,35 +1,42 @@
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using XNode;
-
-public enum PriorityLevel
-{
-    Highest = 1,
-    High = 2,
-    Medium = 3,
-    Low = 4,
-    Lowest = 5
-}
+using XNodeEditor;
 
 public abstract class NodeAI : Node
 {
     [HideInInspector] public AiGraph aiGraph;
     [HideInInspector] public AIController aiController;
 
-    private bool isActive = false;
 
-    public bool IsActive { get => isActive;  }
+    private bool _isActive;
+    public bool IsActive
+    {
+        get => _isActive;
+        set
+        {
+            if (_isActive != value)
+            {
+                _isActive = value;
+                if (NodeEditorWindow.current != null)
+                {
+                    NodeEditorWindow.current.Repaint();
+                }
+            }
+        }
+    }
 
     public void InitializeNode(AiGraph graph, AIController controller)
     {
         if (graph == null)
         {
-            UnityEngine.Debug.LogError("Graph is null in NodeAI.InitializeNode");
+            Debug.LogError("Graph is null in NodeAI.InitializeNode");
             return;
         }
         if (controller == null)
         {
-            UnityEngine.Debug.LogError("Controller is null in NodeAI.InitializeNode");
+            Debug.LogError("Controller is null in NodeAI.InitializeNode");
             return;
         }
 
@@ -41,32 +48,40 @@ public abstract class NodeAI : Node
 
     public virtual void InitializeNode() { }
 
+    public virtual void Execute()
+    {
+        Debug.Log($"Executing node: {name}");
+        SignalInputComplete();
+        TriggerOutputs();
+    }
+
     public virtual void Activate()
     {
-        if (!isActive)
+        Debug.Log($"Activating node: {name}");
+        if (!IsActive)
         {
-            isActive = true;
-            Debug.Log($"Activating node: {name}");
+            IsActive = true;
             OnActivate();
         }
     }
+
     public virtual void ResetState()
     {
-        isActive = false;
-        // Add any other state reset logic here
+        Debug.Log($"Resetting state for node: {name}");
+        IsActive = false;
     }
 
     public virtual void Deactivate()
     {
-        isActive = false;
+        Debug.Log($"Deactivating node: {name}");
+        IsActive = false;
         OnDeactivate();
     }
 
     public virtual void Update()
     {
-        if (isActive)
+        if (IsActive)
         {
-
             OnUpdate();
         }
     }
@@ -107,9 +122,8 @@ public abstract class NodeAI : Node
         }
     }
 
-
     public override object GetValue(NodePort port)
     {
-        return null; // You might want to return something meaningful here depending on your use case
+        return null;
     }
 }

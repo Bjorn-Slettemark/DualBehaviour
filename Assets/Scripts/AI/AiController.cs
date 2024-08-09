@@ -1,12 +1,8 @@
-using Debug = UnityEngine.Debug;
-using System.Collections.Generic;
 using UnityEngine;
-
+using System.Collections.Generic;
 
 public class AIController : MonoBehaviour
 {
-
-
     public AiGraph aiGraph;
 
     private void Awake()
@@ -36,7 +32,10 @@ public class AIController : MonoBehaviour
 
     private void Update()
     {
-        aiGraph.UpdateNodes();
+        if (aiGraph != null)
+        {
+            aiGraph.UpdateNodes();
+        }
     }
 
     public void OnStateCompleted(NodeAIState state)
@@ -44,9 +43,22 @@ public class AIController : MonoBehaviour
         aiGraph.OnStateCompleted(state);
     }
 
-    // New method to get active states
     public List<NodeAIState> GetActiveStates()
     {
         return aiGraph.GetActiveStates();
+    }
+
+    // Test method to activate a node
+    public void TestNodeActivation()
+    {
+        Debug.Log("Testing node activation");
+        if (aiGraph != null && aiGraph.nodes.Count > 0)
+        {
+            NodeAI firstNode = aiGraph.nodes[0] as NodeAI;
+            if (firstNode != null)
+            {
+                aiGraph.ActivateNode(firstNode);
+            }
+        }
     }
 }
