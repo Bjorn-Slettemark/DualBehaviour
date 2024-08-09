@@ -1,32 +1,38 @@
-using Debug = UnityEngine.Debug;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
-
 using XNode;
+using System.Linq;
 using UnityEditor;
+using XNodeEditor;
 
+public enum PriorityLevel
+{
+    Highest = 1,
+    High = 2,
+    Medium = 3,
+    Low = 4,
+    Lowest = 5
+}
+[CreateAssetMenu(fileName = "New AI Graph", menuName = "AI/Graph")]
 public class AiGraph : NodeGraph
 {
     private List<NodeAI> activeNodes = new List<NodeAI>();
     private List<NodeAIState> activeStates = new List<NodeAIState>();
-
-    private AIController aiController; // Add this line
-
     private int currentPriorityLevel = 5; // Default to lowest priority
     public int CurrentPriorityLevel => currentPriorityLevel;
 
+    public event Action OnPriorityChanged;
+    public event System.Action OnGraphChanged;
+
+    private AIController aiController;
+    private List<NodeAI> triggeredNodes = new List<NodeAI>();
+
     public void Initialize(AIController controller)
     {
-        if (controller == null)
-        {
-            Debug.LogError("AIController passed to AiGraph.Initialize is null!");
-            return;
-        }
-
         aiController = controller;
-        Debug.Log($"Initializing AiGraph with {nodes.Count} nodes.");
+        SetCurrentPriorityLevel(5, true); // Reset to lowest priority
+        Debug.Log($"Initializing AiGraph with {nodes.Count} nodes. Starting priority: {CurrentPriorityLevel}");
 
         foreach (NodeAI node in nodes)
         {
@@ -45,27 +51,89 @@ public class AiGraph : NodeGraph
                     ActivateNode(node);
                 }
             }
-            catch (Exception e)
+            catch (System.Exception e)
             {
                 Debug.LogError($"Error initializing node {node.name}: {e.Message}\n{e.StackTrace}");
             }
         }
     }
-    public void SetCurrentPriorityLevel(int level)
-    {
-        currentPriorityLevel = Mathf.Clamp(level, 1, 5);
-        EditorUtility.SetDirty(this);
 
+    public void OnNodeActiveStateChanged()
+    {
+        Debug.Log("Node active state changed");
+        if (XNodeEditor.NodeEditorWindow.current != null)
+        {
+            EditorApplication.delayCall += XNodeEditor.NodeEditorWindow.current.Repaint;
+        }
+        OnGraphChanged?.Invoke();
     }
+    public void SetCurrentPriorityLevel(int level, bool forceSet = false)
+    {
+        if (forceSet || level < currentPriorityLevel)
+        {
+            currentPriorityLevel = Mathf.Clamp(level, 1, 5);
+            Debug.Log($"Priority level set to: {currentPriorityLevel}");
+            OnPriorityChanged?.Invoke();
+        }
+    }
+
+    public void ActivateNode(NodeAI node)
+    {
+        Debug.Log($"AiGraph activating node: {node.name}");
+        if (!activeNodes.Contains(node))
+        {
+            activeNodes.Add(node);
+            node.Activate();
+            OnNodeActiveStateChanged();
+
+            if (node is NodeAIState stateNode)
+            {
+                ActivateState(stateNode);
+            }
+        }
+    }
+
+    public void TriggerNode(NodeAI node)
+    {
+        if (!triggeredNodes.Contains(node))
+        {
+            triggeredNodes.Add(node);
+        }
+    }
+
     public void UpdateNodes()
     {
+        triggeredNodes = triggeredNodes.OrderBy(n => GetNodePriority(n)).ToList();
+
+        foreach (var node in triggeredNodes)
+        {
+            node.Execute();
+        }
+
+        triggeredNodes.Clear();
+
         foreach (NodeAI node in activeNodes)
         {
             node.Update();
         }
     }
+
+    private int GetNodePriority(NodeAI node)
+    {
+        if (node is NodeAIEvent eventNode)
+        {
+            return eventNode.overridePriority ? 0 : (int)eventNode.priorityLevel;
+        }
+        else if (node is NodeAILocalEvent localEventNode)
+        {
+            return localEventNode.overridePriority ? 0 : (int)localEventNode.priorityLevel;
+        }
+        return 5;
+    }
+
     public void ResetAllNodes()
     {
+        Debug.Log("Resetting all nodes");
         foreach (NodeAI node in nodes)
         {
             if (node != null)
@@ -76,27 +144,15 @@ public class AiGraph : NodeGraph
         activeNodes.Clear();
         activeStates.Clear();
     }
-    public void ActivateNode(NodeAI node)
-    {
-        if (!activeNodes.Contains(node))
-        {
-            UnityEngine.Debug.Log($"AiGraph activating node: {node.name}");
-            activeNodes.Add(node);
-            node.Activate();
-
-            if (node is NodeAIState stateNode)
-            {
-                ActivateState(stateNode);
-            }
-        }
-    }
 
     public void DeactivateNode(NodeAI node)
     {
+        Debug.Log($"AiGraph deactivating node: {node.name}");
         if (activeNodes.Contains(node))
         {
             activeNodes.Remove(node);
             node.Deactivate();
+            OnNodeActiveStateChanged();
 
             if (node is NodeAIState stateNode)
             {
@@ -128,4 +184,10 @@ public class AiGraph : NodeGraph
     {
         return new List<NodeAIState>(activeStates);
     }
+    public void SetNodeActive(NodeAI node, bool active)
+    {
+        node.IsActive = active;
+        NodeEditorWindow.current.Repaint();
+    }
+
 }

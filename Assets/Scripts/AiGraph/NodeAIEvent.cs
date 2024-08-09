@@ -2,6 +2,7 @@ using UnityEngine;
 using XNode;
 using System.Collections.Generic;
 using UnityEditor;
+
 public class NodeAIEvent : NodeAI
 {
     [Input(ShowBackingValue.Never, ConnectionType.Multiple, TypeConstraint.None)]
@@ -12,7 +13,7 @@ public class NodeAIEvent : NodeAI
 
     public GameEventChannelSO eventChannel;
     public string eventName;
-    public PriorityLevel priorityLevel = PriorityLevel.Lowest;
+    public  PriorityLevel priorityLevel = PriorityLevel.Lowest;
     public bool overridePriority = false;
 
     private bool isListening = false;
@@ -35,10 +36,16 @@ public class NodeAIEvent : NodeAI
     {
         if (raisedEventName == eventName && (overridePriority || CanTriggerEvent()))
         {
-            TriggerEvent();
+            aiGraph.TriggerNode(this);
         }
     }
 
+    public override void Execute()
+    {
+        Debug.Log($"NodeAIEvent {name} executed. Priority level: {(int)priorityLevel}");
+        aiGraph.SetCurrentPriorityLevel((int)priorityLevel, overridePriority);
+        base.Execute();
+    }
     private bool CanTriggerEvent()
     {
         var inputPort = GetInputPort("input");

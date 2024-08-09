@@ -40,12 +40,17 @@ public class NodeAILocalEvent : NodeAI
 
     private void OnLocalEventRaised(string receivedEventName)
     {
-        Debug.Log($"LocalEventNode received event: {receivedEventName} on channel {eventChannel}. Expecting: {eventName}");
-
         if (receivedEventName == eventName && (overridePriority || CanTriggerEvent()))
         {
-            TriggerEvent();
+            aiGraph.TriggerNode(this);
         }
+    }
+
+    public override void Execute()
+    {
+        Debug.Log($"NodeAIEvent {name} executed. Priority level: {(int)priorityLevel}");
+        aiGraph.SetCurrentPriorityLevel((int)priorityLevel, overridePriority);
+        base.Execute();
     }
 
     private bool CanTriggerEvent()

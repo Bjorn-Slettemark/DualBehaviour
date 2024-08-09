@@ -1,0 +1,1 @@
+code2prompt --path /Dev/Unity/DualBehaviour/Assets/Scripts/  --exclude "*.meta" --output output.md

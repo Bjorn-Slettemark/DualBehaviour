@@ -1,1 +1,0 @@
-code2prompt --path /Dev/Unity/DualBehaviour/Assets/Scripts/Engine --path /Dev/Unity/DualBehaviour/Assets/Scripts/AI --path /Dev/Unity/DualBehaviour/Assets/Scripts/AiGraph --exclude "*.meta" --output output.md
