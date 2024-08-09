@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using XNode;
 using System.Linq;
-using UnityEditor;
-using XNodeEditor;
 
 public enum PriorityLevel
 {
@@ -60,12 +58,12 @@ public class AiGraph : NodeGraph
 
     public void OnNodeActiveStateChanged()
     {
-        Debug.Log("Node active state changed");
-        if (XNodeEditor.NodeEditorWindow.current != null)
-        {
-            EditorApplication.delayCall += XNodeEditor.NodeEditorWindow.current.Repaint;
-        }
-        OnGraphChanged?.Invoke();
+        //Debug.Log("Node active state changed");
+        //if (XNodeEditor.NodeEditorWindow.current != null)
+        //{
+        //    EditorApplication.delayCall += XNodeEditor.NodeEditorWindow.current.Repaint;
+        //}
+        //OnGraphChanged?.Invoke();
     }
     public void SetCurrentPriorityLevel(int level, bool forceSet = false)
     {
@@ -187,7 +185,6 @@ public class AiGraph : NodeGraph
     public void SetNodeActive(NodeAI node, bool active)
     {
         node.IsActive = active;
-        NodeEditorWindow.current.Repaint();
     }
 
 }

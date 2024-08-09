@@ -78,7 +78,7 @@ public class NodeAILocalEvent : NodeAI
         TriggerOutputs();
 
         // Notify Unity that the graph has changed
-        EditorUtility.SetDirty(aiGraph);
+        //EditorUtility.SetDirty(aiGraph);
     }
 
     public override object GetValue(NodePort port)

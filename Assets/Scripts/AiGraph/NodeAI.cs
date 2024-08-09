@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using XNode;
-using XNodeEditor;
 
 public abstract class NodeAI : Node
 {
@@ -19,10 +18,7 @@ public abstract class NodeAI : Node
             if (_isActive != value)
             {
                 _isActive = value;
-                if (NodeEditorWindow.current != null)
-                {
-                    NodeEditorWindow.current.Repaint();
-                }
+
             }
         }
     }
