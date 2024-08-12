@@ -21,6 +21,7 @@ public class MultiplayerManager : MonoBehaviour
 
     private Dictionary<string, List<RTCIceCandidate>> iceCandidateQueue = new Dictionary<string, List<RTCIceCandidate>>();
 
+    private bool isHost;
 
     private void Awake()
     {
@@ -54,8 +55,15 @@ public class MultiplayerManager : MonoBehaviour
 
     public void CreateRoom(string roomName)
     {
+        if (database == null)
+        {
+            Debug.LogError("MultiplayerManager: Firebase database not initialized");
+            return;
+        }
+
         Debug.Log($"MultiplayerManager: Creating room {roomName}");
         this.roomName = roomName;
+        isHost = true;
         database.Child("rooms").Child(roomName).Child("peers").Child(localPeerId).SetValueAsync(true).ContinueWith(task =>
         {
             if (task.IsCompleted && !task.IsFaulted)
@@ -70,10 +78,12 @@ public class MultiplayerManager : MonoBehaviour
         });
     }
 
+
     public void JoinRoom(string roomName)
     {
         Debug.Log($"MultiplayerManager: Joining room {roomName}");
         this.roomName = roomName;
+        isHost = false;
         database.Child("rooms").Child(roomName).Child("peers").Child(localPeerId).SetValueAsync(true).ContinueWith(task =>
         {
             if (task.IsCompleted && !task.IsFaulted)
@@ -143,6 +153,10 @@ public class MultiplayerManager : MonoBehaviour
                 {
                     Debug.Log($"MultiplayerManager: New peer found - {peerId}");
                     CreatePeerConnection(peerId);
+                    if (isHost)
+                    {
+                        StartCoroutine(CreateOffer(peerId));
+                    }
                 }
             }
         }
@@ -181,12 +195,27 @@ public class MultiplayerManager : MonoBehaviour
         dataChannel.OnMessage = message => HandleMessage(peerId, message);
         dataChannels[peerId] = dataChannel;
 
-        pc.OnConnectionStateChange = state => {
+        pc.OnIceConnectionChange = state =>
+        {
+            Debug.Log($"MultiplayerManager: ICE Connection state changed for {peerId}: {state}");
+            if (state == RTCIceConnectionState.Connected || state == RTCIceConnectionState.Completed)
+            {
+                Debug.Log($"MultiplayerManager: ICE Connection established with {peerId}");
+            }
+        };
+
+        pc.OnConnectionStateChange = state =>
+        {
             Debug.Log($"MultiplayerManager: Connection state changed for {peerId}: {state}");
             if (state == RTCPeerConnectionState.Connected)
             {
                 Debug.Log($"MultiplayerManager: WebRTC connection established with {peerId}");
             }
+        };
+
+        dataChannel.OnOpen = () =>
+        {
+            Debug.Log($"MultiplayerManager: Data channel opened for {peerId}. Ready for data exchange.");
         };
 
         StartCoroutine(CreateOffer(peerId));
@@ -209,7 +238,14 @@ public class MultiplayerManager : MonoBehaviour
         {
             OnCreateSessionDescriptionError(op.Error);
         }
+
+        if (!isHost)
+        {
+            ListenForOffer(peerId);
+        }
+        ListenForIceCandidates(peerId);
     }
+
 
     private IEnumerator OnCreateOfferSuccess(RTCPeerConnection pc, string peerId, RTCSessionDescription desc)
     {
@@ -271,10 +307,10 @@ public class MultiplayerManager : MonoBehaviour
 
         var pc = peerConnections[peerId];
         var remoteDesc = new RTCSessionDescription { sdp = init.sdp, type = type };
-        StartCoroutine(SetRemoteDescription(pc, peerId, remoteDesc));
+        StartCoroutine(SetRemoteDescriptionAndHandleCandidates(pc, peerId, remoteDesc));
     }
 
-    private IEnumerator SetRemoteDescription(RTCPeerConnection pc, string peerId, RTCSessionDescription remoteDesc)
+    private IEnumerator SetRemoteDescriptionAndHandleCandidates(RTCPeerConnection pc, string peerId, RTCSessionDescription remoteDesc)
     {
         Debug.Log($"MultiplayerManager: Setting remote description for {peerId}");
         var op = pc.SetRemoteDescription(ref remoteDesc);
@@ -283,6 +319,8 @@ public class MultiplayerManager : MonoBehaviour
         if (!op.IsError)
         {
             Debug.Log($"MultiplayerManager: Remote description set for {peerId}");
+            ProcessIceCandidateQueue(peerId);
+
             if (remoteDesc.type == RTCSdpType.Offer)
             {
                 yield return StartCoroutine(CreateAnswer(pc, peerId));
@@ -294,7 +332,27 @@ public class MultiplayerManager : MonoBehaviour
             OnSetSessionDescriptionError(ref error);
         }
     }
+    private IEnumerator SetRemoteDescription(RTCPeerConnection pc, string peerId, RTCSessionDescription remoteDesc)
+    {
+        Debug.Log($"MultiplayerManager: Setting remote description for {peerId}");
+        var op = pc.SetRemoteDescription(ref remoteDesc);
+        yield return op;
 
+        if (!op.IsError)
+        {
+            Debug.Log($"MultiplayerManager: Remote description set for {peerId}");
+            ProcessIceCandidateQueue(peerId);
+            if (remoteDesc.type == RTCSdpType.Offer)
+            {
+                yield return StartCoroutine(CreateAnswer(pc, peerId));
+            }
+        }
+        else
+        {
+            var error = op.Error;
+            OnSetSessionDescriptionError(ref error);
+        }
+    }
     private IEnumerator CreateAnswer(RTCPeerConnection pc, string peerId)
     {
         Debug.Log($"MultiplayerManager: Creating answer for {peerId}");
@@ -435,54 +493,37 @@ public class MultiplayerManager : MonoBehaviour
 
         if (peerConnections.TryGetValue(peerId, out var pc))
         {
+            RTCIceCandidateInit init = new RTCIceCandidateInit
+            {
+                candidate = candidateString,
+                sdpMid = "0",
+                sdpMLineIndex = 0
+            };
+
+            RTCIceCandidate candidate = new RTCIceCandidate(init);
+
+            bool remoteDescriptionSet = false;
             try
             {
-                // Parse the candidate string
-                string[] parts = candidateString.Split(' ');
-                if (parts.Length < 8)
-                {
-                    Debug.LogError($"Invalid ICE candidate format for {peerId}: {candidateString}");
-                    return;
-                }
-
-                string sdpMid = "0"; // Default value
-                int? sdpMLineIndex = 0; // Default value
-
-                // Try to extract sdpMid and sdpMLineIndex from the candidate string
-                for (int i = 8; i < parts.Length; i += 2)
-                {
-                    if (i + 1 < parts.Length)
-                    {
-                        if (parts[i] == "sdpMid")
-                            sdpMid = parts[i + 1];
-                        else if (parts[i] == "sdpMLineIndex")
-                            sdpMLineIndex = int.Parse(parts[i + 1]);
-                    }
-                }
-
-                RTCIceCandidateInit init = new RTCIceCandidateInit
-                {
-                    candidate = candidateString,
-                    sdpMid = sdpMid,
-                    sdpMLineIndex = sdpMLineIndex
-                };
-
-                RTCIceCandidate candidate = new RTCIceCandidate(init);
-
-                // Check if remote description is set before adding ICE candidate
-                //if (pc.RemoteDescription == null)
-                //{
-                //    Debug.LogWarning($"Remote description not set for {peerId}. Queueing ICE candidate.");
-                //    // You might want to implement a queue system here to add candidates later
-                //    return;
-                //}
-
-                pc.AddIceCandidate(candidate);
-                Debug.Log($"MultiplayerManager: Added remote ICE candidate for {peerId} with ice {candidate.Candidate}");
+                remoteDescriptionSet = (pc.RemoteDescription.type == RTCSdpType.Offer || pc.RemoteDescription.type == RTCSdpType.Answer);
             }
-            catch (Exception ex)
+            catch (System.Exception)
             {
-                Debug.LogError($"Error adding ICE candidate for {peerId}: {ex.Message}\nCandidate: {candidateString}");
+                // If accessing RemoteDescription throws an exception, we assume it's not set
+                remoteDescriptionSet = false;
+            }
+
+            if (!remoteDescriptionSet)
+            {
+                Debug.Log($"MultiplayerManager: Buffering ICE candidate for {peerId} as RemoteDescription is not set yet");
+                if (!iceCandidateQueue.ContainsKey(peerId))
+                    iceCandidateQueue[peerId] = new List<RTCIceCandidate>();
+                iceCandidateQueue[peerId].Add(candidate);
+            }
+            else
+            {
+                pc.AddIceCandidate(candidate);
+                Debug.Log($"MultiplayerManager: Added remote ICE candidate for {peerId}");
             }
         }
         else
@@ -490,8 +531,19 @@ public class MultiplayerManager : MonoBehaviour
             Debug.LogWarning($"MultiplayerManager: Received ICE candidate for unknown peer {peerId}");
         }
     }
-    
-    // Add this class to help with JSON deserialization
+    private void ProcessIceCandidateQueue(string peerId)
+{
+    if (iceCandidateQueue.TryGetValue(peerId, out var queue))
+    {
+        Debug.Log($"MultiplayerManager: Processing queued ICE candidates for {peerId}. Count: {queue.Count}");
+        foreach (var candidate in queue)
+        {
+            peerConnections[peerId].AddIceCandidate(candidate);
+            Debug.Log($"MultiplayerManager: Added queued ICE candidate for {peerId}");
+        }
+        iceCandidateQueue.Remove(peerId);
+    }
+}    // Add this class to help with JSON deserialization
     [System.Serializable]
     private class CandidateWrapper
     {
