@@ -42,7 +42,7 @@ public class MultiplayerTestUI : MonoBehaviour
 
     private void SendMessage()
     {
-        MultiplayerManager.Instance.SendMessage(messageInput.text);
+        MultiplayerManager.Instance.SendDataMessage(messageInput.text);
         messageInput.text = "";
     }
 

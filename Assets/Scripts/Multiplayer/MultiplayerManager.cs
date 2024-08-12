@@ -20,6 +20,12 @@ public class MultiplayerManager : MonoBehaviour
     public event Action<List<string>> OnPeerListUpdated;
 
     private Dictionary<string, List<RTCIceCandidate>> iceCandidateQueue = new Dictionary<string, List<RTCIceCandidate>>();
+   
+    private const float KEEP_ALIVE_INTERVAL = 5f; // Send keep-alive message every 5 seconds
+    private const string KEEP_ALIVE_MESSAGE = "keep-alive";
+    private Dictionary<string, Coroutine> keepAliveCoroutines = new Dictionary<string, Coroutine>();
+
+
 
     private bool isHost;
 
@@ -418,31 +424,88 @@ public class MultiplayerManager : MonoBehaviour
         Debug.Log($"MultiplayerManager: Handling data channel for {peerId}");
         dataChannels[peerId] = channel;
         channel.OnMessage = message => HandleMessage(peerId, message);
-        channel.OnOpen = () => Debug.Log($"MultiplayerManager: Data channel opened for {peerId}");
-        channel.OnClose = () => Debug.Log($"MultiplayerManager: Data channel closed for {peerId}");
+        channel.OnOpen = () =>
+        {
+            Debug.Log($"MultiplayerManager: Data channel opened for {peerId}");
+            StartKeepAlive(peerId);
+        };
+        channel.OnClose = () =>
+        {
+            Debug.Log($"MultiplayerManager: Data channel closed for {peerId}");
+            StopKeepAlive(peerId);
+        };
+    }
+
+    private void StartKeepAlive(string peerId)
+    {
+        if (!keepAliveCoroutines.ContainsKey(peerId))
+        {
+            Debug.Log("Starting the keepalive function");
+            keepAliveCoroutines[peerId] = StartCoroutine(KeepAliveCoroutine(peerId));
+        }
+    }
+
+    private void StopKeepAlive(string peerId)
+    {
+        if (keepAliveCoroutines.TryGetValue(peerId, out Coroutine coroutine))
+        {
+            StopCoroutine(coroutine);
+            keepAliveCoroutines.Remove(peerId);
+        }
+    }
+
+    private IEnumerator KeepAliveCoroutine(string peerId)
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(KEEP_ALIVE_INTERVAL);
+            Debug.Log("message sent keepalive!");
+            SendKeepAliveMessage(peerId);
+        }
+    }
+
+    private void SendKeepAliveMessage(string peerId)
+    {
+        if (dataChannels.TryGetValue(peerId, out RTCDataChannel channel) &&
+            channel.ReadyState == RTCDataChannelState.Open)
+        {
+            byte[] keepAliveMessage = System.Text.Encoding.UTF8.GetBytes(KEEP_ALIVE_MESSAGE);
+            channel.Send(keepAliveMessage);
+            Debug.Log($"MultiplayerManager: Sent keep-alive message to {peerId}");
+        }
     }
 
     private void HandleMessage(string peerId, byte[] bytes)
     {
         string message = System.Text.Encoding.UTF8.GetString(bytes);
-        Debug.Log($"MultiplayerManager: Received message from {peerId}: {message}");
-        OnMessageReceived?.Invoke($"{peerId}: {message}");
+        if (message == KEEP_ALIVE_MESSAGE)
+        {
+            Debug.Log($"MultiplayerManager: Received keep-alive message from {peerId}");
+            // Optionally, you can reset a timer here to track the last received keep-alive
+        }
+        else
+        {
+            Debug.Log($"MultiplayerManager: Received message from {peerId}: {message}");
+            OnMessageReceived?.Invoke($"{peerId}: {message}");
+        }
     }
 
-    public void SendMessage(string message)
+    public void SendDataMessage(string message)
     {
         Debug.Log($"MultiplayerManager: Sending message to all peers: {message}");
         byte[] bytes = System.Text.Encoding.UTF8.GetBytes(message);
-        foreach (var channel in dataChannels.Values)
+        foreach (var kvp in dataChannels)
         {
+            string peerId = kvp.Key;
+            RTCDataChannel channel = kvp.Value;
             if (channel.ReadyState == RTCDataChannelState.Open)
             {
                 channel.Send(bytes);
-                Debug.Log($"MultiplayerManager: Message sent through channel: {channel.Label}");
+                Debug.Log($"MultiplayerManager: Message sent to {peerId} through channel: {channel.Label}");
             }
             else
             {
-                Debug.LogWarning($"MultiplayerManager: Cannot send message through channel {channel.Label}. Channel state: {channel.ReadyState}");
+                Debug.LogWarning($"MultiplayerManager: Cannot send message to {peerId}. Channel state: {channel.ReadyState}");
             }
         }
     }
@@ -450,6 +513,7 @@ public class MultiplayerManager : MonoBehaviour
     private void ClosePeerConnection(string peerId)
     {
         Debug.Log($"MultiplayerManager: Closing peer connection for {peerId}");
+        StopKeepAlive(peerId);
         if (peerConnections.TryGetValue(peerId, out var pc))
         {
             pc.Close();
@@ -473,6 +537,10 @@ public class MultiplayerManager : MonoBehaviour
     private void OnDestroy()
     {
         Debug.Log("MultiplayerManager: Destroying and leaving room");
+        foreach (var peerId in keepAliveCoroutines.Keys)
+        {
+            StopKeepAlive(peerId);
+        }
         LeaveRoom();
     }
 
