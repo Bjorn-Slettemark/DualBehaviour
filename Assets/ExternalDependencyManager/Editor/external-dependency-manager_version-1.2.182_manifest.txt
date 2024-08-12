@@ -1,13 +1,43 @@
-Assets/ExternalDependencyManager/Editor/1.2.182/Google.IOSResolver.dll
-Assets/ExternalDependencyManager/Editor/1.2.182/Google.IOSResolver.pdb
-Assets/ExternalDependencyManager/Editor/1.2.182/Google.JarResolver.dll
-Assets/ExternalDependencyManager/Editor/1.2.182/Google.JarResolver.pdb
-Assets/ExternalDependencyManager/Editor/1.2.182/Google.PackageManagerResolver.dll
-Assets/ExternalDependencyManager/Editor/1.2.182/Google.PackageManagerResolver.pdb
-Assets/ExternalDependencyManager/Editor/1.2.182/Google.VersionHandlerImpl.dll
-Assets/ExternalDependencyManager/Editor/1.2.182/Google.VersionHandlerImpl.pdb
-Assets/ExternalDependencyManager/Editor/CHANGELOG.md
-Assets/ExternalDependencyManager/Editor/Google.VersionHandler.dll
-Assets/ExternalDependencyManager/Editor/Google.VersionHandler.pdb
-Assets/ExternalDependencyManager/Editor/LICENSE
-Assets/ExternalDependencyManager/Editor/README.md
+
+
+    mungSdp(sdp) {
+        const lines = sdp.split('\n');
+        const newLines = [];
+        let isVideo = false;
+
+        lines.forEach(line => {
+            if (line.startsWith('m=video')) {
+                isVideo = true;
+            }
+
+            if (isVideo) {
+                if (line.startsWith('c=')) {
+                    newLines.push(line);
+                    newLines.push('b=AS:9000');  // Set bandwidth to 10 Mbps
+                } else if (line.startsWith('a=fmtp:')) {
+                    if (line.includes('H264')) {
+                        newLines.push(`${line};level-asymmetry-allowed=1;packetization-mode=1;profile-level-id=64001f;max-fr=60;max-fs=8160`);
+                    } else if (line.includes('VP8')) {
+                        newLines.push(`${line};max-fr=60;max-fs=8160`);
+                    } else {
+                        newLines.push(line);
+                    }
+                } else if (line.startsWith('a=rtpmap:')) {
+                    newLines.push(line);
+                    if (line.includes('H264') || line.includes('VP8')) {
+                        const pt = line.split(' ')[0].split(':')[1];
+                        newLines.push(`a=rtcp-fb:${pt} nack`);
+                        newLines.push(`a=rtcp-fb:${pt} nack pli`);
+                        newLines.push(`a=rtcp-fb:${pt} ccm fir`);
+                        newLines.push(`a=rtcp-fb:${pt} goog-remb`);
+                    }
+                } else {
+                    newLines.push(line);
+                }
+            } else {
+                newLines.push(line);
+            }
+        });
+
+        return newLines.join('\n');
+    }

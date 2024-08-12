@@ -1,6 +1,7 @@
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
+using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class MultiplayerTestUI : MonoBehaviour
 {
@@ -20,70 +21,44 @@ public class MultiplayerTestUI : MonoBehaviour
         leaveRoomButton.onClick.AddListener(LeaveRoom);
         sendMessageButton.onClick.AddListener(SendMessage);
 
-        // Subscribe to events from MultiplayerManager
-        // You'll need to implement these events in MultiplayerManager
-        MultiplayerManager.Instance.OnPeerConnected += UpdatePeerList;
-        MultiplayerManager.Instance.OnPeerDisconnected += UpdatePeerList;
-        MultiplayerManager.Instance.OnMessageReceived += DisplayMessage;
+        MultiplayerManager.Instance.OnMessageReceived += HandleMessageReceived;
+        MultiplayerManager.Instance.OnPeerListUpdated += HandlePeerListUpdated;
     }
 
-    private async void CreateRoom()
+    private void CreateRoom()
     {
-        string roomName = roomNameInput.text;
-        await MultiplayerManager.Instance.TestCreateRoom(roomName);
-        UpdateUI();
+        MultiplayerManager.Instance.CreateRoom(roomNameInput.text);
     }
 
-    private async void JoinRoom()
+    private void JoinRoom()
     {
-        string roomName = roomNameInput.text;
-        await MultiplayerManager.Instance.TestJoinRoom(roomName);
-        UpdateUI();
+        MultiplayerManager.Instance.JoinRoom(roomNameInput.text);
     }
 
     private void LeaveRoom()
     {
         MultiplayerManager.Instance.LeaveRoom();
-        UpdateUI();
     }
 
     private void SendMessage()
     {
-        string message = messageInput.text;
-        byte[] messageBytes = System.Text.Encoding.UTF8.GetBytes(message);
-        MultiplayerManager.Instance.SendInput(messageBytes);
-        DisplayMessage("You", message);
+        MultiplayerManager.Instance.SendMessage(messageInput.text);
         messageInput.text = "";
     }
 
-    private void UpdatePeerList()
+    private void HandleMessageReceived(string message)
     {
-        // Update the peer list UI
-        // You'll need to implement a method in MultiplayerManager to get the current peer list
-        string peerList = string.Join("\n", MultiplayerManager.Instance.GetConnectedPeers());
-        peerListText.text = "Connected Peers:\n" + peerList;
+        messageLogText.text += $"{message}\n";
     }
 
-    private void DisplayMessage(string sender, string message)
+    private void HandlePeerListUpdated(List<string> peers)
     {
-        messageLogText.text += $"\n{sender}: {message}";
-    }
-
-    private void UpdateUI()
-    {
-        bool inRoom = !string.IsNullOrEmpty(MultiplayerManager.Instance.CurrentRoomName);
-        createRoomButton.interactable = !inRoom;
-        joinRoomButton.interactable = !inRoom;
-        leaveRoomButton.interactable = inRoom;
-        sendMessageButton.interactable = inRoom;
-        messageInput.interactable = inRoom;
+        peerListText.text = string.Join("\n", peers);
     }
 
     private void OnDestroy()
     {
-        // Unsubscribe from events
-        MultiplayerManager.Instance.OnPeerConnected -= UpdatePeerList;
-        MultiplayerManager.Instance.OnPeerDisconnected -= UpdatePeerList;
-        MultiplayerManager.Instance.OnMessageReceived -= DisplayMessage;
+        MultiplayerManager.Instance.OnMessageReceived -= HandleMessageReceived;
+        MultiplayerManager.Instance.OnPeerListUpdated -= HandlePeerListUpdated;
     }
 }
