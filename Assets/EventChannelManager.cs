@@ -6,9 +6,12 @@ using UnityEngine;
 public class EventChannelManager : MonoBehaviour
 {
     public static EventChannelManager Instance { get; private set; }
+
     public List<GameEventChannelSO> EventChannels { get => eventChannels; }
     [SerializeField] private List<GameEventChannelSO> eventChannels;
+
     private Dictionary<GameObject, Dictionary<GameEventChannelSO, Dictionary<string, System.Action<string>>>> subscriptions = new Dictionary<GameObject, Dictionary<GameEventChannelSO, Dictionary<string, System.Action<string>>>>();
+    
     public List<EventHistory> eventHistory = new List<EventHistory>();
 
     public struct EventHistory
@@ -230,4 +233,56 @@ public void RegisterForAllChannels(GameObject subscriber, System.Action<string> 
 #endif
 
 
+
+
+    private Dictionary<string, GameEventChannelSO> channelsByName = new Dictionary<string, GameEventChannelSO>();
+
+    public void RegisterChannelByName(string channelName)
+    {
+        if (!channelsByName.ContainsKey(channelName))
+        {
+            GameEventChannelSO newChannel = ScriptableObject.CreateInstance<GameEventChannelSO>();
+            newChannel.name = channelName;
+
+            channelsByName[channelName] = newChannel;
+
+            eventChannels.Add(newChannel);
+
+            Debug.Log($"Registered new channel: {channelName}");
+        }
+    }
+
+    public void RegisterEventByName(GameObject subscriber, string channelName, string eventName, Action<string> callback)
+    {
+        if (!channelsByName.ContainsKey(channelName))
+        {
+            RegisterChannelByName(channelName);
+        }
+
+        GameEventChannelSO channel = channelsByName[channelName];
+        channel.RegisterListener(callback, eventName);
+        Debug.Log($"Registered event '{eventName}' for channel '{channelName}'");
+    }
+
+    public void UnregisterEventByName(GameObject subscriber, string channelName, string eventName, Action<string> callback)
+    {
+        if (channelsByName.TryGetValue(channelName, out GameEventChannelSO channel))
+        {
+            channel.UnregisterListener(callback);
+            Debug.Log($"Unregistered event '{eventName}' for channel '{channelName}'");
+        }
+    }
+
+    public void RaiseEventByName(string channelName, string eventName)
+    {
+        if (channelsByName.TryGetValue(channelName, out GameEventChannelSO channel))
+        {
+            channel.RaiseEvent(eventName);
+            Debug.Log($"Raised event '{eventName}' on channel '{channelName}'");
+        }
+        else
+        {
+            Debug.LogWarning($"Attempted to raise event '{eventName}' on non-existent channel '{channelName}'");
+        }
+    }
 }

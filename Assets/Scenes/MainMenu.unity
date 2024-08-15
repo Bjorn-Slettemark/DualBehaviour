@@ -172,7 +172,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd950ee8960889e47933d9af4285eefa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  desiredLevelSO: {fileID: 11400000, guid: 78c76493d8e10734a877919dd8a16f62, type: 2}
 --- !u!114 &28373645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -775,7 +774,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 399.6, y: 35.6}
+  m_AnchoredPosition: {x: -185.69998, y: 35.6}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &366636196
@@ -790,7 +789,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd950ee8960889e47933d9af4285eefa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  desiredLevelSO: {fileID: 11400000, guid: 78c76493d8e10734a877919dd8a16f62, type: 2}
 --- !u!114 &366636197
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -974,7 +972,7 @@ MonoBehaviour:
         m_MethodName: ChangeLevel
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: 78c76493d8e10734a877919dd8a16f62, type: 2}
+          m_ObjectArgument: {fileID: 11400000, guid: fa1baeee551c52b46b42842427a3d545, type: 2}
           m_ObjectArgumentAssemblyTypeName: GameLevelSO, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
@@ -1031,7 +1029,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd950ee8960889e47933d9af4285eefa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  desiredLevelSO: {fileID: 11400000, guid: 78c76493d8e10734a877919dd8a16f62, type: 2}
 --- !u!1 &483590206
 GameObject:
   m_ObjectHideFlags: 0
@@ -1166,7 +1163,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 406.8, y: -28.6}
+  m_AnchoredPosition: {x: -178.5, y: -28.6}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &483590209
@@ -1627,7 +1624,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 405.3, y: 153.3}
+  m_AnchoredPosition: {x: -180, y: 153.3}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &706710144
@@ -1682,7 +1679,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd950ee8960889e47933d9af4285eefa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  desiredLevelSO: {fileID: 11400000, guid: 78c76493d8e10734a877919dd8a16f62, type: 2}
 --- !u!114 &706710147
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1928,6 +1924,9 @@ GameObject:
   - component: {fileID: 1091187337}
   - component: {fileID: 1091187339}
   - component: {fileID: 1091187340}
+  - component: {fileID: 1091187341}
+  - component: {fileID: 1091187342}
+  - component: {fileID: 1091187343}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: GameManager
@@ -1950,6 +1949,7 @@ MonoBehaviour:
   gameLevels:
   - {fileID: 11400000, guid: 78c76493d8e10734a877919dd8a16f62, type: 2}
   - {fileID: 11400000, guid: 5d0102b2abf3aaf4089675b20b45a89b, type: 2}
+  - {fileID: 11400000, guid: fa1baeee551c52b46b42842427a3d545, type: 2}
   levelEventChannel: {fileID: 11400000, guid: c1111422abca47c4094f29068d8f6f54, type: 2}
 --- !u!114 &1091187333
 MonoBehaviour:
@@ -2076,6 +2076,42 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a19da8af6e10edb48b785fc7f126ca28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1091187341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1091187331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1526ba4df1d43874b9c7678ac1487cf8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1091187342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1091187331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17ff5b6dc65642243b82b09e0a3cda5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1091187343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1091187331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 535e21f130f1d664aa9bc20777507ce2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1283146868
@@ -2267,7 +2303,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -211, y: 158.8}
+  m_AnchoredPosition: {x: 398, y: 158.8}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1329214282
@@ -2820,7 +2856,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd950ee8960889e47933d9af4285eefa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  desiredLevelSO: {fileID: 11400000, guid: 78c76493d8e10734a877919dd8a16f62, type: 2}
 --- !u!222 &1500265664
 CanvasRenderer:
   m_ObjectHideFlags: 0

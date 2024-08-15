@@ -21,32 +21,32 @@ public class MultiplayerTestUI : MonoBehaviour
         leaveRoomButton.onClick.AddListener(LeaveRoom);
         sendMessageButton.onClick.AddListener(SendMessage);
 
-        MultiplayerManager.Instance.OnMessageReceived += HandleMessageReceived;
-        MultiplayerManager.Instance.OnPeerListUpdated += HandlePeerListUpdated;
+        WebRTCManager.Instance.OnMessageReceived += HandleMessageReceived;
+        WebRTCManager.Instance.OnPeerListUpdated += HandlePeerListUpdated;
     }
 
     private void CreateRoom()
     {
-        MultiplayerManager.Instance.CreateRoom(roomNameInput.text);
+        WebRTCManager.Instance.CreateRoom(roomNameInput.text);
     }
 
     private void JoinRoom()
     {
-        MultiplayerManager.Instance.JoinRoom(roomNameInput.text);
+        WebRTCManager.Instance.JoinRoom(roomNameInput.text);
     }
 
     private void LeaveRoom()
     {
-        MultiplayerManager.Instance.LeaveRoom();
+        WebRTCManager.Instance.LeaveRoom();
     }
 
     private void SendMessage()
     {
-        MultiplayerManager.Instance.SendDataMessage(messageInput.text);
+        WebRTCManager.Instance.SendDataMessage(messageInput.text);
         messageInput.text = "";
     }
 
-    private void HandleMessageReceived(string message)
+    private void HandleMessageReceived(string peerId, string message)
     {
         messageLogText.text += $"{message}\n";
     }
@@ -58,7 +58,7 @@ public class MultiplayerTestUI : MonoBehaviour
 
     private void OnDestroy()
     {
-        MultiplayerManager.Instance.OnMessageReceived -= HandleMessageReceived;
-        MultiplayerManager.Instance.OnPeerListUpdated -= HandlePeerListUpdated;
+        WebRTCManager.Instance.OnMessageReceived -= HandleMessageReceived;
+        WebRTCManager.Instance.OnPeerListUpdated -= HandlePeerListUpdated;
     }
 }

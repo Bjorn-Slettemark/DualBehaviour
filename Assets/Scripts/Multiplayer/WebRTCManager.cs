@@ -4,24 +4,28 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Firebase.Database;
+using System.Linq;
 
-public class MultiplayerManager : MonoBehaviour
+public class WebRTCManager : MonoBehaviour
 {
-    private static MultiplayerManager _instance;
-    public static MultiplayerManager Instance => _instance;
+    private static WebRTCManager _instance;
+    public static WebRTCManager Instance => _instance;
 
     private DatabaseReference database;
     private string roomName;
+
     private string localPeerId;
+    public string LocalPeerId {  get { return localPeerId; } }
+
     private Dictionary<string, RTCPeerConnection> peerConnections = new Dictionary<string, RTCPeerConnection>();
     private Dictionary<string, RTCDataChannel> dataChannels = new Dictionary<string, RTCDataChannel>();
 
-    public event Action<string> OnMessageReceived;
+    public event Action<string, string> OnMessageReceived; // peerId, message
     public event Action<List<string>> OnPeerListUpdated;
 
     private Dictionary<string, List<RTCIceCandidate>> iceCandidateQueue = new Dictionary<string, List<RTCIceCandidate>>();
 
-    private const float KEEP_ALIVE_INTERVAL = 5f;
+    private const float KEEP_ALIVE_INTERVAL = 0.1f;
     private const string KEEP_ALIVE_MESSAGE = "KEEP_ALIVE";
     private Dictionary<string, Coroutine> keepAliveCoroutines = new Dictionary<string, Coroutine>();
     private Dictionary<string, float> lastKeepAliveTime = new Dictionary<string, float>();
@@ -42,6 +46,8 @@ public class MultiplayerManager : MonoBehaviour
             Debug.LogWarning("Multiple instances of MultiplayerManager detected. Destroying duplicate.");
             Destroy(gameObject);
         }
+        localPeerId = DualBehaviourUtils.GenerateRandomString(5);
+
     }
 
     private void Start()
@@ -53,12 +59,26 @@ public class MultiplayerManager : MonoBehaviour
             return;
         }
         database = FirebaseDatabase.DefaultInstance.RootReference;
-        localPeerId = DualBehaviourUtils.GenerateRandomString(5);
         Debug.Log($"MultiplayerManager: Local Peer ID is {localPeerId}");
+
         StartCoroutine(WebRTC.Update());
         Debug.Log("MultiplayerManager: WebRTC Update coroutine started");
     }
 
+    public void AddPeerConnection(string peerId, RTCPeerConnection peerConnection)
+    {
+        peerConnections[peerId] = peerConnection;
+    }
+
+    public void AddDataChannel(string peerId, RTCDataChannel dataChannel)
+    {
+        dataChannels[peerId] = dataChannel;
+        dataChannel.OnMessage += (bytes) =>
+        {
+            string message = System.Text.Encoding.UTF8.GetString(bytes);
+            OnMessageReceived?.Invoke(peerId, message);
+        };
+    }
     public void CreateRoom(string roomName)
     {
         if (database == null)
@@ -152,9 +172,11 @@ public class MultiplayerManager : MonoBehaviour
         {
             string peerId = child.Key;
             Debug.Log($"MultiplayerManager: Peer found - {peerId}");
+
             if (peerId != localPeerId)
             {
                 peers.Add(peerId);
+
                 if (!peerConnections.ContainsKey(peerId))
                 {
                     Debug.Log($"MultiplayerManager: New peer found - {peerId}");
@@ -163,13 +185,18 @@ public class MultiplayerManager : MonoBehaviour
                     {
                         StartCoroutine(CreateOffer(peerId));
                     }
+                    else
+                    {
+                        ListenForOffer(peerId);
+                    }
                 }
             }
         }
 
-        foreach (var peer in peerConnections.Keys)
+        // Only remove remote peer connections, not the local one
+        foreach (var peer in peerConnections.Keys.ToList())
         {
-            if (!peers.Contains(peer))
+            if (!peers.Contains(peer) && peer != LocalPeerConnectionSetup.Instance.RemotePeerId)
             {
                 Debug.Log($"MultiplayerManager: Peer left - {peer}");
                 ClosePeerConnection(peer);
@@ -177,6 +204,10 @@ public class MultiplayerManager : MonoBehaviour
         }
 
         Debug.Log($"MultiplayerManager: Updated peer list - {string.Join(", ", peers)}");
+
+        //var allPeers = new List<string> { localPeerId };
+        //allPeers.AddRange(peerConnections.Keys.Where(p => p != localPeerId));
+
         OnPeerListUpdated?.Invoke(peers);
     }
 
@@ -197,7 +228,7 @@ public class MultiplayerManager : MonoBehaviour
         var dataChannel = pc.CreateDataChannel("data");
         SetupDataChannel(peerId, dataChannel);
 
-        StartCoroutine(CreateOffer(peerId));
+        //StartCoroutine(CreateOffer(peerId));
         ListenForIceCandidates(peerId);
     }
 
@@ -394,20 +425,26 @@ public class MultiplayerManager : MonoBehaviour
 
     private void SetupDataChannel(string peerId, RTCDataChannel channel)
     {
-        Debug.Log($"MultiplayerManager: Setting up data channel for {peerId}");
+        Debug.Log($"WebRTCManager: Setting up data channel for {peerId}");
         dataChannels[peerId] = channel;
 
         channel.OnOpen = () =>
         {
-            Debug.Log($"MultiplayerManager: Data channel opened for {peerId}. Starting keep-alive.");
-            StartKeepAlive(peerId);
+            Debug.Log($"WebRTCManager: Data channel opened for {peerId}.");
+            if (peerId != localPeerId)
+            {
+                StartKeepAlive(peerId);
+            }
         };
 
         channel.OnClose = () =>
         {
-            Debug.Log($"MultiplayerManager: Data channel closed for {peerId}. Stopping keep-alive.");
-            StopKeepAlive(peerId);
-            StartCoroutine(TryReconnectDataChannel(peerId));
+            Debug.Log($"WebRTCManager: Data channel closed for {peerId}.");
+            if (peerId != localPeerId)
+            {
+                StopKeepAlive(peerId);
+                StartCoroutine(TryReconnectDataChannel(peerId));
+            }
         };
 
         channel.OnMessage = message => HandleDataMessage(peerId, message);
@@ -433,12 +470,41 @@ public class MultiplayerManager : MonoBehaviour
         if (state == RTCPeerConnectionState.Connected)
         {
             Debug.Log($"MultiplayerManager: WebRTC connection established with {peerId}");
+            StopCoroutine(nameof(ReconnectionAttempt));  // Stop any ongoing reconnection attempts
         }
         else if (state == RTCPeerConnectionState.Disconnected || state == RTCPeerConnectionState.Failed)
         {
             Debug.Log($"MultiplayerManager: WebRTC connection lost with {peerId}. Attempting to reconnect.");
-            StartCoroutine(TryReconnectPeerConnection(peerId));
+            StartCoroutine(ReconnectionAttempt(peerId));
         }
+    }
+
+    private IEnumerator ReconnectionAttempt(string peerId)
+    {
+        int attempts = 0;
+        const int maxAttempts = 5;
+        const float delayBetweenAttempts = 2f;
+
+        while (attempts < maxAttempts)
+        {
+            yield return new WaitForSeconds(delayBetweenAttempts);
+            attempts++;
+
+            Debug.Log($"MultiplayerManager: Reconnection attempt {attempts} for {peerId}");
+            ClosePeerConnection(peerId);
+            CreatePeerConnection(peerId);
+
+            // Wait for connection to be established
+            yield return new WaitForSeconds(5f);
+
+            if (peerConnections.TryGetValue(peerId, out var pc) && pc.ConnectionState == RTCPeerConnectionState.Connected)
+            {
+                Debug.Log($"MultiplayerManager: Reconnection successful for {peerId}");
+                yield break;
+            }
+        }
+
+        Debug.LogError($"MultiplayerManager: Failed to reconnect to {peerId} after {maxAttempts} attempts");
     }
 
     private IEnumerator TryReconnectPeerConnection(string peerId)
@@ -509,13 +575,20 @@ public class MultiplayerManager : MonoBehaviour
     private IEnumerator TryReconnectDataChannel(string peerId)
     {
         Debug.Log($"MultiplayerManager: Attempting to reconnect data channel for {peerId}");
-        yield return new WaitForSeconds(1f); // Wait a bit before attempting reconnection
+        yield return new WaitForSeconds(1f);
 
         if (peerConnections.TryGetValue(peerId, out RTCPeerConnection pc))
         {
-            var dataChannel = pc.CreateDataChannel("data");
-            HandleDataChannel(peerId, dataChannel);
-            Debug.Log($"MultiplayerManager: Created new data channel for {peerId}");
+            if (!dataChannels.ContainsKey(peerId) || dataChannels[peerId].ReadyState == RTCDataChannelState.Closed)
+            {
+                var dataChannel = pc.CreateDataChannel("data");
+                SetupDataChannel(peerId, dataChannel);
+                Debug.Log($"MultiplayerManager: Created new data channel for {peerId}");
+            }
+            else
+            {
+                Debug.Log($"MultiplayerManager: Data channel already exists for {peerId}. State: {dataChannels[peerId].ReadyState}");
+            }
         }
         else
         {
@@ -523,10 +596,11 @@ public class MultiplayerManager : MonoBehaviour
         }
     }
 
+
     private void HandleDataMessage(string peerId, byte[] bytes)
     {
         string message = System.Text.Encoding.UTF8.GetString(bytes);
-        if (message == KEEP_ALIVE_MESSAGE)
+        if (message == KEEP_ALIVE_MESSAGE && peerId != localPeerId)
         {
             Debug.Log($"MultiplayerManager: Received keep-alive message from {peerId}");
             lastKeepAliveTime[peerId] = Time.time;
@@ -534,14 +608,25 @@ public class MultiplayerManager : MonoBehaviour
         else
         {
             Debug.Log($"MultiplayerManager: Received message from {peerId}: {message}");
-            OnMessageReceived?.Invoke($"{peerId}: {message}");
+            OnMessageReceived?.Invoke(peerId, message);
         }
     }
+    public List<string> GetConnectedPeers()
+    {
+        return new List<string>(peerConnections.Keys);
+    }
+
 
     public void SendDataMessage(string message)
     {
-        Debug.Log($"MultiplayerManager: Sending data message to all peers: {message}");
+        Debug.Log($"WebRTCManager: Sending data message to all peers: {message}");
         byte[] bytes = System.Text.Encoding.UTF8.GetBytes(message);
+
+        // Send to local peer
+        //LocalPeerConnectionSetup.Instance.SendLocalMessage(message);
+        //Debug.Log("WebRTCManager: Data message sent to local peer");
+
+        // Send to remote peers
         foreach (var kvp in dataChannels)
         {
             string peerId = kvp.Key;
@@ -549,32 +634,36 @@ public class MultiplayerManager : MonoBehaviour
             if (channel.ReadyState == RTCDataChannelState.Open)
             {
                 channel.Send(bytes);
-                Debug.Log($"MultiplayerManager: Data message sent to {peerId} through channel: {channel.Label}");
+                Debug.Log($"WebRTCManager: Data message sent to remote peer {peerId}");
             }
             else
             {
-                Debug.LogWarning($"MultiplayerManager: Cannot send data message to {peerId}. Channel state: {channel.ReadyState}");
-                StartCoroutine(TryReconnectDataChannel(peerId));
+                Debug.LogWarning($"WebRTCManager: Cannot send data message to remote peer {peerId}. Channel state: {channel.ReadyState}");
             }
         }
+
+ 
     }
+
+
 
     private void ClosePeerConnection(string peerId)
     {
         Debug.Log($"MultiplayerManager: Closing peer connection for {peerId}");
         StopKeepAlive(peerId);
-        if (peerConnections.TryGetValue(peerId, out var pc))
-        {
-            pc.Close();
-            peerConnections.Remove(peerId);
-            Debug.Log($"MultiplayerManager: Peer connection closed and removed for {peerId}");
-        }
 
         if (dataChannels.TryGetValue(peerId, out var channel))
         {
             channel.Close();
             dataChannels.Remove(peerId);
             Debug.Log($"MultiplayerManager: Data channel closed and removed for {peerId}");
+        }
+
+        if (peerConnections.TryGetValue(peerId, out var pc))
+        {
+            pc.Close();
+            peerConnections.Remove(peerId);
+            Debug.Log($"MultiplayerManager: Peer connection closed and removed for {peerId}");
         }
 
         // Remove all signaling data for this peer
@@ -585,10 +674,12 @@ public class MultiplayerManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        Debug.Log("MultiplayerManager: Destroying and leaving room");
-        foreach (var peerId in keepAliveCoroutines.Keys)
+        Debug.Log("WebRTCManager: Destroying and leaving room");
+        foreach (var peerId in peerConnections.Keys.ToList())
         {
+            ClosePeerConnection(peerId);
             StopKeepAlive(peerId);
+
         }
         LeaveRoom();
     }

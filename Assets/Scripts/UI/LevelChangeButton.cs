@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class LevelChangeButton : MonoBehaviour
 {
-    [SerializeField]
+
     private GameLevelSO desiredLevelSO;
     public void ChangeLevel(GameLevelSO eventLevelSO)
     {

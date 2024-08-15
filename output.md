@@ -1,69 +1,250 @@
 # Table of Contents
+- \Dev\Unity\DualBehaviour\Assets\Scripts\AI.meta
+- \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph.meta
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Common.meta
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Engine.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\GameStateManager.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\GameStateManager.cs.meta
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Level.meta
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Multiplayer.meta
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Player.meta
+- \Dev\Unity\DualBehaviour\Assets\Scripts\UI.meta
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Utils.meta
+- \Dev\Unity\DualBehaviour\Assets\Scripts\AI\Agents.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\AI\AiController.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\AI\AiController.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\AI\AISenseSystem.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\AI\AISenseSystem.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\AI\AIState.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\AI\AIState.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\AI\AiStateAttackSO.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\AI\AiStateAttackSO.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\AI\AiStateIdleSO.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\AI\AiStateIdleSO.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\AI\AiStateSO.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\AI\AiStateSO.cs.meta
+- \Dev\Unity\DualBehaviour\Assets\Scripts\AI\Helper.meta
+- \Dev\Unity\DualBehaviour\Assets\Scripts\AI\Weapon.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\AiGraph.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\AiGraph.cs.meta
+- \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\Editor.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\NodeAI.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\NodeAI.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\NodeAiConditional.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\NodeAiConditional.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\NodeAIEvent.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\NodeAIEvent.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\NodeAILocalEvent.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\NodeAILocalEvent.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\NodeAIState.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\NodeAIState.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\Common\HealthSystem.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Common\HealthSystem.cs.meta
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\Core.meta
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\EventSystem.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\FloatReference.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\FloatReference.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\FloatVariable.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\FloatVariable.cs.meta
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState.meta
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\Level.meta
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\SaveLoad.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\Level\DestructibleObject.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Level\DestructibleObject.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\Level\DoorController.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Level\DoorController.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\Level\HideInGame.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Level\HideInGame.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\Level\Spawnpoint.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Level\Spawnpoint.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\Level\Trigger.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Level\Trigger.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\Level\WinPoint.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Level\WinPoint.cs.meta
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Multiplayer\FirebaseHelper.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Multiplayer\FirebaseHelper.cs.meta
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Multiplayer\FirebaseInitializer.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Multiplayer\FirebaseInitializer.cs.meta
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Multiplayer\firebase_config.json
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Multiplayer\firebase_config.json.meta
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Multiplayer\WebRTCManager.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Multiplayer\WebRTCManager.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\Player\BulletController.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Player\BulletController.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\Player\DynamicCameraFollow.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Player\DynamicCameraFollow.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\Player\GunController.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Player\GunController.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\Player\PlayerController.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Player\PlayerController.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\Player\PlayerDataSO.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Player\PlayerDataSO.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\Player\PlayerStatsSO.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Player\PlayerStatsSO.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\UI\GameControllButtons.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\UI\GameControllButtons.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\UI\HealthBar.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\UI\HealthBar.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\UI\LevelChangeButton.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\UI\LevelChangeButton.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\UI\UIManager.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\UI\UIManager.cs.meta
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Utils\DualBehaviourUtils.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Utils\DualBehaviourUtils.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\AI\Agents\AIBehaviorMelee.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\AI\Agents\AIBehaviorMelee.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\AI\Agents\AIBehaviorRanged.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\AI\Agents\AIBehaviorRanged.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\AI\Agents\IAIBehavior.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\AI\Agents\IAIBehavior.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\AI\Helper\AIHelperFunctions.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\AI\Helper\AIHelperFunctions.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\AI\Weapon\EnemyGunController.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\AI\Weapon\EnemyGunController.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\AI\Weapon\SwordController.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\AI\Weapon\SwordController.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\Editor\AiGraphEditor.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\Editor\AiGraphEditor.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\Editor\AiGraphEditorExtensions.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\Editor\AiGraphEditorExtensions.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\Editor\NodeAiEditor.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\Editor\NodeAiEditor.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\Editor\NodeAIEventEditor.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\Editor\NodeAIEventEditor.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\Editor\NodeAiStateEditor.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\Editor\NodeAiStateEditor.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\Core\DualBehaviour.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\Core\DualBehaviour.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\EventSystem\GameEventChannelSO.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\EventSystem\GameEventChannelSO.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\EventSystem\GameEventListener.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\EventSystem\GameEventListener.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\DefaultStateSO.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\DefaultStateSO.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\GameOverStateSO.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\GameOverStateSO.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\GameStateMachine.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\GameStateMachine.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\GameStateSO.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\GameStateSO.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\InGameStateSO.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\InGameStateSO.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\IntroStateSO.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\IntroStateSO.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\LevelLoadingStateSO.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\LevelLoadingStateSO.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\LoadingStateSO.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\LoadingStateSO.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\MainMenuStateSO.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\MainMenuStateSO.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\PauseStateSO.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\PauseStateSO.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\SavingStateSO.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\SavingStateSO.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\Level\GameLevelSO.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\Level\GameLevelSO.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\Level\IngameGameLevelSO.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\Level\IngameGameLevelSO.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\Level\MainMenuGameLevelSO.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\Level\MainMenuGameLevelSO.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\SaveLoad\GameDataSO.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\SaveLoad\GameDataSO.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\SaveLoad\LevelSaveBlueprintSO.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\SaveLoad\LevelSaveBlueprintSO.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\SaveLoad\MigrationConfigBaseSO.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\SaveLoad\MigrationConfigBaseSO.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\SaveLoad\MigrationConfig_v1_to_v2_SO.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\SaveLoad\MigrationConfig_v1_to_v2_SO.cs.meta
 - \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\SaveLoad\SaveBlueprintSO.cs
+- \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\SaveLoad\SaveBlueprintSO.cs.meta
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AI.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 180 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 767043d457f5e424aa937e35ed0312df
+folderAsset: yes
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 172 bytes
+- Created: 2024-07-23 07:33:43
+- Modified: 2024-07-23 07:33:44
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 10a349e9148b5fb4b83e5c22f6b2c9f6
+folderAsset: yes
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Common.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 180 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 2cafbeea9ff6ebb4aa231dff24bb00db
+folderAsset: yes
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 180 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: f03bf6b8e5751144c8e39d671055a430
+folderAsset: yes
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
 
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\GameStateManager.cs
 
@@ -235,6 +416,163 @@ public class GameStateManager : MonoBehaviour
 }
 ```
 
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\GameStateManager.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 7e80864e86f397d42aacd3d73106a76d
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 1
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Level.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 180 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: ddd37c0bca00ac440999659234aee7e5
+folderAsset: yes
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Multiplayer.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 172 bytes
+- Created: 2024-08-09 12:15:57
+- Modified: 2024-08-09 12:15:57
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 8135f254e3a666448b1a80dcd940eadc
+folderAsset: yes
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Player.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 180 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 11b7a5cebbaff02498933b5eb6896fee
+folderAsset: yes
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\UI.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 180 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: e57eab62a5d845444a8d37dde8debc1d
+folderAsset: yes
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Utils.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 172 bytes
+- Created: 2024-08-11 20:01:06
+- Modified: 2024-08-11 20:01:06
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 80d2ba04019db634f9685477c7f45465
+folderAsset: yes
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AI\Agents.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 180 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: e7041a50aada2f34dbedfa78a4a0fc08
+folderAsset: yes
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AI\AiController.cs
 
 - Extension: .cs
@@ -310,6 +648,31 @@ public class AIController : MonoBehaviour
         }
     }
 }
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AI\AiController.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 243 bytes
+- Created: 2024-07-23 07:48:27
+- Modified: 2024-07-23 07:48:27
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: f698fc559aaa3ec4b9d460697bc1a39a
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
 ```
 
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AI\AISenseSystem.cs
@@ -466,6 +829,31 @@ public class AISenseSystem : MonoBehaviour
 
 ```
 
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AI\AISenseSystem.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 3953fbb4cc287bc4da4dc0d8936df3dd
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AI\AIState.cs
 
 - Extension: .cs
@@ -519,6 +907,31 @@ public class AIState : ScriptableObject
 }
 ```
 
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AI\AIState.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 1e771bf476644c54f86e8bd4cc468a66
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AI\AiStateAttackSO.cs
 
 - Extension: .cs
@@ -564,6 +977,31 @@ public class AiStateAttackSO : AiStateSO
 }
 ```
 
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AI\AiStateAttackSO.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 243 bytes
+- Created: 2024-07-23 08:12:34
+- Modified: 2024-07-23 08:12:34
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 55d529aa10f30bd4d9e5c2503b034547
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AI\AiStateIdleSO.cs
 
 - Extension: .cs
@@ -599,6 +1037,31 @@ public class AiStateIdleSO : AiStateSO
 }
 ```
 
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AI\AiStateIdleSO.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 243 bytes
+- Created: 2024-07-24 06:51:22
+- Modified: 2024-07-24 06:51:22
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 9a762d753d07b294db378061e98222ef
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AI\AiStateSO.cs
 
 - Extension: .cs
@@ -630,13 +1093,82 @@ public abstract class AiStateSO : ScriptableObject
 }
 ```
 
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AI\AiStateSO.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 243 bytes
+- Created: 2024-07-23 08:12:13
+- Modified: 2024-07-23 08:12:13
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 0b0fd7c3fb040714b8abd161ed3d6ae9
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AI\Helper.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 180 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 33e562de6adec7646a68f278fee26776
+folderAsset: yes
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AI\Weapon.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 180 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 6b1162e9875b24f4592e40ceb1438cd2
+folderAsset: yes
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\AiGraph.cs
 
 - Extension: .cs
 - Language: csharp
-- Size: 5287 bytes
+- Size: 5214 bytes
 - Created: 2024-07-23 07:33:49
-- Modified: 2024-08-08 09:35:59
+- Modified: 2024-08-10 01:10:53
 
 ### Code
 
@@ -646,8 +1178,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using XNode;
 using System.Linq;
-using UnityEditor;
-using XNodeEditor;
 
 public enum PriorityLevel
 {
@@ -703,12 +1233,12 @@ public class AiGraph : NodeGraph
 
     public void OnNodeActiveStateChanged()
     {
-        Debug.Log("Node active state changed");
-        if (XNodeEditor.NodeEditorWindow.current != null)
-        {
-            EditorApplication.delayCall += XNodeEditor.NodeEditorWindow.current.Repaint;
-        }
-        OnGraphChanged?.Invoke();
+        //Debug.Log("Node active state changed");
+        //if (XNodeEditor.NodeEditorWindow.current != null)
+        //{
+        //    EditorApplication.delayCall += XNodeEditor.NodeEditorWindow.current.Repaint;
+        //}
+        //OnGraphChanged?.Invoke();
     }
     public void SetCurrentPriorityLevel(int level, bool forceSet = false)
     {
@@ -830,19 +1360,65 @@ public class AiGraph : NodeGraph
     public void SetNodeActive(NodeAI node, bool active)
     {
         node.IsActive = active;
-        NodeEditorWindow.current.Repaint();
     }
 
 }
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\AiGraph.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 243 bytes
+- Created: 2024-07-28 21:11:33
+- Modified: 2024-07-28 21:11:33
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 03767c76e9960274eaf350286f19cbb0
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\Editor.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 172 bytes
+- Created: 2024-07-24 06:47:20
+- Modified: 2024-07-24 06:47:20
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: ac8705f02bacfd144841f98c04806cc6
+folderAsset: yes
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
 ```
 
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\NodeAI.cs
 
 - Extension: .cs
 - Language: csharp
-- Size: 3143 bytes
+- Size: 2975 bytes
 - Created: 2024-07-26 08:11:18
-- Modified: 2024-08-08 09:35:46
+- Modified: 2024-08-10 01:09:23
 
 ### Code
 
@@ -851,7 +1427,6 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using XNode;
-using XNodeEditor;
 
 public abstract class NodeAI : Node
 {
@@ -868,10 +1443,7 @@ public abstract class NodeAI : Node
             if (_isActive != value)
             {
                 _isActive = value;
-                if (NodeEditorWindow.current != null)
-                {
-                    NodeEditorWindow.current.Repaint();
-                }
+
             }
         }
     }
@@ -978,6 +1550,31 @@ public abstract class NodeAI : Node
 }
 ```
 
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\NodeAI.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 243 bytes
+- Created: 2024-07-28 21:08:49
+- Modified: 2024-07-28 21:08:50
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 548ecd2545e9f384086a3c463191dc4d
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\NodeAiConditional.cs
 
 - Extension: .cs
@@ -1023,13 +1620,38 @@ public abstract class NodeAIConditional : NodeAI
 }
 ```
 
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\NodeAiConditional.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 243 bytes
+- Created: 2024-07-29 05:52:06
+- Modified: 2024-07-29 05:52:06
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: ab9bf89bb7588fc4ebacfc0a38a89df0
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\NodeAIEvent.cs
 
 - Extension: .cs
 - Language: csharp
-- Size: 2436 bytes
+- Size: 2438 bytes
 - Created: 2024-07-23 07:37:25
-- Modified: 2024-08-08 09:14:29
+- Modified: 2024-08-10 01:11:11
 
 ### Code
 
@@ -1107,7 +1729,7 @@ public class NodeAIEvent : NodeAI
         TriggerOutputs();
 
         // Notify Unity that the graph has changed
-        EditorUtility.SetDirty(aiGraph);
+        //EditorUtility.SetDirty(aiGraph);
     }
     public override object GetValue(NodePort port)
     {
@@ -1120,13 +1742,38 @@ public class NodeAIEvent : NodeAI
 }
 ```
 
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\NodeAIEvent.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 243 bytes
+- Created: 2024-07-28 21:09:33
+- Modified: 2024-07-28 21:09:33
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 34acda2f985ab42468e2c1b7ab5c6d56
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\NodeAILocalEvent.cs
 
 - Extension: .cs
 - Language: csharp
-- Size: 3042 bytes
+- Size: 3044 bytes
 - Created: 2024-07-24 08:14:49
-- Modified: 2024-08-08 06:42:48
+- Modified: 2024-08-10 01:11:26
 
 ### Code
 
@@ -1211,7 +1858,7 @@ public class NodeAILocalEvent : NodeAI
         TriggerOutputs();
 
         // Notify Unity that the graph has changed
-        EditorUtility.SetDirty(aiGraph);
+        //EditorUtility.SetDirty(aiGraph);
     }
 
     public override object GetValue(NodePort port)
@@ -1231,6 +1878,31 @@ public class NodeAILocalEvent : NodeAI
         }
     }
 }
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\NodeAILocalEvent.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 243 bytes
+- Created: 2024-07-28 21:09:49
+- Modified: 2024-07-28 21:09:49
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 6ff63bf0e8d27284291a5a77a4c3018d
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
 ```
 
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\NodeAIState.cs
@@ -1320,6 +1992,31 @@ public class NodeAIState : NodeAI
 }
 ```
 
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\NodeAIState.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 243 bytes
+- Created: 2024-07-28 21:09:17
+- Modified: 2024-07-28 21:09:17
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 25f8c96a154405f419eb37a97419334f
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Common\HealthSystem.cs
 
 - Extension: .cs
@@ -1380,6 +2077,75 @@ public class HealthSystem : MonoBehaviour
 
 ```
 
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Common\HealthSystem.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: ece50e4607ff4304da63a6e8c29bf9e2
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\Core.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 180 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 07760f60bd48ea74d9b3467f41e14386
+folderAsset: yes
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\EventSystem.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 180 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: a9f6fc1604c78e64580471a0ca248e37
+folderAsset: yes
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\FloatReference.cs
 
 - Extension: .cs
@@ -1436,6 +2202,31 @@ public class FloatReference
 
 ```
 
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\FloatReference.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: f18845574ef12794da01b813be1c94a0
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\FloatVariable.cs
 
 - Extension: .cs
@@ -1471,6 +2262,97 @@ public class FloatVariable : ScriptableObject
 
 ```
 
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\FloatVariable.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 1cfa721fca7e7254cb91553bbe43f3e7
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 180 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: d7c13252fa779344eb6d24045a937523
+folderAsset: yes
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\Level.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 180 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 015b9b076f89e0a4b9da524f7a673d92
+folderAsset: yes
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\SaveLoad.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 180 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 8526785193388f742a111459fad4d393
+folderAsset: yes
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Level\DestructibleObject.cs
 
 - Extension: .cs
@@ -1498,6 +2380,31 @@ public class DestructibleObject : MonoBehaviour
     }
 }
 
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Level\DestructibleObject.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: dc643207375530f468f387d6337ca1eb
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
 
 ```
 
@@ -1578,6 +2485,31 @@ public class DoorController : MonoBehaviour
 
 ```
 
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Level\DoorController.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 4258eda679ec8dc458f33851f435779a
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Level\HideInGame.cs
 
 - Extension: .cs
@@ -1614,6 +2546,31 @@ public class HideInGame : MonoBehaviour
         }
     }
 }
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Level\HideInGame.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 9ab305a291454b24cadb5b0a3e20d28a
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
 
 ```
 
@@ -1722,6 +2679,31 @@ public class SpawnPoint : MonoBehaviour
 
 ```
 
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Level\Spawnpoint.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 23129745d342dea4cbf585752bde6c7c
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Level\Trigger.cs
 
 - Extension: .cs
@@ -1758,6 +2740,31 @@ public class Trigger : MonoBehaviour
 
 }
 
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Level\Trigger.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 7d5d377b630adca4083dc11df05b754d
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
 
 ```
 
@@ -1929,6 +2936,1037 @@ public class WinPoint : MonoBehaviour
 
 ```
 
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Level\WinPoint.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 48cfae51ac028334781d14faed172d0a
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Multiplayer\FirebaseHelper.cs
+
+- Extension: .cs
+- Language: csharp
+- Size: 985 bytes
+- Created: 2024-08-10 14:25:56
+- Modified: 2024-08-10 17:31:11
+
+### Code
+
+```csharp
+using System;
+using System.Threading.Tasks;
+using Firebase.Database;
+
+public static class FirebaseHelper
+{
+    public static async Task<DataSnapshot> WithTimeout(Task<DataSnapshot> task, int timeoutMilliseconds = 5000)
+    {
+        var timeoutTask = Task.Delay(timeoutMilliseconds);
+        var completedTask = await Task.WhenAny(task, timeoutTask);
+        if (completedTask == timeoutTask)
+        {
+            throw new TimeoutException($"Firebase operation timed out after {timeoutMilliseconds}ms");
+        }
+        return await task;
+    }
+
+    public static async Task WithTimeout(Task task, int timeoutMilliseconds = 5000)
+    {
+        var timeoutTask = Task.Delay(timeoutMilliseconds);
+        var completedTask = await Task.WhenAny(task, timeoutTask);
+        if (completedTask == timeoutTask)
+        {
+            throw new TimeoutException($"Firebase operation timed out after {timeoutMilliseconds}ms");
+        }
+        await task;
+    }
+}
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Multiplayer\FirebaseHelper.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 243 bytes
+- Created: 2024-08-10 14:25:56
+- Modified: 2024-08-10 14:25:56
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 77f3ef2963a8b594d8ea6815de8c5241
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Multiplayer\FirebaseInitializer.cs
+
+- Extension: .cs
+- Language: csharp
+- Size: 1431 bytes
+- Created: 2024-08-09 12:16:04
+- Modified: 2024-08-11 01:39:43
+
+### Code
+
+```csharp
+using UnityEngine;
+using Firebase;
+
+public class FirebaseInitializer : MonoBehaviour
+{
+    private FirebaseApp app;
+
+    private void Awake()
+    {
+        InitializeFirebase();
+    }
+
+    private async void InitializeFirebase()
+    {
+        Debug.Log("Initializing Firebase...");
+
+        try
+        {
+            // Check that all dependencies are available
+            var dependencyStatus = await FirebaseApp.CheckAndFixDependenciesAsync();
+            if (dependencyStatus != DependencyStatus.Available)
+            {
+                Debug.LogError($"Could not resolve all Firebase dependencies: {dependencyStatus}");
+                return;
+            }
+
+            // Initialize the default app
+            app = FirebaseApp.DefaultInstance;
+
+            Debug.Log("Firebase initialized successfully.");
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Firebase initialization failed: {ex.Message}");
+        }
+    }
+}
+
+[System.Serializable]
+public class FirebaseConfig
+{
+    public string type;
+    public string project_id;
+    public string private_key_id;
+    public string private_key;
+    public string client_email;
+    public string client_id;
+    public string auth_uri;
+    public string token_uri;
+    public string auth_provider_x509_cert_url;
+    public string client_x509_cert_url;
+    public string universe_domain;
+}
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Multiplayer\FirebaseInitializer.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 243 bytes
+- Created: 2024-08-09 12:16:04
+- Modified: 2024-08-09 12:16:04
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 8cbc1baacb13f9f4784b33ca403c5c9f
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Multiplayer\firebase_config.json
+
+- Extension: .json
+- Language: json
+- Size: 2397 bytes
+- Created: 2024-08-09 13:49:00
+- Modified: 2024-08-09 13:10:05
+
+### Code
+
+```json
+{
+  "type": "service_account",
+  "project_id": "dualbehaviour-6b915",
+  "private_key_id": "01c846dda025efc622fce01ef9fe5186976c9402",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC7eOJYYaPPI+io\ncNjEWGMAJ5Y91g47bfEt47Jcyh1fHHg6IqKhLo728ORcWAyS2dI9pi0HQYs/AQBn\nNxzxujXz9cuJRgRo8dWnagBYJxeMPG8M7zPL7mIeUS1Uin9L92o+/gPNJuv3cf7R\nIHU+vNwMt8Fo42MUCWw3OTkVzK38VIbYUb6CFESXQRBLJnO6sYL1pDgLtZ4ddoiw\n7m96PKvKj8ykJyWrrAgj6+sro4/O/Iz5i34lIgSICdXWofq6e6q6WpgjKTOy2App\nKsLrQeztCUsBpf/71RNoej9piavwuXmmfLM3/zy9KyAYsMl+5NCPnDeujt/TxXrZ\nBVC4meQzAgMBAAECggEAPHWSTZ2DliiG/leSWNQGbYTWy69uXJUqzDlcCte13DgS\nv/DukNuyiIoMo4lT2MI9rtsaN3ZYYWPBzQe1onGCt+BDmUxG3M9tL3YckVFeI0BU\nMhAsnK6O3ycf3t1hi07J6XHDKRTN0bnmS2xT031V3BYg3mJC0DHvv+mI8vJVBARz\nQJ7Z22iCMkVBuRC+c0qX9rzGfV5k7Z1hqoC9WBBbhxQfxiKE+BmWt0VARRfKRlsZ\nWdNyjhVKp+OavNIl7902iUvSB+Gd3sliOMELyCpWsaFQbQLqsJnzKmQTVn2m6j/8\nGcoBsGdS661+xRjJSwDlsSssJplk/Vi/0vl6ODkNpQKBgQDb6yGxO2limM8uJNwS\niYrBVrMmGSYLCKUbg8dg1K2N7TqBVndSyTAM3GsvHPYmLvOCyQrzI8CkskCvH5OM\nO7Q+RemSG6iVT+0aaydPQtkh0T2qMUPqnW/yVy+cyWppKlt70Db0wHC2d0I5OFSn\n9xJ0jIU5yNgRUJnxYnPwr1y7hwKBgQDaOvc6J7XFP30U0Ux8rKd2/7dbspvzIcZG\nD5+1vRQoRRRWadOEfHrL+fEnlhxQi3hZe9M2BmQDDv7CQy3dtFHYMBNCEt44PQDJ\nuk1nNC2T9JsckVWX3d6Wm4ImOZ2bCd7O02T7YYfDC/DzfYKyrNEGUpjD8U+jjyVx\nQQQA+eU09QKBgBr3RfZZdp6kZiMeWe3b96ulWeo+AzAvKy+ohPYWngFdKWNamt8H\n1GB/VpU8U+Jyt2E+DZ2qsKCBSvUuRgVX/M31/KHxykYkusoWgYdyhvViltEboVxP\nWb65ehkbiXTDwNv5uANi5W86SGCDy72cyiKIaH2hZv0YiQfULqtAlXpZAoGAT5nM\njgDoE5+53zsM3DkaCJTz69W1frTmHq4aQm9Kh/nSlkaZqazCGd78cMUXZOXKq1E4\nVG92UYtJr9BTTZg1dlbq32IEfpz5yZtUGn301hAV+BCnGPML+wGUMp83dtLd27FO\nF0eW/rU/WYGBh+zzfYvpPyepNe7D6JCfhj+gtHUCgYEAkZPbXUb3b851OfU7e32/\nlBWg5nE29YBDcJDOzTj6y3aAEJePEFekIksL8WytSuehod7AoU/QHjIkQo4d3mfH\n20IZZISDOriiCcDfyD+IXIqRXgKmWDlEjthR7mYdvUjmmkTSiGpviQrUg4kK0K4Q\nexPvp2zKjbEiNQm5YsluyYw=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-swli4@dualbehaviour-6b915.iam.gserviceaccount.com",
+  "client_id": "104209742646164346538",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-swli4%40dualbehaviour-6b915.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Multiplayer\firebase_config.json.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 158 bytes
+- Created: 2024-08-09 13:49:00
+- Modified: 2024-08-09 13:49:00
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 59c28318d5624b64687b468666363e25
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Multiplayer\WebRTCManager.cs
+
+- Extension: .cs
+- Language: csharp
+- Size: 28570 bytes
+- Created: 2024-08-09 22:08:54
+- Modified: 2024-08-12 14:27:26
+
+### Code
+
+```csharp
+using UnityEngine;
+using Unity.WebRTC;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using Firebase.Database;
+using System.Linq;
+
+public class WebRTCManager : MonoBehaviour
+{
+    private static WebRTCManager _instance;
+    public static WebRTCManager Instance => _instance;
+
+    private DatabaseReference database;
+    private string roomName;
+    private string localPeerId;
+    private Dictionary<string, RTCPeerConnection> peerConnections = new Dictionary<string, RTCPeerConnection>();
+    private Dictionary<string, RTCDataChannel> dataChannels = new Dictionary<string, RTCDataChannel>();
+
+    public event Action<string> OnMessageReceived;
+    public event Action<List<string>> OnPeerListUpdated;
+
+    private Dictionary<string, List<RTCIceCandidate>> iceCandidateQueue = new Dictionary<string, List<RTCIceCandidate>>();
+
+    private const float KEEP_ALIVE_INTERVAL = 0.1f;
+    private const string KEEP_ALIVE_MESSAGE = "KEEP_ALIVE";
+    private Dictionary<string, Coroutine> keepAliveCoroutines = new Dictionary<string, Coroutine>();
+    private Dictionary<string, float> lastKeepAliveTime = new Dictionary<string, float>();
+
+
+    private bool isHost;
+
+    private void Awake()
+    {
+        Debug.Log("MultiplayerManager: Awake called");
+        if (_instance == null)
+        {
+            _instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Debug.LogWarning("Multiple instances of MultiplayerManager detected. Destroying duplicate.");
+            Destroy(gameObject);
+        }
+    }
+
+    private void Start()
+    {
+        Debug.Log("MultiplayerManager: Start called");
+        if (Firebase.FirebaseApp.DefaultInstance == null)
+        {
+            Debug.LogError("Firebase has not been initialized. Please make sure Firebase is set up correctly.");
+            return;
+        }
+        database = FirebaseDatabase.DefaultInstance.RootReference;
+        localPeerId = DualBehaviourUtils.GenerateRandomString(5);
+        Debug.Log($"MultiplayerManager: Local Peer ID is {localPeerId}");
+        StartCoroutine(WebRTC.Update());
+        Debug.Log("MultiplayerManager: WebRTC Update coroutine started");
+    }
+
+    public void CreateRoom(string roomName)
+    {
+        if (database == null)
+        {
+            Debug.LogError("MultiplayerManager: Firebase database not initialized");
+            return;
+        }
+
+        Debug.Log($"MultiplayerManager: Creating room {roomName}");
+        this.roomName = roomName;
+        isHost = true;
+        database.Child("rooms").Child(roomName).Child("peers").Child(localPeerId).SetValueAsync(true).ContinueWith(task =>
+        {
+            if (task.IsCompleted && !task.IsFaulted)
+            {
+                Debug.Log($"MultiplayerManager: Successfully created room {roomName} in Firebase");
+                ListenForPeers();
+            }
+            else
+            {
+                Debug.LogError($"MultiplayerManager: Failed to create room in Firebase: {task.Exception}");
+            }
+        });
+    }
+
+
+    public void JoinRoom(string roomName)
+    {
+        Debug.Log($"MultiplayerManager: Joining room {roomName}");
+        this.roomName = roomName;
+        isHost = false;
+        database.Child("rooms").Child(roomName).Child("peers").Child(localPeerId).SetValueAsync(true).ContinueWith(task =>
+        {
+            if (task.IsCompleted && !task.IsFaulted)
+            {
+                Debug.Log($"MultiplayerManager: Successfully joined room {roomName} in Firebase");
+                ListenForPeers();
+            }
+            else
+            {
+                Debug.LogError($"MultiplayerManager: Failed to join room in Firebase: {task.Exception}");
+            }
+        });
+    }
+
+    public void LeaveRoom()
+    {
+        if (string.IsNullOrEmpty(roomName)) return;
+
+        Debug.Log($"MultiplayerManager: Leaving room {roomName}");
+        foreach (var peer in peerConnections)
+        {
+            ClosePeerConnection(peer.Key);
+        }
+
+        database.Child("rooms").Child(roomName).Child("peers").Child(localPeerId).RemoveValueAsync().ContinueWith(task =>
+        {
+            if (task.IsCompleted && !task.IsFaulted)
+            {
+                Debug.Log($"MultiplayerManager: Successfully left room {roomName} in Firebase");
+            }
+            else
+            {
+                Debug.LogError($"MultiplayerManager: Failed to leave room in Firebase: {task.Exception}");
+            }
+        });
+        roomName = null;
+    }
+
+    private void ListenForPeers()
+    {
+        Debug.Log($"MultiplayerManager: Start listening for peers in room {roomName}");
+        database.Child("rooms").Child(roomName).Child("peers").ValueChanged += HandlePeersChanged;
+    }
+
+    private void HandlePeersChanged(object sender, ValueChangedEventArgs args)
+    {
+        if (args.DatabaseError != null)
+        {
+            Debug.LogError($"MultiplayerManager: Database error - {args.DatabaseError.Message}");
+            return;
+        }
+
+        if (args.Snapshot.Value == null) return;
+
+        Debug.Log("MultiplayerManager: Peer list changed");
+        Debug.Log($"MultiplayerManager: Snapshot value: {args.Snapshot.GetRawJsonValue()}");
+
+        var peers = new List<string>();
+        foreach (var child in args.Snapshot.Children)
+        {
+            string peerId = child.Key;
+            Debug.Log($"MultiplayerManager: Peer found - {peerId}");
+            if (peerId != localPeerId)
+            {
+                peers.Add(peerId);
+                if (!peerConnections.ContainsKey(peerId))
+                {
+                    Debug.Log($"MultiplayerManager: New peer found - {peerId}");
+                    CreatePeerConnection(peerId);
+                    if (isHost)
+                    {
+                        StartCoroutine(CreateOffer(peerId));
+                    }
+                }
+            }
+        }
+
+        foreach (var peer in peerConnections.Keys)
+        {
+            if (!peers.Contains(peer))
+            {
+                Debug.Log($"MultiplayerManager: Peer left - {peer}");
+                ClosePeerConnection(peer);
+            }
+        }
+
+        Debug.Log($"MultiplayerManager: Updated peer list - {string.Join(", ", peers)}");
+        OnPeerListUpdated?.Invoke(peers);
+    }
+
+    private void CreatePeerConnection(string peerId)
+    {
+        Debug.Log($"MultiplayerManager: Creating peer connection for {peerId}");
+        RTCConfiguration config = default;
+        config.iceServers = new[] { new RTCIceServer { urls = new[] { "stun:stun.l.google.com:19302" } } };
+
+        var pc = new RTCPeerConnection(ref config);
+        peerConnections[peerId] = pc;
+
+        pc.OnIceCandidate = candidate => HandleIceCandidate(peerId, candidate);
+        pc.OnDataChannel = channel => HandleDataChannel(peerId, channel);
+        pc.OnIceConnectionChange = state => HandleIceConnectionChange(peerId, state);
+        pc.OnConnectionStateChange = state => HandleConnectionStateChange(peerId, state);
+
+        var dataChannel = pc.CreateDataChannel("data");
+        SetupDataChannel(peerId, dataChannel);
+
+        StartCoroutine(CreateOffer(peerId));
+        ListenForIceCandidates(peerId);
+    }
+
+    private IEnumerator CreateOffer(string peerId)
+    {
+        Debug.Log($"MultiplayerManager: Creating offer for {peerId}");
+        var pc = peerConnections[peerId];
+        var op = pc.CreateOffer();
+        yield return op;
+
+        if (!op.IsError)
+        {
+            Debug.Log($"MultiplayerManager: Offer created successfully for {peerId}");
+            yield return StartCoroutine(OnCreateOfferSuccess(pc, peerId, op.Desc));
+        }
+        else
+        {
+            OnCreateSessionDescriptionError(op.Error);
+        }
+
+        if (!isHost)
+        {
+            ListenForOffer(peerId);
+        }
+        ListenForIceCandidates(peerId);
+    }
+
+
+    private IEnumerator OnCreateOfferSuccess(RTCPeerConnection pc, string peerId, RTCSessionDescription desc)
+    {
+        Debug.Log($"MultiplayerManager: Setting local description for {peerId}");
+        var op = pc.SetLocalDescription(ref desc);
+        yield return op;
+
+        if (!op.IsError)
+        {
+            Debug.Log($"MultiplayerManager: Local description set for {peerId}");
+            string sdpMessage = JsonUtility.ToJson(new RTCSessionDescriptionInit
+            {
+                sdp = desc.sdp,
+                type = desc.type.ToString().ToLower()
+            });
+
+            Debug.Log($"MultiplayerManager: Sending offer to {peerId}");
+            database.Child("rooms").Child(roomName).Child("offers").Child(localPeerId).Child(peerId).SetValueAsync(sdpMessage).ContinueWith(task =>
+            {
+                if (task.IsCompleted && !task.IsFaulted)
+                {
+                    Debug.Log($"MultiplayerManager: Offer sent successfully to {peerId}");
+                    ListenForAnswer(peerId);
+                }
+                else
+                {
+                    Debug.LogError($"MultiplayerManager: Failed to send offer to {peerId}: {task.Exception}");
+                }
+            });
+        }
+        else
+        {
+            var error = op.Error;
+            OnSetSessionDescriptionError(ref error);
+        }
+    }
+
+    private void ListenForAnswer(string peerId)
+    {
+        Debug.Log($"MultiplayerManager: Listening for answer from {peerId}");
+        database.Child("rooms").Child(roomName).Child("answers").Child(peerId).Child(localPeerId)
+            .ValueChanged += (sender, args) => HandleRemoteSessionDescription(peerId, args, RTCSdpType.Answer);
+    }
+
+    private void ListenForOffer(string peerId)
+    {
+        Debug.Log($"MultiplayerManager: Listening for offer from {peerId}");
+        database.Child("rooms").Child(roomName).Child("offers").Child(peerId).Child(localPeerId)
+            .ValueChanged += (sender, args) => HandleRemoteSessionDescription(peerId, args, RTCSdpType.Offer);
+    }
+
+    private void HandleRemoteSessionDescription(string peerId, ValueChangedEventArgs args, RTCSdpType type)
+    {
+        if (args.DatabaseError != null || args.Snapshot.Value == null) return;
+
+        Debug.Log($"MultiplayerManager: Received {type} from {peerId}");
+        string sdpMessage = args.Snapshot.Value.ToString();
+        var init = JsonUtility.FromJson<RTCSessionDescriptionInit>(sdpMessage);
+
+        var pc = peerConnections[peerId];
+        var remoteDesc = new RTCSessionDescription { sdp = init.sdp, type = type };
+        StartCoroutine(SetRemoteDescriptionAndHandleCandidates(pc, peerId, remoteDesc));
+    }
+
+    private IEnumerator SetRemoteDescriptionAndHandleCandidates(RTCPeerConnection pc, string peerId, RTCSessionDescription remoteDesc)
+    {
+        Debug.Log($"MultiplayerManager: Setting remote description for {peerId}");
+        var op = pc.SetRemoteDescription(ref remoteDesc);
+        yield return op;
+
+        if (!op.IsError)
+        {
+            Debug.Log($"MultiplayerManager: Remote description set for {peerId}");
+            ProcessIceCandidateQueue(peerId);
+
+            if (remoteDesc.type == RTCSdpType.Offer)
+            {
+                yield return StartCoroutine(CreateAnswer(pc, peerId));
+            }
+        }
+        else
+        {
+            var error = op.Error;
+            OnSetSessionDescriptionError(ref error);
+        }
+    }
+    private IEnumerator SetRemoteDescription(RTCPeerConnection pc, string peerId, RTCSessionDescription remoteDesc)
+    {
+        Debug.Log($"MultiplayerManager: Setting remote description for {peerId}");
+        var op = pc.SetRemoteDescription(ref remoteDesc);
+        yield return op;
+
+        if (!op.IsError)
+        {
+            Debug.Log($"MultiplayerManager: Remote description set for {peerId}");
+            ProcessIceCandidateQueue(peerId);
+            if (remoteDesc.type == RTCSdpType.Offer)
+            {
+                yield return StartCoroutine(CreateAnswer(pc, peerId));
+            }
+        }
+        else
+        {
+            var error = op.Error;
+            OnSetSessionDescriptionError(ref error);
+        }
+    }
+    private IEnumerator CreateAnswer(RTCPeerConnection pc, string peerId)
+    {
+        Debug.Log($"MultiplayerManager: Creating answer for {peerId}");
+        var op = pc.CreateAnswer();
+        yield return op;
+
+        if (!op.IsError)
+        {
+            Debug.Log($"MultiplayerManager: Answer created for {peerId}");
+            yield return StartCoroutine(OnCreateAnswerSuccess(pc, peerId, op.Desc));
+        }
+        else
+        {
+            OnCreateSessionDescriptionError(op.Error);
+        }
+    }
+
+    private IEnumerator OnCreateAnswerSuccess(RTCPeerConnection pc, string peerId, RTCSessionDescription desc)
+    {
+        Debug.Log($"MultiplayerManager: Setting local description (answer) for {peerId}");
+        var op = pc.SetLocalDescription(ref desc);
+        yield return op;
+
+        if (!op.IsError)
+        {
+            Debug.Log($"MultiplayerManager: Local description (answer) set for {peerId}");
+            string answerMessage = JsonUtility.ToJson(new RTCSessionDescriptionInit
+            {
+                sdp = desc.sdp,
+                type = desc.type.ToString().ToLower()
+            });
+
+            Debug.Log($"MultiplayerManager: Sending answer to {peerId}");
+            database.Child("rooms").Child(roomName).Child("answers").Child(localPeerId).Child(peerId).SetValueAsync(answerMessage).ContinueWith(task =>
+            {
+                if (task.IsCompleted && !task.IsFaulted)
+                {
+                    Debug.Log($"MultiplayerManager: Answer sent successfully to {peerId}");
+                }
+                else
+                {
+                    Debug.LogError($"MultiplayerManager: Failed to send answer to {peerId}: {task.Exception}");
+                }
+            });
+        }
+        else
+        {
+            var error = op.Error;
+            OnSetSessionDescriptionError(ref error);
+        }
+    }
+
+    private void HandleIceCandidate(string peerId, RTCIceCandidate iceCandidate)
+    {
+        Debug.Log($"MultiplayerManager: ICE candidate gathered for {peerId}: {iceCandidate.Candidate}");
+
+        // Send only the candidate string
+        database.Child("rooms").Child(roomName).Child("iceCandidates").Child(localPeerId).Child(peerId).Push().SetValueAsync(iceCandidate.Candidate);
+    }
+
+    private void SetupDataChannel(string peerId, RTCDataChannel channel)
+    {
+        Debug.Log($"MultiplayerManager: Setting up data channel for {peerId}");
+        dataChannels[peerId] = channel;
+
+        channel.OnOpen = () =>
+        {
+            Debug.Log($"MultiplayerManager: Data channel opened for {peerId}. Starting keep-alive.");
+            StartKeepAlive(peerId);
+        };
+
+        channel.OnClose = () =>
+        {
+            Debug.Log($"MultiplayerManager: Data channel closed for {peerId}. Stopping keep-alive.");
+            StopKeepAlive(peerId);
+            StartCoroutine(TryReconnectDataChannel(peerId));
+        };
+
+        channel.OnMessage = message => HandleDataMessage(peerId, message);
+    }
+
+    private void HandleDataChannel(string peerId, RTCDataChannel channel)
+    {
+        Debug.Log($"MultiplayerManager: Received data channel for {peerId}");
+        SetupDataChannel(peerId, channel);
+    }
+    private void HandleIceConnectionChange(string peerId, RTCIceConnectionState state)
+    {
+        Debug.Log($"MultiplayerManager: ICE Connection state changed for {peerId}: {state}");
+        if (state == RTCIceConnectionState.Connected || state == RTCIceConnectionState.Completed)
+        {
+            Debug.Log($"MultiplayerManager: ICE Connection established with {peerId}");
+        }
+    }
+
+    private void HandleConnectionStateChange(string peerId, RTCPeerConnectionState state)
+    {
+        Debug.Log($"MultiplayerManager: Connection state changed for {peerId}: {state}");
+        if (state == RTCPeerConnectionState.Connected)
+        {
+            Debug.Log($"MultiplayerManager: WebRTC connection established with {peerId}");
+            StopCoroutine(nameof(ReconnectionAttempt));  // Stop any ongoing reconnection attempts
+        }
+        else if (state == RTCPeerConnectionState.Disconnected || state == RTCPeerConnectionState.Failed)
+        {
+            Debug.Log($"MultiplayerManager: WebRTC connection lost with {peerId}. Attempting to reconnect.");
+            StartCoroutine(ReconnectionAttempt(peerId));
+        }
+    }
+
+    private IEnumerator ReconnectionAttempt(string peerId)
+    {
+        int attempts = 0;
+        const int maxAttempts = 5;
+        const float delayBetweenAttempts = 2f;
+
+        while (attempts < maxAttempts)
+        {
+            yield return new WaitForSeconds(delayBetweenAttempts);
+            attempts++;
+
+            Debug.Log($"MultiplayerManager: Reconnection attempt {attempts} for {peerId}");
+            ClosePeerConnection(peerId);
+            CreatePeerConnection(peerId);
+
+            // Wait for connection to be established
+            yield return new WaitForSeconds(5f);
+
+            if (peerConnections.TryGetValue(peerId, out var pc) && pc.ConnectionState == RTCPeerConnectionState.Connected)
+            {
+                Debug.Log($"MultiplayerManager: Reconnection successful for {peerId}");
+                yield break;
+            }
+        }
+
+        Debug.LogError($"MultiplayerManager: Failed to reconnect to {peerId} after {maxAttempts} attempts");
+    }
+
+    private IEnumerator TryReconnectPeerConnection(string peerId)
+    {
+        yield return new WaitForSeconds(1f);
+        ClosePeerConnection(peerId);
+        CreatePeerConnection(peerId);
+    }
+    private void StartKeepAlive(string peerId)
+    {
+        if (!keepAliveCoroutines.ContainsKey(peerId))
+        {
+            Debug.Log($"MultiplayerManager: Starting keep-alive coroutine for {peerId}");
+            keepAliveCoroutines[peerId] = StartCoroutine(KeepAliveCoroutine(peerId));
+            lastKeepAliveTime[peerId] = Time.time;
+        }
+    }
+
+    private void StopKeepAlive(string peerId)
+    {
+        if (keepAliveCoroutines.TryGetValue(peerId, out Coroutine coroutine))
+        {
+            Debug.Log($"MultiplayerManager: Stopping keep-alive coroutine for {peerId}");
+            StopCoroutine(coroutine);
+            keepAliveCoroutines.Remove(peerId);
+            lastKeepAliveTime.Remove(peerId);
+        }
+    }
+
+    private IEnumerator KeepAliveCoroutine(string peerId)
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(KEEP_ALIVE_INTERVAL);
+            SendKeepAliveMessage(peerId);
+            CheckKeepAliveStatus(peerId);
+        }
+    }
+
+    private void SendKeepAliveMessage(string peerId)
+    {
+        if (dataChannels.TryGetValue(peerId, out RTCDataChannel channel) &&
+            channel.ReadyState == RTCDataChannelState.Open)
+        {
+            byte[] keepAliveMessage = System.Text.Encoding.UTF8.GetBytes(KEEP_ALIVE_MESSAGE);
+            channel.Send(keepAliveMessage);
+            Debug.Log($"MultiplayerManager: Sent keep-alive message to {peerId}");
+        }
+        else
+        {
+            Debug.LogWarning($"MultiplayerManager: Failed to send keep-alive message to {peerId}. Channel not ready.");
+        }
+    }
+
+    private void CheckKeepAliveStatus(string peerId)
+    {
+        if (lastKeepAliveTime.TryGetValue(peerId, out float lastTime))
+        {
+            float timeSinceLastKeepAlive = Time.time - lastTime;
+            if (timeSinceLastKeepAlive > KEEP_ALIVE_INTERVAL * 3)
+            {
+                Debug.LogWarning($"MultiplayerManager: No keep-alive received from {peerId} for {timeSinceLastKeepAlive} seconds. Attempting to reconnect.");
+                StartCoroutine(TryReconnectDataChannel(peerId));
+            }
+        }
+    }
+
+    private IEnumerator TryReconnectDataChannel(string peerId)
+    {
+        Debug.Log($"MultiplayerManager: Attempting to reconnect data channel for {peerId}");
+        yield return new WaitForSeconds(1f);
+
+        if (peerConnections.TryGetValue(peerId, out RTCPeerConnection pc))
+        {
+            if (!dataChannels.ContainsKey(peerId) || dataChannels[peerId].ReadyState == RTCDataChannelState.Closed)
+            {
+                var dataChannel = pc.CreateDataChannel("data");
+                SetupDataChannel(peerId, dataChannel);
+                Debug.Log($"MultiplayerManager: Created new data channel for {peerId}");
+            }
+            else
+            {
+                Debug.Log($"MultiplayerManager: Data channel already exists for {peerId}. State: {dataChannels[peerId].ReadyState}");
+            }
+        }
+        else
+        {
+            Debug.LogError($"MultiplayerManager: Failed to reconnect. No peer connection found for {peerId}");
+        }
+    }
+
+
+    private void HandleDataMessage(string peerId, byte[] bytes)
+    {
+        string message = System.Text.Encoding.UTF8.GetString(bytes);
+        if (message == KEEP_ALIVE_MESSAGE)
+        {
+            Debug.Log($"MultiplayerManager: Received keep-alive message from {peerId}");
+            lastKeepAliveTime[peerId] = Time.time;
+        }
+        else
+        {
+            Debug.Log($"MultiplayerManager: Received message from {peerId}: {message}");
+            OnMessageReceived?.Invoke($"{peerId}: {message}");
+        }
+    }
+
+    public void SendDataMessage(string message)
+    {
+        Debug.Log($"MultiplayerManager: Sending data message to all peers: {message}");
+        byte[] bytes = System.Text.Encoding.UTF8.GetBytes(message);
+        foreach (var kvp in dataChannels.ToList())  // Use ToList to avoid modification during iteration
+        {
+            string peerId = kvp.Key;
+            RTCDataChannel channel = kvp.Value;
+            if (channel.ReadyState == RTCDataChannelState.Open)
+            {
+                channel.Send(bytes);
+                Debug.Log($"MultiplayerManager: Data message sent to {peerId} through channel: {channel.Label}");
+            }
+            else if (channel.ReadyState == RTCDataChannelState.Closed)
+            {
+                Debug.LogWarning($"MultiplayerManager: Data channel for {peerId} is closed. Removing and attempting to reconnect.");
+                dataChannels.Remove(peerId);
+                StartCoroutine(TryReconnectDataChannel(peerId));
+            }
+            else
+            {
+                Debug.LogWarning($"MultiplayerManager: Cannot send data message to {peerId}. Channel state: {channel.ReadyState}");
+            }
+        }
+    }
+
+    private void ClosePeerConnection(string peerId)
+    {
+        Debug.Log($"MultiplayerManager: Closing peer connection for {peerId}");
+        StopKeepAlive(peerId);
+
+        if (dataChannels.TryGetValue(peerId, out var channel))
+        {
+            channel.Close();
+            dataChannels.Remove(peerId);
+            Debug.Log($"MultiplayerManager: Data channel closed and removed for {peerId}");
+        }
+
+        if (peerConnections.TryGetValue(peerId, out var pc))
+        {
+            pc.Close();
+            peerConnections.Remove(peerId);
+            Debug.Log($"MultiplayerManager: Peer connection closed and removed for {peerId}");
+        }
+
+        // Remove all signaling data for this peer
+        database.Child("rooms").Child(roomName).Child("offers").Child(localPeerId).Child(peerId).RemoveValueAsync();
+        database.Child("rooms").Child(roomName).Child("answers").Child(localPeerId).Child(peerId).RemoveValueAsync();
+        database.Child("rooms").Child(roomName).Child("iceCandidates").Child(localPeerId).Child(peerId).RemoveValueAsync();
+    }
+
+    private void OnDestroy()
+    {
+        Debug.Log("MultiplayerManager: Destroying and leaving room");
+        foreach (var peerId in keepAliveCoroutines.Keys)
+        {
+            StopKeepAlive(peerId);
+        }
+        LeaveRoom();
+    }
+
+    private void OnCreateSessionDescriptionError(RTCError error)
+    {
+        Debug.LogError($"MultiplayerManager: Failed to create session description: {error.message}");
+    }
+
+    private void OnSetSessionDescriptionError(ref RTCError error)
+    {
+        Debug.LogError($"MultiplayerManager: Failed to set session description: {error.message}");
+    }
+
+    // Helper method to parse and add remote ICE candidates
+    private void AddRemoteIceCandidate(string peerId, string candidateString)
+    {
+        Debug.Log($"Received ICE candidate for {peerId}: {candidateString}");
+
+        if (peerConnections.TryGetValue(peerId, out var pc))
+        {
+            RTCIceCandidateInit init = new RTCIceCandidateInit
+            {
+                candidate = candidateString,
+                sdpMid = "0",
+                sdpMLineIndex = 0
+            };
+
+            RTCIceCandidate candidate = new RTCIceCandidate(init);
+
+            bool remoteDescriptionSet = false;
+            try
+            {
+                remoteDescriptionSet = (pc.RemoteDescription.type == RTCSdpType.Offer || pc.RemoteDescription.type == RTCSdpType.Answer);
+            }
+            catch (System.Exception)
+            {
+                // If accessing RemoteDescription throws an exception, we assume it's not set
+                remoteDescriptionSet = false;
+            }
+
+            if (!remoteDescriptionSet)
+            {
+                Debug.Log($"MultiplayerManager: Buffering ICE candidate for {peerId} as RemoteDescription is not set yet");
+                if (!iceCandidateQueue.ContainsKey(peerId))
+                    iceCandidateQueue[peerId] = new List<RTCIceCandidate>();
+                iceCandidateQueue[peerId].Add(candidate);
+            }
+            else
+            {
+                pc.AddIceCandidate(candidate);
+                Debug.Log($"MultiplayerManager: Added remote ICE candidate for {peerId}");
+            }
+        }
+        else
+        {
+            Debug.LogWarning($"MultiplayerManager: Received ICE candidate for unknown peer {peerId}");
+        }
+    }
+    private void ProcessIceCandidateQueue(string peerId)
+{
+    if (iceCandidateQueue.TryGetValue(peerId, out var queue))
+    {
+        Debug.Log($"MultiplayerManager: Processing queued ICE candidates for {peerId}. Count: {queue.Count}");
+        foreach (var candidate in queue)
+        {
+            peerConnections[peerId].AddIceCandidate(candidate);
+            Debug.Log($"MultiplayerManager: Added queued ICE candidate for {peerId}");
+        }
+        iceCandidateQueue.Remove(peerId);
+    }
+}    // Add this class to help with JSON deserialization
+    [System.Serializable]
+    private class CandidateWrapper
+    {
+        public string candidate;
+        public string sdpMid;
+        public ushort? sdpMLineIndex;
+    }
+
+    [System.Serializable]
+    private class CandidateContainer
+    {
+        public string candidate;
+        public string sdpMid;
+    }
+    // Temporary class to match the structure of the received JSON
+    [System.Serializable]
+    private class TempIceCandidate
+    {
+        public string candidate;
+        public string sdpMid;
+    }
+
+    // Modify the ListenForIceCandidates method
+    private void ListenForIceCandidates(string peerId)
+    {
+        Debug.Log($"MultiplayerManager: Start listening for ICE candidates from {peerId}");
+        database.Child("rooms").Child(roomName).Child("iceCandidates").Child(peerId).Child(localPeerId)
+            .ChildAdded += (sender, args) =>
+            {
+                if (args.Snapshot.Value != null)
+                {
+                    string candidateString = args.Snapshot.Value.ToString();
+                    AddRemoteIceCandidate(peerId, candidateString);
+                }
+            };
+    }
+
+
+}
+    [Serializable]
+    public class RTCSessionDescriptionInit
+    {
+        public string sdp;
+        public string type;
+    }
+
+
+[Serializable]
+public class IceCandidateInfo
+{
+    public string candidate;
+    public string sdpMid;
+    public ushort? sdpMLineIndex;
+}
+
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Multiplayer\WebRTCManager.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 243 bytes
+- Created: 2024-08-09 22:08:54
+- Modified: 2024-08-09 22:08:54
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: a19da8af6e10edb48b785fc7f126ca28
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Player\BulletController.cs
 
 - Extension: .cs
@@ -1997,6 +4035,31 @@ public class BulletController : MonoBehaviour
         this.speed = speed;
     }
 }
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Player\BulletController.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: d684d1ca69fdace4e80eea5ba8918047
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
 
 ```
 
@@ -2164,6 +4227,31 @@ public class DynamicCameraFollow : MonoBehaviour
 
 ```
 
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Player\DynamicCameraFollow.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 666134b28f670c24fbedb274e2ed6bb9
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Player\GunController.cs
 
 - Extension: .cs
@@ -2242,6 +4330,31 @@ public class GunController : MonoBehaviour
         Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
     }
 }
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Player\GunController.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: c1b89946b7d1d9448b6149bae7b5839d
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
 
 ```
 
@@ -2376,6 +4489,31 @@ public class PlayerController : MonoBehaviour
 
 ```
 
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Player\PlayerController.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: a0fa6b666dd2d924fba8e6b93172677a
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Player\PlayerDataSO.cs
 
 - Extension: .cs
@@ -2398,6 +4536,31 @@ public class PlayerDataSO : GameDataSO
     public Vector3 playerPosition;
     public string dataName;
 }
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Player\PlayerDataSO.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 5615fee2657b399428aa4bf80f0c5a39
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
 
 ```
 
@@ -2504,6 +4667,31 @@ public class PlayerStatsSO : ScriptableObject
 
 ```
 
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Player\PlayerStatsSO.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: e6537eb6ebbbcba4aacc572f367c1f22
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\UI\GameControllButtons.cs
 
 - Extension: .cs
@@ -2536,6 +4724,31 @@ public class GameControlButtons : MonoBehaviour
 #endif
     }
 }
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\UI\GameControllButtons.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: bd063c511bd43aa4f9c6dbc3d1e97e70
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
 
 ```
 
@@ -2591,6 +4804,31 @@ public class HealthBar : MonoBehaviour
 
 ```
 
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\UI\HealthBar.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 5c35f373fb1e74c40bfd2fe990b51c14
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\UI\LevelChangeButton.cs
 
 - Extension: .cs
@@ -2618,6 +4856,31 @@ public class LevelChangeButton : MonoBehaviour
         // Assuming GameManager has a method to change levels that accepts a level name or identifier
     }
 }
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\UI\LevelChangeButton.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: bd950ee8960889e47933d9af4285eefa
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
 
 ```
 
@@ -2718,6 +4981,88 @@ public class UIManager : MonoBehaviour
         }
     }
 }
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\UI\UIManager.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 4f994d7a702fc954fb9fe23b35ff47a5
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Utils\DualBehaviourUtils.cs
+
+- Extension: .cs
+- Language: csharp
+- Size: 525 bytes
+- Created: 2024-08-11 20:01:17
+- Modified: 2024-08-11 20:03:51
+
+### Code
+
+```csharp
+
+public static class DualBehaviourUtils
+{
+    private static string characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    public static string GenerateRandomString(int length)
+    {
+        char[] stringChars = new char[length];
+        System.Random random = new System.Random();
+
+        for (int i = 0; i < stringChars.Length; i++)
+        {
+            stringChars[i] = characters[random.Next(characters.Length)];
+        }
+
+        return new string(stringChars);
+    }
+}
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Utils\DualBehaviourUtils.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 243 bytes
+- Created: 2024-08-11 20:01:17
+- Modified: 2024-08-11 20:01:18
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 4d8c88cc90ccdd94bb861bea72237a91
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
 
 ```
 
@@ -2874,6 +5219,31 @@ public class AIBehaviorMelee : MonoBehaviour, IAIBehavior
     #endregion
 
 }
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AI\Agents\AIBehaviorMelee.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 9fe2d020957ca004dbe9dba60084ea7c
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
 
 ```
 
@@ -3059,6 +5429,31 @@ public class AIBehaviorMelee : MonoBehaviour, IAIBehavior
 
 ```
 
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AI\Agents\AIBehaviorRanged.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 70a74d0c44618114783f6bc5f07df895
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AI\Agents\IAIBehavior.cs
 
 - Extension: .cs
@@ -3074,6 +5469,31 @@ public interface IAIBehavior
 {
     bool aggressive { get; set; }
 }
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AI\Agents\IAIBehavior.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 03bfafc3b829275458e84acd2f69be40
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
 ```
 
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AI\Helper\AIHelperFunctions.cs
@@ -3111,6 +5531,31 @@ public static class AIUtility
         return Vector3.zero;
     }
 }
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AI\Helper\AIHelperFunctions.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 116876219449f244d8f5e5d73d1373b9
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
 
 ```
 
@@ -3194,6 +5639,31 @@ public class EnemyGunController : MonoBehaviour
 
 ```
 
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AI\Weapon\EnemyGunController.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 1ef9104a09be07c468acd0bdbf00f2bb
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AI\Weapon\SwordController.cs
 
 - Extension: .cs
@@ -3259,6 +5729,31 @@ public class SwordController : MonoBehaviour
     }
 
 }
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AI\Weapon\SwordController.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: d5b66360dbc78e7458b02680da074414
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
 
 ```
 
@@ -3366,6 +5861,31 @@ public class AIGraphEditor : NodeGraphEditor
 }
 ```
 
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\Editor\AiGraphEditor.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 243 bytes
+- Created: 2024-07-23 07:39:01
+- Modified: 2024-07-23 07:39:01
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: bb43c6bc9a4d4de4698ca33348806a21
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\Editor\AiGraphEditorExtensions.cs
 
 - Extension: .cs
@@ -3397,6 +5917,31 @@ public static class AiGraphEditorExtension
         }
     }
 }
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\Editor\AiGraphEditorExtensions.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 243 bytes
+- Created: 2024-08-05 11:39:20
+- Modified: 2024-08-05 11:39:20
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: ce2b870c0fcad9c4faf2eea7cc6ddb88
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
 ```
 
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\Editor\NodeAiEditor.cs
@@ -3452,6 +5997,31 @@ public class NodeAIEditor : NodeEditor
 }
 ```
 
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\Editor\NodeAiEditor.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 243 bytes
+- Created: 2024-07-28 22:31:39
+- Modified: 2024-07-28 22:31:39
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 23d153f4b401af540b55e3c19ce916a8
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\Editor\NodeAIEventEditor.cs
 
 - Extension: .cs
@@ -3501,6 +6071,31 @@ public class NodeAILocalEventEditor : NodeEditor
         serializedObject.ApplyModifiedProperties();
     }
 }
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\Editor\NodeAIEventEditor.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 243 bytes
+- Created: 2024-08-01 07:48:12
+- Modified: 2024-08-01 07:48:13
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 9ebe4e1776cde29469dc094a8348b474
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
 ```
 
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\Editor\NodeAiStateEditor.cs
@@ -3662,6 +6257,31 @@ public class NodeAiStateEditor : NodeEditor
 }
 ```
 
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\AiGraph\Editor\NodeAiStateEditor.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 243 bytes
+- Created: 2024-07-24 06:47:28
+- Modified: 2024-07-24 06:47:28
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: bdf32f31ab80a3940994fbd91e43ca35
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\Core\DualBehaviour.cs
 
 - Extension: .cs
@@ -3682,6 +6302,31 @@ public class DualBehaviour : MonoBehaviour
     EventChannelManager EventChannelManager = EventChannelManager.Instance;
     SaveLoadManager SaveLoadManager = SaveLoadManager.Instance;
 }
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\Core\DualBehaviour.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 0db11408a8168d8439a942f0da1b7b18
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
 
 ```
 
@@ -3778,6 +6423,31 @@ public class GameEventChannelSO : ScriptableObject
 
 ```
 
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\EventSystem\GameEventChannelSO.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: d309d34c230f39f458b31fbb236208a0
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\EventSystem\GameEventListener.cs
 
 - Extension: .cs
@@ -3819,6 +6489,31 @@ public class GameEventListener : MonoBehaviour
 
 ```
 
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\EventSystem\GameEventListener.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 0b293a11007a9d04aa543a069a3bfa14
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\DefaultStateSO.cs
 
 - Extension: .cs
@@ -3853,6 +6548,31 @@ public class DefaultState : GameStateSO
         // Handle updates specific to the main menu state
     }
 }
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\DefaultStateSO.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: d19c80274e1deac4a920051e0dfe7396
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
 
 ```
 
@@ -3892,6 +6612,31 @@ public class GameOverStateSO : GameStateSO
 }
 ```
 
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\GameOverStateSO.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 07a8ed9be6b9b184185e440e7ba259e2
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\GameStateMachine.cs
 
 - Extension: .cs
@@ -3922,6 +6667,31 @@ public class StateMachine : MonoBehaviour
         currentState.EnterState();
     }
 }
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\GameStateMachine.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 459ff93e695c2624d9f412053c1ed32c
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
 
 ```
 
@@ -3967,6 +6737,31 @@ public abstract class GameStateSO : ScriptableObject
 
 ```
 
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\GameStateSO.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 382315d37caa3ab4d96cadefcc5cf863
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\InGameStateSO.cs
 
 - Extension: .cs
@@ -4001,6 +6796,31 @@ public class IngameState : GameStateSO
         // Handle updates specific to the main menu state
     }
 }
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\InGameStateSO.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 22809a8632b0e364cb664ec36fe6fe9e
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
 
 ```
 
@@ -4040,6 +6860,31 @@ public class IntroStateSO : GameStateSO
 }
 ```
 
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\IntroStateSO.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 27a8c098f30d18d4190fb6f75d4d811c
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\LevelLoadingStateSO.cs
 
 - Extension: .cs
@@ -4074,6 +6919,31 @@ public class LevelLoadingStateSO : GameStateSO
         // Handle updates specific to the state
     }
 }
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\LevelLoadingStateSO.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 76069d01e04d20e44b579f53f317d7f8
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
 ```
 
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\LoadingStateSO.cs
@@ -4112,6 +6982,31 @@ public class LoadingStateSO : GameStateSO
 }
 ```
 
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\LoadingStateSO.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: e6bb29290ac3ae04a9c0d0d7a5635dc6
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\MainMenuStateSO.cs
 
 - Extension: .cs
@@ -4146,6 +7041,31 @@ public class MainMenuStateSO : GameStateSO
         // Handle updates specific to the state
     }
 }
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\MainMenuStateSO.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 7b1aceb4f44f3e14b91d5a42724ebc18
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
 ```
 
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\PauseStateSO.cs
@@ -4184,6 +7104,31 @@ public class PauseStateSO : GameStateSO
 }
 ```
 
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\PauseStateSO.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 49d0aeca871f46f40b829628652b6803
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\SavingStateSO.cs
 
 - Extension: .cs
@@ -4218,6 +7163,31 @@ public class SavingStateSO : GameStateSO
         // Handle updates specific to the state
     }
 }
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\GameState\SavingStateSO.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 44fec2459e58fa54aa1a4d570ab47be4
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
 ```
 
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\Level\GameLevelSO.cs
@@ -4271,6 +7241,31 @@ public abstract class GameLevelSO : ScriptableObject
 
 ```
 
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\Level\GameLevelSO.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 77f059085e5ae1b4a95a5a3e8e54ebbf
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\Level\IngameGameLevelSO.cs
 
 - Extension: .cs
@@ -4306,6 +7301,31 @@ public class IngameGameLevelSO : GameLevelSO
 
 ```
 
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\Level\IngameGameLevelSO.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 1868db2a09fb070489a8cf2a2d79a99b
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\Level\MainMenuGameLevelSO.cs
 
 - Extension: .cs
@@ -4334,6 +7354,31 @@ public class MainMenuGameLevelSO : GameLevelSO
 
 
 }
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\Level\MainMenuGameLevelSO.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 33c8978686258f945a54327c51713eb5
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
 
 ```
 
@@ -4369,6 +7414,31 @@ public class GameDataSO : ScriptableObject, IGameData
 
 
 }
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\SaveLoad\GameDataSO.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 026c7b8df9613ee4481f96f5c174118d
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
 
 ```
 
@@ -4419,6 +7489,31 @@ public class LevelSaveBlueprintSO : SaveBlueprintSO
 
 ```
 
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\SaveLoad\LevelSaveBlueprintSO.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: c5fbdeea698ccf846a2d6c365236b805
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+
+```
+
 ## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\SaveLoad\MigrationConfigBaseSO.cs
 
 - Extension: .cs
@@ -4440,6 +7535,31 @@ public abstract class MigrationConfigBaseSO : ScriptableObject
     // Define an abstract method for migration that derived classes must implement
     public abstract void Migrate(GameDataSO gameData);
 }
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\SaveLoad\MigrationConfigBaseSO.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 691f823df9827614990bafb5ef3e68bd
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
 
 ```
 
@@ -4467,6 +7587,31 @@ public class MigrationConfig_v1_to_v2_SO : MigrationConfigBaseSO
         // gameData.newField = defaultValue;
     }
 }
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\SaveLoad\MigrationConfig_v1_to_v2_SO.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 2a7c48c7e63d3654b8abdb9e9fea7bac
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
 
 ```
 
@@ -4512,6 +7657,31 @@ public class SaveBlueprintSO : ScriptableObject
 
     }
 }
+
+```
+
+## File: \Dev\Unity\DualBehaviour\Assets\Scripts\Engine\SaveLoad\SaveBlueprintSO.cs.meta
+
+- Extension: .meta
+- Language: unknown
+- Size: 254 bytes
+- Created: 2024-07-22 07:36:43
+- Modified: 2024-07-22 07:36:43
+
+### Code
+
+```unknown
+fileFormatVersion: 2
+guid: 92efbacfeeb32c343aed85c1024e7892
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
 
 ```
 

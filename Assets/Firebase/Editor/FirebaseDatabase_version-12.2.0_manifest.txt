@@ -20,6 +20,8 @@ Assets/Editor Default Resources/Firebase/fb_storage.png
 Assets/Editor Default Resources/Firebase/fb_storage_dark.png
 Assets/Editor Default Resources/Firebase/firebase_lockup.png
 Assets/Editor Default Resources/Firebase/firebase_lockup_dark.png
+Assets/ExternalDependencyManager/Editor/1.2.182/Google.IOSResolver.dll
+Assets/ExternalDependencyManager/Editor/1.2.182/Google.IOSResolver.pdb
 Assets/ExternalDependencyManager/Editor/1.2.182/Google.JarResolver.dll
 Assets/ExternalDependencyManager/Editor/1.2.182/Google.JarResolver.pdb
 Assets/ExternalDependencyManager/Editor/1.2.182/Google.PackageManagerResolver.dll
@@ -52,6 +54,12 @@ Assets/Firebase/Plugins/Firebase.Platform.pdb
 Assets/Firebase/Plugins/Firebase.TaskExtension.dll
 Assets/Firebase/Plugins/Firebase.TaskExtension.pdb
 Assets/Firebase/Plugins/Google.MiniJson.dll
+Assets/Firebase/Plugins/iOS/Firebase.App.dll
+Assets/Firebase/Plugins/iOS/Firebase.App.pdb
+Assets/Firebase/Plugins/iOS/Firebase.Auth.dll
+Assets/Firebase/Plugins/iOS/Firebase.Auth.pdb
+Assets/Firebase/Plugins/iOS/Firebase.Database.dll
+Assets/Firebase/Plugins/iOS/Firebase.Database.pdb
 Assets/Firebase/Plugins/x86_64/FirebaseCppApp-12_2_0.bundle
 Assets/Firebase/Plugins/x86_64/FirebaseCppApp-12_2_0.dll
 Assets/Firebase/Plugins/x86_64/FirebaseCppApp-12_2_0.so
@@ -70,4 +78,9 @@ Assets/Firebase/m2repository/com/google/firebase/firebase-auth-unity/maven-metad
 Assets/Firebase/m2repository/com/google/firebase/firebase-database-unity/12.2.0/firebase-database-unity-12.2.0.pom
 Assets/Firebase/m2repository/com/google/firebase/firebase-database-unity/12.2.0/firebase-database-unity-12.2.0.srcaar
 Assets/Firebase/m2repository/com/google/firebase/firebase-database-unity/maven-metadata.xml
-
+Assets/Plugins/iOS/Firebase/libFirebaseCppApp.a
+Assets/Plugins/iOS/Firebase/libFirebaseCppAuth.a
+Assets/Plugins/iOS/Firebase/libFirebaseCppDatabase.a
+Assets/Plugins/tvOS/Firebase/libFirebaseCppApp.a
+Assets/Plugins/tvOS/Firebase/libFirebaseCppAuth.a
+Assets/Plugins/tvOS/Firebase/libFirebaseCppDatabase.a

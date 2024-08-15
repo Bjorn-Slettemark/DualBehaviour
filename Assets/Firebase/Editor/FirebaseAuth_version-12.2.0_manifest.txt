@@ -20,6 +20,8 @@ Assets/Editor Default Resources/Firebase/fb_storage.png
 Assets/Editor Default Resources/Firebase/fb_storage_dark.png
 Assets/Editor Default Resources/Firebase/firebase_lockup.png
 Assets/Editor Default Resources/Firebase/firebase_lockup_dark.png
+Assets/ExternalDependencyManager/Editor/1.2.182/Google.IOSResolver.dll
+Assets/ExternalDependencyManager/Editor/1.2.182/Google.IOSResolver.pdb
 Assets/ExternalDependencyManager/Editor/1.2.182/Google.JarResolver.dll
 Assets/ExternalDependencyManager/Editor/1.2.182/Google.JarResolver.pdb
 Assets/ExternalDependencyManager/Editor/1.2.182/Google.PackageManagerResolver.dll
