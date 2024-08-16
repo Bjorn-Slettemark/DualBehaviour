@@ -54,6 +54,8 @@ public class MultiplayerLevelSO : GameLevelSO
     private void SpawnRemotePlayer(string peerId)
     {
         Vector3 randomPosition = GetRandomSpawnPosition();
+
+
         GameObject remotePlayerObject = Instantiate(playerCubePrefab, randomPosition, Quaternion.identity);
         PlayerCube remotePlayerCube = remotePlayerObject.GetComponent<PlayerCube>();
         remotePlayerCube.Initialize(peerId);

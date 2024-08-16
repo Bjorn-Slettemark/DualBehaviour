@@ -1,6 +1,6 @@
 using UnityEngine;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 
 public class MultiplayerManager : MonoBehaviour
 {
@@ -9,7 +9,7 @@ public class MultiplayerManager : MonoBehaviour
 
     private const string MultiplayerChannelName = "MultiplayerChannel";
     private Dictionary<string, Action<string>> peerEventHandlers = new Dictionary<string, Action<string>>();
-
+    private Dictionary<string, MultiBehaviour> networkObjects = new Dictionary<string, MultiBehaviour>();
 
     private void Awake()
     {
@@ -22,6 +22,68 @@ public class MultiplayerManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    public void RegisterNetworkObject(string objectId, MultiBehaviour networkObject)
+    {
+        networkObjects[objectId] = networkObject;
+    }
+
+
+    public void BroadcastSyncMessage(string ownerId, string message)
+    {
+        // Broadcast to all peers
+        BroadcastEventToAllPeers(message);
+
+        // Also broadcast to the specific peer's channel
+        string channelName = $"PeerChannel_{ownerId}";
+        EventChannelManager.Instance.RaiseEventByName(channelName, message);
+    }
+
+    public void HandleWebRTCMessage(string senderPeerId, string message)
+    {
+        if (message.StartsWith("SYNC|"))
+        {
+            HandleSyncMessage(message);
+        }
+        else if (peerEventHandlers.TryGetValue(senderPeerId, out var handler))
+        {
+            handler.Invoke(message);
+        }
+        else
+        {
+            Debug.LogWarning($"No handler registered for peer {senderPeerId}");
+        }
+    }
+
+    private void HandleSyncMessage(string message)
+    {
+        string[] parts = message.Split('|');
+        if (parts.Length < 3) return;
+
+        string objectId = parts[1];
+        if (!networkObjects.TryGetValue(objectId, out MultiBehaviour networkObject))
+        {
+            Debug.LogWarning($"No network object found with ID: {objectId}");
+            return;
+        }
+
+        Dictionary<string, object> receivedFields = new Dictionary<string, object>();
+        for (int i = 2; i < parts.Length; i++)
+        {
+            string[] fieldParts = parts[i].Split(':');
+            if (fieldParts.Length == 2)
+            {
+                receivedFields[fieldParts[0]] = fieldParts[1];
+            }
+        }
+
+        networkObject.ReceiveSyncMessage(receivedFields);
+    }
+
+    public void BroadcastEventToAllPeers(string eventName)
+    {
+        WebRTCManager.Instance.SendDataMessage(eventName);
     }
 
     private void Start()
@@ -72,29 +134,13 @@ public class MultiplayerManager : MonoBehaviour
         // You might want to add this functionality or handle it differently.
         Debug.Log($"Removed channel for peer: {peerId}");
     }
-    public void HandleWebRTCMessage(string senderPeerId, string eventName)
-    {
-        Debug.Log($"Received WebRTC message from {senderPeerId}: {eventName}");
-        if (peerEventHandlers.TryGetValue(senderPeerId, out var handler))
-        {
-            handler.Invoke(eventName);
-        }
-        else
-        {
-            Debug.LogWarning($"No handler registered for peer {senderPeerId}");
-        }
-    }
+
 
     public void SendEventToPeer(string peerId, string eventName)
     {
         WebRTCManager.Instance.SendDataMessage(eventName);
     }
 
-    public void BroadcastEventToAllPeers(string eventName)
-    {
-        WebRTCManager.Instance.SendDataMessage(eventName);
-        Debug.Log($"Broadcasting event to all peers: {eventName}");
-    }
 
     public void RaiseEventLocally(string peerId, string eventName)
     {

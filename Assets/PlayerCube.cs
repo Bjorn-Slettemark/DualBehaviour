@@ -1,10 +1,10 @@
 using UnityEngine;
 using System.Collections;
 
-public class PlayerCube : MonoBehaviour
+public class PlayerCube : MultiBehaviour
 {
-    public float moveSpeed = 5f;
-    public float jumpForce = 5f;
+    [Sync] public float moveSpeed = 5f;
+    [Sync] public float jumpForce = 5f;
     [SerializeField] public string PeerId;
     [SerializeField] public bool IsLocalPlayer;
 
@@ -27,6 +27,8 @@ public class PlayerCube : MonoBehaviour
         }
 
         PeerId = assignedPeerId;
+        base.SetOwnerId(PeerId);
+
         IsLocalPlayer = MultiplayerManager.Instance.IsLocalPeer(PeerId);
 
         MultiplayerManager.Instance.RegisterForPeerEvents(PeerId, HandlePeerEvent);
