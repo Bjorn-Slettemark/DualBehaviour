@@ -147,8 +147,9 @@ public class LocalWebRTCManager : MonoBehaviour
 
             if (peerName == "LocalPeer")
             {
+                MultiplayerManager.Instance.HandleWebRTCMessage(LocalWebRTCManager.Instance.LocalPeerId, message);
+
                 // Forward local messages directly to MultiplayerManager
-               MultiplayerManager.Instance.HandleWebRTCMessage(LocalWebRTCManager.Instance.LocalPeerId, message);
             }
             // Remote messages are handled by WebRTCManager
         };

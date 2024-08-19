@@ -20,9 +20,21 @@ public class WebRTCManager : MonoBehaviour
 
 
     private Dictionary<string, List<RTCIceCandidate>> iceCandidateQueue = new Dictionary<string, List<RTCIceCandidate>>();
+    public string roomName { get; private set; }
+
 
     private string localPeerId;
-    private string roomName;
+    public string LocalPeerId => localPeerId;
+
+    private bool isHost;
+
+    public bool IsHost => isHost;
+
+    private string localPeerChannelName;
+    public string LocalPeerChannelName => localPeerChannelName;
+
+    private string hostPeerId;
+    public string HostPeerId => hostPeerId;
 
     private DatabaseReference database;
 
@@ -33,7 +45,6 @@ public class WebRTCManager : MonoBehaviour
         {
             _instance = this;
             DontDestroyOnLoad(gameObject);
-            StartCoroutine(Initialize());
 
         }
         else
@@ -43,49 +54,153 @@ public class WebRTCManager : MonoBehaviour
         }
 
     }
-    private IEnumerator Initialize()
+ 
+
+    public void ListenForPeers()
     {
-        // Wait for PeerManager to be available and initialized
-        while (PeerManager.Instance == null || !PeerManager.Instance.IsInitialized)
-        {
-            yield return null;
-        }
+        Debug.Log($"Setting up peer listener for room {roomName}");
+        database.Child("rooms").Child(roomName).Child("peers").ValueChanged += HandlePeersChanged;
+    }
 
+    private void Start()
+    {
         // Now it's safe to access PeerManager properties
-        localPeerId = LocalWebRTCManager.Instance.LocalPeerId;
-        database = PeerManager.Instance.database;
-        roomName = PeerManager.Instance.roomName;
+        // Perform any necessary initialization here
+        database = FirebaseDatabase.DefaultInstance.RootReference;
 
-        // Perform the rest of your initialization
-        if (Firebase.FirebaseApp.DefaultInstance == null)
-        {
-            Debug.LogError("Firebase has not been initialized. Please make sure Firebase is set up correctly.");
-            yield break;
-        }
+        localPeerId = LocalWebRTCManager.Instance.LocalPeerId;
+        localPeerChannelName = "PeerChannel_" + LocalPeerId;
+        peerConnections = WebRTCManager.Instance.peerConnections;
+
 
         Debug.Log($"WebRTCManager: Local Peer ID is {localPeerId}");
         StartCoroutine(WebRTC.Update());
         Debug.Log("WebRTCManager: WebRTC Update coroutine started");
     }
-
-    
-
-
-    public void ListenForPeers()
+    public void CreateRoom(string roomName)
     {
-        Debug.Log($"MultiplayerManager: Start listening for peers in room {roomName}");
-        database.Child("rooms").Child(roomName).Child("peers").ValueChanged += HandlePeersChanged;
+        if (database == null)
+        {
+            Debug.LogError("WebRTCManager: Firebase database not initialized");
+            return;
+        }
+
+        Debug.Log($"WebRTCManager: Creating room {roomName}");
+        this.roomName = roomName;
+        isHost = true;
+        hostPeerId = localPeerId;
+        database.Child("rooms").Child(roomName).Child("host").SetValueAsync(localPeerId);
+
+        database.Child("rooms").Child(roomName).Child("peers").Child(localPeerId).SetValueAsync(true).ContinueWith(task =>
+        {
+            if (task.IsCompleted && !task.IsFaulted)
+            {
+                Debug.Log($"WebRTCManager: Successfully created room {roomName} in Firebase");
+                database.Child("rooms").Child(roomName).Child("host").SetValueAsync(localPeerId);
+                //WebRTCManager.Instance.ListenForPeers();
+                //ListenForPeers();
+                database.Child("rooms").Child(roomName).Child("peers").ValueChanged += WebRTCManager.Instance.HandlePeersChanged;
+
+            }
+            else
+            {
+                Debug.LogError($"WebRTCManager: Failed to create room in Firebase: {task.Exception}");
+            }
+        });
+    }
+
+    public void JoinRoom(string roomName)
+    {
+        Debug.Log($"WebRTCManager: Joining room {roomName}");
+        this.roomName = roomName;
+        isHost = false;
+        database.Child("rooms").Child(roomName).Child("host").GetValueAsync().ContinueWith(task =>
+        {
+            if (task.IsCompleted && !task.IsFaulted && task.Result.Value != null)
+            {
+                hostPeerId = task.Result.Value.ToString();
+            }
+        });
+
+        database.Child("rooms").Child(roomName).Child("peers").Child(localPeerId).SetValueAsync(true).ContinueWith(task =>
+        {
+            if (task.IsCompleted && !task.IsFaulted)
+            {
+                Debug.Log($"WebRTCManager: Successfully joined room {roomName} in Firebase");
+                //WebRTCManager.Instance.ListenForPeers();
+                database.Child("rooms").Child(roomName).Child("peers").ValueChanged += WebRTCManager.Instance.HandlePeersChanged;
+
+                WebRTCManager.Instance.ConnectToExistingPeers();
+            }
+            else
+            {
+                Debug.LogError($"WebRTCManager: Failed to join room in Firebase: {task.Exception}");
+            }
+        });
+    }
+
+    public void LeaveRoom()
+    {
+        if (string.IsNullOrEmpty(roomName)) return;
+
+        Debug.Log($"WebRTCManager: Leaving room {roomName}");
+        foreach (var peer in peerConnections)
+        {
+            WebRTCManager.Instance.ClosePeerConnection(peer.Key);
+        }
+
+        if (isHost)
+        {
+            // Trigger host migration before leaving
+            database.Child("rooms").Child(roomName).Child("host").RemoveValueAsync();
+        }
+
+        database.Child("rooms").Child(roomName).Child("peers").Child(localPeerId).RemoveValueAsync().ContinueWith(task =>
+        {
+            if (task.IsCompleted && !task.IsFaulted)
+            {
+                Debug.Log($"WebRTCManager: Successfully left room {roomName} in Firebase");
+            }
+            else
+            {
+                Debug.LogError($"WebRTCManager: Failed to leave room in Firebase: {task.Exception}");
+            }
+        });
+        roomName = null;
+        isHost = false;
     }
 
 
-    private void Start()
+    public void HandleHostMigration()
     {
+        if (isHost) return; // Already the host
 
+        var peers = new List<string>(peerConnections.Keys);
+        peers.Add(localPeerId);
+        peers.Sort();
+
+        if (peers[0] == localPeerId)
+        {
+            isHost = true;
+            hostPeerId = localPeerId;
+            database.Child("rooms").Child(roomName).Child("host").SetValueAsync(localPeerId);
+
+        }
+    }
+    public void AddPeerConnection(string peerId, RTCPeerConnection peerConnection)
+    {
+        peerConnections[peerId] = peerConnection;
     }
 
+    public string GetCurrentHost()
+    {
+        return isHost ? localPeerId : null; // Only the host knows for sure it's the host
+    }
 
-
-
+    public bool IsPeerHost(string peerId)
+    {
+        return isHost && peerId == localPeerId;
+    }
 
     private IEnumerator InitiateConnection(string peerId)
     {
@@ -103,15 +218,18 @@ public class WebRTCManager : MonoBehaviour
 
     public void ConnectToExistingPeers()
     {
+        Debug.Log("connect to existing peers.. ");
         database.Child("rooms").Child(roomName).Child("peers").GetValueAsync().ContinueWith(task =>
         {
             if (task.IsCompleted && !task.IsFaulted && task.Result.Value != null)
             {
+                Debug.Log("Found some peers...");
                 foreach (var child in task.Result.Children)
                 {
                     string peerId = child.Key;
                     if (peerId != localPeerId && !peerConnections.ContainsKey(peerId))
                     {
+
                         CreatePeerConnection(peerId);
                         StartCoroutine(CreateOffer(peerId));
                     }
@@ -119,7 +237,7 @@ public class WebRTCManager : MonoBehaviour
             }
         });
     }
-    private void HandlePeersChanged(object sender, ValueChangedEventArgs args)
+    public void HandlePeersChanged(object sender, ValueChangedEventArgs args)
     {
         if (args.DatabaseError != null)
         {
@@ -159,7 +277,7 @@ public class WebRTCManager : MonoBehaviour
                 string hostPeerId = task.Result.Value.ToString();
                 if (!peers.Contains(hostPeerId))
                 {
-                    PeerManager.Instance.HandleHostMigration();
+                    WebRTCManager.Instance.HandleHostMigration();
                 }
             }
         });
@@ -376,6 +494,12 @@ public class WebRTCManager : MonoBehaviour
 
     private void SetupDataChannel(string peerId, RTCDataChannel channel)
     {
+        if (dataChannels.ContainsKey(peerId))
+        {
+            Debug.Log($"Data channel for {peerId} already exists. Skipping setup.");
+            return;
+        }
+
         Debug.Log($"WebRTCManager: Setting up data channel for {peerId}");
         dataChannels[peerId] = channel;
 
@@ -490,6 +614,7 @@ public class WebRTCManager : MonoBehaviour
 
         Debug.Log($"MultiplayerManager: Received message from {peerId}: {message}");
         //OnMessageReceived?.Invoke(peerId, message);
+        
         MultiplayerManager.Instance.HandleWebRTCMessage(LocalWebRTCManager.Instance.LocalPeerId, message);
 
     }
@@ -657,12 +782,13 @@ public class WebRTCManager : MonoBehaviour
         }
     }    // Add this class to help with JSON deserialization
 
-    // Modify the ListenForIceCandidates method
     private void ListenForIceCandidates(string peerId)
     {
         Debug.Log($"MultiplayerManager: Start listening for ICE candidates from {peerId}");
-        database.Child("rooms").Child(roomName).Child("iceCandidates").Child(peerId).Child(localPeerId)
-            .ChildAdded += (sender, args) =>
+        try
+        {
+            string path = $"rooms/{roomName}/iceCandidates/{peerId}/{localPeerId}";
+            database.Child(path).ChildAdded += (sender, args) =>
             {
                 if (args.Snapshot.Value != null)
                 {
@@ -670,8 +796,12 @@ public class WebRTCManager : MonoBehaviour
                     AddRemoteIceCandidate(peerId, candidateString);
                 }
             };
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Error setting up ICE candidate listener for {peerId}: {ex.Message}");
+        }
     }
-
 
     private void OnDestroy()
     {
@@ -681,7 +811,7 @@ public class WebRTCManager : MonoBehaviour
             ClosePeerConnection(peerId);
 
         }
-        PeerManager.Instance.LeaveRoom();
+        LeaveRoom();
     }
 
 

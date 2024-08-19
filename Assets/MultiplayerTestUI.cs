@@ -26,17 +26,17 @@ public class MultiplayerTestUI : MonoBehaviour
 
     private void CreateRoom()
     {
-        PeerManager.Instance.CreateRoom(roomNameInput.text);
+        WebRTCManager.Instance.CreateRoom(roomNameInput.text);
     }
 
     private void JoinRoom()
     {
-        PeerManager.Instance.JoinRoom(roomNameInput.text);
+        WebRTCManager.Instance.JoinRoom(roomNameInput.text);
     }
 
     private void LeaveRoom()
     {
-        PeerManager.Instance.LeaveRoom();
+        WebRTCManager.Instance.LeaveRoom();
     }
 
     private void SendMessage()

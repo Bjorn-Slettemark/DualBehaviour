@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class MultiplayerLevelSO : GameLevelSO
 {
-    [SerializeField] private GameObject playerPrefab;
+    [SerializeField] private string playerPrefabName = "PlayerCube"; // Name of the prefab in Resources folder
 
     public override void EnterLevel()
     {
@@ -11,45 +11,48 @@ public class MultiplayerLevelSO : GameLevelSO
 
         spawnPoints = GameObject.FindGameObjectsWithTag("Spawnpoint")
                                .Select(go => go.transform)
-                               .ToList();        // Register for multiplayer events
+                               .ToList();
 
-        EventChannelManager.Instance.RegisterForChannel(null, "LevelEventChannel", HandlePlayerEvent);
-        Debug.Log(PeerManager.Instance.LocalPeerChannelName);
-        // Notify other peers that a new player has joined
-        MultiplayerChannelManager.Instance.BroadcastEvent("LevelEventChannel", $"NewPlayerJoined:{LocalWebRTCManager.Instance.LocalPeerId}");
+        // Register for level events
+        EventChannelManager.Instance.RegisterForChannel(null, "LevelChannel", HandleLevelEvent);
+
+        // Spawn local player
+        SpawnLocalPlayer();
+
+        Debug.Log($"Entered multiplayer level. Local peer channel: {WebRTCManager.Instance.LocalPeerChannelName}");
     }
 
     private void SpawnLocalPlayer()
     {
         Transform spawnPosition = GetRandomSpawnPoint();
-        GameObject playerObject = Instantiate(playerPrefab, spawnPosition.position, Quaternion.identity);
-        playerObject.GetComponent<PlayerCube>().Initialize(LocalWebRTCManager.Instance.LocalPeerId, true);
-        //playerObject.GetComponent<PlayerController>().Initialize(LocalWebRTCManager.Instance.LocalPeerId, true);
-    }
+        GameObject playerPrefab = Resources.Load<GameObject>(playerPrefabName);
 
-    private void HandlePlayerEvent(string eventData)
-    {
-        string[] parts = eventData.Split(':');
-        if (parts[0] == "NewPlayerJoined")
+        if (playerPrefab != null)
         {
-            string peerId = parts[1];
+            GameObject playerObject = Instantiate(playerPrefab, spawnPosition.position, Quaternion.identity);
+            MultiBehaviour multiBehaviour = playerObject.GetComponent<MultiBehaviour>();
 
-
-            if (peerId != LocalWebRTCManager.Instance.LocalPeerId)
+            if (multiBehaviour != null)
             {
-                SpawnRemotePlayer(peerId);
-            } else
-            {
-                SpawnLocalPlayer();
+                Debug.Log("Setting ownerId: " + WebRTCManager.Instance.LocalPeerId);
+               multiBehaviour.Initialize(WebRTCManager.Instance.LocalPeerId);
             }
+            else
+            {
+                Debug.LogError($"MultiBehaviour component not found on {playerPrefabName} prefab");
+            }
+        }
+        else
+        {
+            Debug.LogError($"Player prefab '{playerPrefabName}' not found in Resources folder");
         }
     }
 
-    private void SpawnRemotePlayer(string peerId)
+    private void HandleLevelEvent(string eventData)
     {
-        Transform spawnPosition = GetRandomSpawnPoint();
-        GameObject playerObject = Instantiate(playerPrefab, spawnPosition.position, Quaternion.identity);
-        //playerObject.GetComponent<PlayerController>().Initialize(peerId, false);
+        // This method is now primarily for debugging or additional level-specific logic
+        // MultiBehaviour will handle most network-related events
+        Debug.Log($"Received level event: {eventData}");
     }
 
     private Transform GetRandomSpawnPoint()
@@ -60,11 +63,11 @@ public class MultiplayerLevelSO : GameLevelSO
     public override void ExitLevel()
     {
         base.ExitLevel();
-        EventChannelManager.Instance.UnregisterFromChannel(null, "PlayerChannel");
+        EventChannelManager.Instance.UnregisterFromChannel(null, "LevelChannel");
     }
 
     public override void LevelUpdate()
     {
-        throw new System.NotImplementedException();
+        // Implement if needed
     }
 }

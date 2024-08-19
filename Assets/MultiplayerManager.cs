@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Collections;
 
 public class MultiplayerManager : MonoBehaviour
 {
@@ -14,26 +15,53 @@ public class MultiplayerManager : MonoBehaviour
 
     private int nextObjectId = 1;
 
+    private bool isInitialized = false;
+
+
     private void Awake()
     {
         if (_instance == null)
         {
             _instance = this;
             DontDestroyOnLoad(gameObject);
+            StartCoroutine(Initialize());
         }
         else
         {
             Destroy(gameObject);
         }
         localPeerId = LocalWebRTCManager.Instance.LocalPeerId;
-    }
 
-    private void Start()
+    }
+    private IEnumerator Initialize()
     {
+        while (LocalWebRTCManager.Instance == null || string.IsNullOrEmpty(LocalWebRTCManager.Instance.LocalPeerId))
+        {
+            yield return null;
+        }
+
+        localPeerId = LocalWebRTCManager.Instance.LocalPeerId;
+        Debug.Log($"[MultiplayerManager] Initialized with local peer ID: {localPeerId}");
+
+        while (WebRTCManager.Instance == null)
+        {
+            yield return null;
+        }
+
         WebRTCManager.Instance.OnPeerListUpdated += HandlePeerListUpdated;
         LocalWebRTCManager.Instance.OnLocalConnectionEstablished += OnLocalConnectionEstablished;
 
+        isInitialized = true;
+        Debug.Log("[MultiplayerManager] Initialization complete");
     }
+
+
+    //private void Start()
+    //{
+    //    WebRTCManager.Instance.OnPeerListUpdated += HandlePeerListUpdated;
+    //    LocalWebRTCManager.Instance.OnLocalConnectionEstablished += OnLocalConnectionEstablished;
+
+    //}
 
     public void BroadcastLocalPeer(string senderPeerId, string message)
     {
@@ -59,10 +87,10 @@ public class MultiplayerManager : MonoBehaviour
 
     private void HandlePeerListUpdated(List<string> peers)
     {
-        Debug.Log($"HandlePeerListUpdated called. Number of peers: {peers.Count}");
+        Debug.Log($"[MultiplayerManager] HandlePeerListUpdated called. Number of peers: {peers.Count}");
         foreach (var peerId in peers)
         {
-            Debug.Log($"Attempting to create channel for peer: {peerId}");
+            Debug.Log($"[MultiplayerManager] Processing peer: {peerId}");
             CreatePeerChannel(peerId);
         }
 
@@ -79,8 +107,10 @@ public class MultiplayerManager : MonoBehaviour
                 }
             }
         }
-    }
 
+        // Log the final list of connected peers
+        Debug.Log($"[MultiplayerManager] Connected peers: {string.Join(", ", GetConnectedPeers())}");
+    }
     private void CreatePeerChannel(string peerId)
     {
         string channelName = GetPeerChannelName(peerId);
@@ -113,6 +143,7 @@ public class MultiplayerManager : MonoBehaviour
 
             if (channelName == "LevelChannel")
             {
+                Debug.Log("LevelChannel recieved a message!" + eventData);
                 HandleLevelChannelMessage(senderPeerId, eventData);
             }
             else if (EventChannelManager.Instance.channelsByName.ContainsKey(channelName))
@@ -146,7 +177,8 @@ public class MultiplayerManager : MonoBehaviour
         switch (parts[0])
         {
             case "RequestMultiplayerObjectId":
-                if (PeerManager.Instance.IsHost)
+                Debug.Log("RequestMultiplayerObjectId registered! and this is: " + WebRTCManager.Instance.IsHost);
+                if (WebRTCManager.Instance.IsHost)
                 {
                     HandleRequestMultiplayerObjectId(parts);
                 }
@@ -160,10 +192,13 @@ public class MultiplayerManager : MonoBehaviour
 
     private void HandleRequestMultiplayerObjectId(string[] parts)
     {
-        if (parts.Length < 3) return;
-        string peerId = parts[2];
+        Debug.Log("HandleRequestMultiplayerObjectId registered!" + parts.Length);
+
+        //if (parts.Length < 3) return;
+        string peerId = parts[1];
         string objectId = $"Obj_{nextObjectId++}";
         multiplayerObjectOwners[objectId] = peerId;
+        Debug.Log("Raise event with objectId: " + peerId + " " + objectId);
         BroadcastEventToAllPeers($"LevelChannel:NewMultiplayerObjectId:{peerId}:{objectId}");
     }
 
@@ -179,7 +214,7 @@ public class MultiplayerManager : MonoBehaviour
         string objectId = parts[2];
         string objectName = parts[3];
 
-        if (multiplayerObjectOwners[objectId] != PeerManager.Instance.LocalPeerId)
+        if (multiplayerObjectOwners[objectId] != WebRTCManager.Instance.LocalPeerId)
         {
             GameObject prefab = Resources.Load<GameObject>(objectName);
             if (prefab != null)
@@ -220,8 +255,10 @@ public class MultiplayerManager : MonoBehaviour
         if (WebRTCManager.Instance != null)
         {
             WebRTCManager.Instance.OnMessageReceived -= BroadcastLocalPeer;
+            WebRTCManager.Instance.OnPeerListUpdated -= HandlePeerListUpdated;
+
         }
-       
+
     }
    
 }

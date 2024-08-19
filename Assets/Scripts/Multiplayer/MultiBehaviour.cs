@@ -34,7 +34,7 @@ public class MultiBehaviour : MonoBehaviour
         {
             SetObjectId(objectId);
         }
-        else if (ownerId == PeerManager.Instance.LocalPeerId)
+        else if (ownerId == WebRTCManager.Instance.LocalPeerId)
         {
             RequestObjectId();
         }
@@ -48,10 +48,13 @@ public class MultiBehaviour : MonoBehaviour
 
     private void HandleLevelChannelMessage(string eventData)
     {
+        Debug.Log("MultiBehaviour is getting the levelchannel: " + eventData);
         string[] parts = eventData.Split(':');
-        if (parts[0] == "NewMultiplayerObjectId" && parts[2] == ownerId && !isInitialized)
+        if (parts[0] == "NewMultiplayerObjectId" && parts[1] == ownerId && !isInitialized)
         {
-            SetObjectId(parts[3]);
+            Debug.Log("Setting objectid: " + parts[2]);
+            SetObjectId(parts[2]);
+            
         }
     }
 
@@ -62,10 +65,10 @@ public class MultiBehaviour : MonoBehaviour
             objectId = id;
             isInitialized = true;
             SubscribeToSyncEvents();
-            if (ownerId == PeerManager.Instance.LocalPeerId)
-            {
-                MultiplayerManager.Instance.CreateMultiplayerObject(objectId, gameObject.name);
-            }
+            //if (ownerId == WebRTCManager.Instance.LocalPeerId)
+            //{
+            //    MultiplayerManager.Instance.CreateMultiplayerObject(objectId, gameObject.name);
+            //}
             Debug.Log($"[MultiBehaviour] Initialized: ObjectId={objectId}, OwnerId={ownerId}");
         }
         else
