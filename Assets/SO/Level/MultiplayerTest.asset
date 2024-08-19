@@ -15,6 +15,15 @@ MonoBehaviour:
   sceneName: MultiplayerTest
   gameLevelName: Multiplayer
   loadingScreenPrefab: {fileID: 6296524129658548436, guid: 117be6921313892479060b2b488b1743, type: 3}
+  spawnPoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   levelEventChannel: {fileID: 11400000, guid: c1111422abca47c4094f29068d8f6f54, type: 2}
-  playerEventChannel: {fileID: 11400000, guid: 510691ba3e6849d448f33659328afb04, type: 2}
-  playerCubePrefab: {fileID: 3836095995112535584, guid: dce287df40f5e734eb6c2719f94a196d, type: 3}
+  playerPrefab: {fileID: 3836095995112535584, guid: dce287df40f5e734eb6c2719f94a196d, type: 3}

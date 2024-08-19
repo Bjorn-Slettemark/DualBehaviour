@@ -11,7 +11,8 @@ public class EventChannelManager : MonoBehaviour
     [SerializeField] private List<GameEventChannelSO> eventChannels;
 
     private Dictionary<GameObject, Dictionary<GameEventChannelSO, Dictionary<string, System.Action<string>>>> subscriptions = new Dictionary<GameObject, Dictionary<GameEventChannelSO, Dictionary<string, System.Action<string>>>>();
-    
+    private Dictionary<GameEventChannelSO, Dictionary<string, System.Action<string>>> globalSubscriptions = new Dictionary<GameEventChannelSO, Dictionary<string, System.Action<string>>>();
+
     public List<EventHistory> eventHistory = new List<EventHistory>();
 
     public struct EventHistory
@@ -35,6 +36,7 @@ public class EventChannelManager : MonoBehaviour
     {
         SetupSingleton(); // Ensure singleton setup on Awake.
 
+        PopulateChannelsByName();
 
         // Ensure DontDestroyOnLoad is only called when in play mode
         if (Application.isPlaying)
@@ -44,6 +46,7 @@ public class EventChannelManager : MonoBehaviour
 
         // Initialize other components or setup as necessary
     }
+
     private void SetupSingleton()
     {
         if (Instance != null && Instance != this)
@@ -61,12 +64,24 @@ public class EventChannelManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
 
-        // Additional initialization can be placed here as needed.
     }
 
-    // Add other methods and logic as previously discussed...
-
-public void RegisterForAllChannels(GameObject subscriber, System.Action<string> callback)
+    private void PopulateChannelsByName()
+    {
+        channelsByName.Clear();
+        foreach (var channel in eventChannels)
+        {
+            if (channel != null && !string.IsNullOrEmpty(channel.name))
+            {
+                channelsByName[channel.name] = channel;
+            }
+            else
+            {
+                Debug.LogWarning("Found a null or unnamed channel in eventChannels list.");
+            }
+        }
+    }
+    public void RegisterForAllChannels(GameObject subscriber, System.Action<string> callback)
     {
         foreach (var channel in eventChannels)
         {
@@ -86,20 +101,34 @@ public void RegisterForAllChannels(GameObject subscriber, System.Action<string> 
     {
         if (channel == null) return;
 
-        if (!subscriptions.ContainsKey(subscriber))
+        if (subscriber == null)
         {
-            subscriptions[subscriber] = new Dictionary<GameEventChannelSO, Dictionary<string, System.Action<string>>>();
+            // Handle global subscription
+            if (!globalSubscriptions.ContainsKey(channel))
+            {
+                globalSubscriptions[channel] = new Dictionary<string, System.Action<string>>();
+            }
+            const string allEventsKey = "*";
+            globalSubscriptions[channel][allEventsKey] = callback;
+        }
+        else
+        {
+            // Handle GameObject-specific subscription
+            if (!subscriptions.ContainsKey(subscriber))
+            {
+                subscriptions[subscriber] = new Dictionary<GameEventChannelSO, Dictionary<string, System.Action<string>>>();
+            }
+            if (!subscriptions[subscriber].ContainsKey(channel))
+            {
+                subscriptions[subscriber][channel] = new Dictionary<string, System.Action<string>>();
+            }
+            const string allEventsKey = "*";
+            subscriptions[subscriber][channel][allEventsKey] = callback;
         }
 
-        if (!subscriptions[subscriber].ContainsKey(channel))
-        {
-            subscriptions[subscriber][channel] = new Dictionary<string, System.Action<string>>();
-        }
-
-        const string allEventsKey = "*"; // Special key to denote subscription to all events in the channel
-        subscriptions[subscriber][channel][allEventsKey] = callback;
         channel.RegisterListenerForAllEvents(callback);
     }
+
 
     public void UnregisterChannel(GameObject subscriber, GameEventChannelSO channel)
     {
@@ -234,10 +263,9 @@ public void RegisterForAllChannels(GameObject subscriber, System.Action<string> 
 
 
 
+    public Dictionary<string, GameEventChannelSO> channelsByName = new Dictionary<string, GameEventChannelSO>();
 
-    private Dictionary<string, GameEventChannelSO> channelsByName = new Dictionary<string, GameEventChannelSO>();
-
-    public void RegisterChannelByName(string channelName)
+    public void CreateChannelIfNotExists(string channelName)
     {
         if (!channelsByName.ContainsKey(channelName))
         {
@@ -245,39 +273,56 @@ public void RegisterForAllChannels(GameObject subscriber, System.Action<string> 
             newChannel.name = channelName;
 
             channelsByName[channelName] = newChannel;
-
             eventChannels.Add(newChannel);
 
-            Debug.Log($"Registered new channel: {channelName}");
+            Debug.Log($"Created new channel: {channelName}");
         }
     }
 
-    public void RegisterEventByName(GameObject subscriber, string channelName, string eventName, Action<string> callback)
+    public void RegisterForChannel(GameObject subscriber, string channelName, Action<string> callback)
     {
-        if (!channelsByName.ContainsKey(channelName))
-        {
-            RegisterChannelByName(channelName);
-        }
+        CreateChannelIfNotExists(channelName);
 
         GameEventChannelSO channel = channelsByName[channelName];
-        channel.RegisterListener(callback, eventName);
-        Debug.Log($"Registered event '{eventName}' for channel '{channelName}'");
+        RegisterChannel(subscriber, channel, callback);
+        Debug.Log($"Registered for all events on channel '{channelName}', Subscriber: {(subscriber == null ? "Global" : subscriber.name)}");
     }
 
-    public void UnregisterEventByName(GameObject subscriber, string channelName, string eventName, Action<string> callback)
+
+    public void UnregisterFromChannel(GameObject subscriber, string channelName)
     {
         if (channelsByName.TryGetValue(channelName, out GameEventChannelSO channel))
         {
-            channel.UnregisterListener(callback);
-            Debug.Log($"Unregistered event '{eventName}' for channel '{channelName}'");
+            UnregisterChannel(subscriber, channel);
+            Debug.Log($"Unregistered from all events on channel '{channelName}'");
         }
     }
 
-    public void RaiseEventByName(string channelName, string eventName)
+    public void RegisterForEvent(GameObject subscriber, string channelName, string eventName, Action<string> callback)
+    {
+        CreateChannelIfNotExists(channelName);
+
+        GameEventChannelSO channel = channelsByName[channelName];
+        RegisterEvent(subscriber, channel, eventName, callback);
+        Debug.Log($"Registered for event '{eventName}' on channel '{channelName}'");
+    }
+
+    public void UnregisterFromEvent(GameObject subscriber, string channelName, string eventName)
+    {
+        if (channelsByName.TryGetValue(channelName, out GameEventChannelSO channel))
+        {
+            UnregisterEvent(subscriber, channel, eventName);
+            Debug.Log($"Unregistered from event '{eventName}' on channel '{channelName}'");
+        }
+    }
+
+    public void RaiseEvent(string channelName, string eventName)
     {
         if (channelsByName.TryGetValue(channelName, out GameEventChannelSO channel))
         {
             channel.RaiseEvent(eventName);
+            eventHistory.Add(new EventHistory(channelName, eventName, "System"));
+
             Debug.Log($"Raised event '{eventName}' on channel '{channelName}'");
         }
         else

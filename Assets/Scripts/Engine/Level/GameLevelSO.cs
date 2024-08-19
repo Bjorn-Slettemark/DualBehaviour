@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class GameLevelSO : ScriptableObject
@@ -9,6 +10,8 @@ public abstract class GameLevelSO : ScriptableObject
     public string gameLevelName;
 
     public GameObject loadingScreenPrefab;
+
+    public List<Transform> spawnPoints;
 
     [SerializeField]
     private GameEventChannelSO levelEventChannel;

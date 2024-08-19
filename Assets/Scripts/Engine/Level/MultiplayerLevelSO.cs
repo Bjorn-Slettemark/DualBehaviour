@@ -1,106 +1,70 @@
+using System.Linq;
 using UnityEngine;
-using System.Collections.Generic;
 
-[CreateAssetMenu(fileName = "MultiplayerTest", menuName = "GameLevel/MultiplayerTest", order = 1)]
 public class MultiplayerLevelSO : GameLevelSO
 {
-    [SerializeField]
-    private GameEventChannelSO playerEventChannel;
-    [SerializeField]
-    private GameObject playerCubePrefab;
-    private List<PlayerCube> spawnedPlayers = new List<PlayerCube>();
-    [SerializeField]
-    private float spawnAreaSize = 20f; // Size of the spawn area (20x20)
+    [SerializeField] private GameObject playerPrefab;
 
     public override void EnterLevel()
     {
         base.EnterLevel();
-        Debug.Log("Entering level " + gameLevelName + ", spawning players");
-        // Register for multiplayer events
-        MultiplayerManager.Instance.RegisterForMultiplayerEvents(HandleMultiplayerEvent);
-        // Spawn local player
-        SpawnLocalPlayer();
-        // Spawn remote players
-        SpawnRemotePlayers();
+
+        spawnPoints = GameObject.FindGameObjectsWithTag("Spawnpoint")
+                               .Select(go => go.transform)
+                               .ToList();        // Register for multiplayer events
+
+        EventChannelManager.Instance.RegisterForChannel(null, "LevelEventChannel", HandlePlayerEvent);
+        Debug.Log(PeerManager.Instance.LocalPeerChannelName);
         // Notify other peers that a new player has joined
-        MultiplayerManager.Instance.BroadcastEventToAllPeers($"NewPlayerJoined:{WebRTCManager.Instance.LocalPeerId}");
+        MultiplayerChannelManager.Instance.BroadcastEvent("LevelEventChannel", $"NewPlayerJoined:{LocalWebRTCManager.Instance.LocalPeerId}");
     }
 
     private void SpawnLocalPlayer()
     {
-        Vector3 randomPosition = GetRandomSpawnPosition();
-        GameObject localPlayerObject = Instantiate(playerCubePrefab, randomPosition, Quaternion.identity);
-        PlayerCube localPlayerCube = localPlayerObject.GetComponent<PlayerCube>();
-        localPlayerCube.Initialize(WebRTCManager.Instance.LocalPeerId);
-        spawnedPlayers.Add(localPlayerCube);
-        Debug.Log($"Spawned local player with PeerId: {localPlayerCube.PeerId} at position: {randomPosition}");
+        Transform spawnPosition = GetRandomSpawnPoint();
+        GameObject playerObject = Instantiate(playerPrefab, spawnPosition.position, Quaternion.identity);
+        playerObject.GetComponent<PlayerCube>().Initialize(LocalWebRTCManager.Instance.LocalPeerId, true);
+        //playerObject.GetComponent<PlayerController>().Initialize(LocalWebRTCManager.Instance.LocalPeerId, true);
     }
 
-    private void SpawnRemotePlayers()
+    private void HandlePlayerEvent(string eventData)
     {
-        List<string> connectedPeers = MultiplayerManager.Instance.GetConnectedPeers();
-        Debug.Log(connectedPeers.Count);
-        foreach (string peerId in connectedPeers)
+        string[] parts = eventData.Split(':');
+        if (parts[0] == "NewPlayerJoined")
         {
-            if (peerId != WebRTCManager.Instance.LocalPeerId)
-            {
-                Debug.Log("spawning remote player");
+            string peerId = parts[1];
 
+
+            if (peerId != LocalWebRTCManager.Instance.LocalPeerId)
+            {
                 SpawnRemotePlayer(peerId);
+            } else
+            {
+                SpawnLocalPlayer();
             }
         }
     }
 
     private void SpawnRemotePlayer(string peerId)
     {
-        Vector3 randomPosition = GetRandomSpawnPosition();
-
-
-        GameObject remotePlayerObject = Instantiate(playerCubePrefab, randomPosition, Quaternion.identity);
-        PlayerCube remotePlayerCube = remotePlayerObject.GetComponent<PlayerCube>();
-        remotePlayerCube.Initialize(peerId);
-        spawnedPlayers.Add(remotePlayerCube);
-        Debug.Log($"Spawned remote player with PeerId: {peerId} at position: {randomPosition}");
+        Transform spawnPosition = GetRandomSpawnPoint();
+        GameObject playerObject = Instantiate(playerPrefab, spawnPosition.position, Quaternion.identity);
+        //playerObject.GetComponent<PlayerController>().Initialize(peerId, false);
     }
 
-    private Vector3 GetRandomSpawnPosition()
+    private Transform GetRandomSpawnPoint()
     {
-        float halfSize = spawnAreaSize / 2f;
-        float x = Random.Range(-halfSize, halfSize);
-        float z = Random.Range(-halfSize, halfSize);
-        return new Vector3(x, 1f, z); // Y is set to 1 to spawn slightly above the ground
-    }
-
-    private void HandleMultiplayerEvent(string eventName)
-    {
-        if (eventName.StartsWith("NewPlayerJoined:"))
-        {
-            string newPeerId = eventName.Split(':')[1];
-            if (newPeerId != WebRTCManager.Instance.LocalPeerId)
-            {
-                SpawnRemotePlayer(newPeerId);
-            }
-        }
+        return spawnPoints[Random.Range(0, spawnPoints.Count)];
     }
 
     public override void ExitLevel()
     {
         base.ExitLevel();
-        // Clean up spawned players
-        foreach (PlayerCube player in spawnedPlayers)
-        {
-            if (player != null)
-            {
-                Destroy(player.gameObject);
-            }
-        }
-        spawnedPlayers.Clear();
-        // Unregister from multiplayer events
-        MultiplayerManager.Instance.UnregisterFromMultiplayerEvents(HandleMultiplayerEvent);
+        EventChannelManager.Instance.UnregisterFromChannel(null, "PlayerChannel");
     }
 
     public override void LevelUpdate()
     {
-        // Add any level-specific update logic here
+        throw new System.NotImplementedException();
     }
 }

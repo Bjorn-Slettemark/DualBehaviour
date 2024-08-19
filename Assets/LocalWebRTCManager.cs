@@ -1,17 +1,21 @@
 using UnityEngine;
 using Unity.WebRTC;
+using System;
 using System.Collections;
 
-public class LocalPeerConnectionSetup : MonoBehaviour
+public class LocalWebRTCManager : MonoBehaviour
 {
-    private static LocalPeerConnectionSetup _instance;
-    public static LocalPeerConnectionSetup Instance => _instance;
+    private static LocalWebRTCManager _instance;
+    public static LocalWebRTCManager Instance => _instance;
 
     private RTCPeerConnection localPeer;
     private RTCPeerConnection remotePeer;
     private RTCDataChannel localDataChannel;
     private RTCDataChannel remoteDataChannel;
 
+    public event Action OnLocalConnectionEstablished;
+
+    public string LocalPeerId { get; private set; }
     public string RemotePeerId { get; private set; }
 
     private void Awake()
@@ -27,7 +31,7 @@ public class LocalPeerConnectionSetup : MonoBehaviour
             Destroy(gameObject);
         }
         RemotePeerId = DualBehaviourUtils.GenerateRandomString(5);
-
+        LocalPeerId = DualBehaviourUtils.GenerateRandomString(5);
     }
 
     private void Start()
@@ -94,7 +98,9 @@ public class LocalPeerConnectionSetup : MonoBehaviour
 
         // Add only the remote peer to WebRTCManager
         //WebRTCManager.Instance.AddPeerConnection(RemotePeerId, remotePeer);
-        WebRTCManager.Instance.AddDataChannel(WebRTCManager.Instance.LocalPeerId, remoteDataChannel);
+        WebRTCManager.Instance.AddDataChannel(LocalWebRTCManager.Instance.LocalPeerId, remoteDataChannel);
+        OnLocalConnectionEstablished?.Invoke();
+
     }
 
     private IEnumerator SetLocalDescription(RTCPeerConnection pc, RTCSessionDescription desc)
@@ -142,7 +148,7 @@ public class LocalPeerConnectionSetup : MonoBehaviour
             if (peerName == "LocalPeer")
             {
                 // Forward local messages directly to MultiplayerManager
-                MultiplayerManager.Instance.HandleWebRTCMessage(WebRTCManager.Instance.LocalPeerId, message);
+               MultiplayerManager.Instance.HandleWebRTCMessage(LocalWebRTCManager.Instance.LocalPeerId, message);
             }
             // Remote messages are handled by WebRTCManager
         };

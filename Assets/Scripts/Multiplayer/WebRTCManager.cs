@@ -12,27 +12,19 @@ public class WebRTCManager : MonoBehaviour
     private static WebRTCManager _instance;
     public static WebRTCManager Instance => _instance;
 
-    private DatabaseReference database;
-    private string roomName;
-
-    private string localPeerId;
-    public string LocalPeerId {  get { return localPeerId; } }
-
-    private Dictionary<string, RTCPeerConnection> peerConnections = new Dictionary<string, RTCPeerConnection>();
+    public Dictionary<string, RTCPeerConnection> peerConnections = new Dictionary<string, RTCPeerConnection>();
     private Dictionary<string, RTCDataChannel> dataChannels = new Dictionary<string, RTCDataChannel>();
 
     public event Action<string, string> OnMessageReceived; // peerId, message
     public event Action<List<string>> OnPeerListUpdated;
 
+
     private Dictionary<string, List<RTCIceCandidate>> iceCandidateQueue = new Dictionary<string, List<RTCIceCandidate>>();
 
-    private const float KEEP_ALIVE_INTERVAL = 0.1f;
-    private const string KEEP_ALIVE_MESSAGE = "KEEP_ALIVE";
-    private Dictionary<string, Coroutine> keepAliveCoroutines = new Dictionary<string, Coroutine>();
-    private Dictionary<string, float> lastKeepAliveTime = new Dictionary<string, float>();
+    private string localPeerId;
+    private string roomName;
 
-
-    private bool isHost;
+    private DatabaseReference database;
 
     private void Awake()
     {
@@ -41,42 +33,92 @@ public class WebRTCManager : MonoBehaviour
         {
             _instance = this;
             DontDestroyOnLoad(gameObject);
+            StartCoroutine(Initialize());
+
         }
         else
         {
             Debug.LogWarning("Multiple instances of MultiplayerManager detected. Destroying duplicate.");
             Destroy(gameObject);
         }
-        localPeerId = DualBehaviourUtils.GenerateRandomString(5);
 
     }
-
-    private void Start()
+    private IEnumerator Initialize()
     {
-        Debug.Log("MultiplayerManager: Start called");
+        // Wait for PeerManager to be available and initialized
+        while (PeerManager.Instance == null || !PeerManager.Instance.IsInitialized)
+        {
+            yield return null;
+        }
+
+        // Now it's safe to access PeerManager properties
+        localPeerId = LocalWebRTCManager.Instance.LocalPeerId;
+        database = PeerManager.Instance.database;
+        roomName = PeerManager.Instance.roomName;
+
+        // Perform the rest of your initialization
         if (Firebase.FirebaseApp.DefaultInstance == null)
         {
             Debug.LogError("Firebase has not been initialized. Please make sure Firebase is set up correctly.");
-            return;
+            yield break;
         }
-        database = FirebaseDatabase.DefaultInstance.RootReference;
-        Debug.Log($"MultiplayerManager: Local Peer ID is {localPeerId}");
 
+        Debug.Log($"WebRTCManager: Local Peer ID is {localPeerId}");
         StartCoroutine(WebRTC.Update());
-        Debug.Log("MultiplayerManager: WebRTC Update coroutine started");
+        Debug.Log("WebRTCManager: WebRTC Update coroutine started");
     }
 
-    public void AddPeerConnection(string peerId, RTCPeerConnection peerConnection)
-    {
-        peerConnections[peerId] = peerConnection;
-    }
+    
 
-    private void ListenForPeers()
+
+    public void ListenForPeers()
     {
         Debug.Log($"MultiplayerManager: Start listening for peers in room {roomName}");
         database.Child("rooms").Child(roomName).Child("peers").ValueChanged += HandlePeersChanged;
     }
 
+
+    private void Start()
+    {
+
+    }
+
+
+
+
+
+    private IEnumerator InitiateConnection(string peerId)
+    {
+        yield return new WaitForSeconds(UnityEngine.Random.Range(0f, 1f)); // Add a small random delay
+
+        if (string.Compare(localPeerId, peerId) < 0)
+        {
+            yield return StartCoroutine(CreateOffer(peerId));
+        }
+        else
+        {
+            ListenForOffer(peerId);
+        }
+    }
+
+    public void ConnectToExistingPeers()
+    {
+        database.Child("rooms").Child(roomName).Child("peers").GetValueAsync().ContinueWith(task =>
+        {
+            if (task.IsCompleted && !task.IsFaulted && task.Result.Value != null)
+            {
+                foreach (var child in task.Result.Children)
+                {
+                    string peerId = child.Key;
+                    if (peerId != localPeerId && !peerConnections.ContainsKey(peerId))
+                    {
+                        CreatePeerConnection(peerId);
+                        StartCoroutine(CreateOffer(peerId));
+                    }
+                }
+            }
+        });
+    }
     private void HandlePeersChanged(object sender, ValueChangedEventArgs args)
     {
         if (args.DatabaseError != null)
@@ -103,16 +145,30 @@ public class WebRTCManager : MonoBehaviour
                 if (!peerConnections.ContainsKey(peerId))
                 {
                     Debug.Log($"WebRTCManager: New peer found - {peerId}");
-                    CreatePeerConnection(peerId);
+                    WebRTCManager.Instance.CreatePeerConnection(peerId);
                     StartCoroutine(InitiateConnection(peerId));
                 }
             }
         }
 
+        // Check if the host is still in the room
+        database.Child("rooms").Child(roomName).Child("host").GetValueAsync().ContinueWith(task =>
+        {
+            if (task.IsCompleted && !task.IsFaulted && task.Result.Value != null)
+            {
+                string hostPeerId = task.Result.Value.ToString();
+                if (!peers.Contains(hostPeerId))
+                {
+                    PeerManager.Instance.HandleHostMigration();
+                }
+            }
+        });
+
+
         // Remove connections for peers that are no longer in the room
         foreach (var peer in peerConnections.Keys.ToList())
         {
-            if (!peers.Contains(peer) && peer != LocalPeerConnectionSetup.Instance.RemotePeerId)
+            if (!peers.Contains(peer) && peer != LocalWebRTCManager.Instance.RemotePeerId)
             {
                 Debug.Log($"MultiplayerManager: Peer left - {peer}");
                 ClosePeerConnection(peer);
@@ -122,111 +178,8 @@ public class WebRTCManager : MonoBehaviour
         Debug.Log($"MultiplayerManager: Updated peer list - {string.Join(", ", peers)}");
         OnPeerListUpdated?.Invoke(peers);
     }
-    private IEnumerator InitiateConnection(string peerId)
-    {
-        yield return new WaitForSeconds(UnityEngine.Random.Range(0f, 1f)); // Add a small random delay
 
-        if (string.Compare(localPeerId, peerId) < 0)
-        {
-            yield return StartCoroutine(CreateOffer(peerId));
-        }
-        else
-        {
-            ListenForOffer(peerId);
-        }
-    }
-
-
-    public void CreateRoom(string roomName)
-    {
-        if (database == null)
-        {
-            Debug.LogError("MultiplayerManager: Firebase database not initialized");
-            return;
-        }
-
-        Debug.Log($"MultiplayerManager: Creating room {roomName}");
-        this.roomName = roomName;
-        isHost = true;
-        database.Child("rooms").Child(roomName).Child("peers").Child(localPeerId).SetValueAsync(true).ContinueWith(task =>
-        {
-            if (task.IsCompleted && !task.IsFaulted)
-            {
-                Debug.Log($"MultiplayerManager: Successfully created room {roomName} in Firebase");
-                ListenForPeers();
-            }
-            else
-            {
-                Debug.LogError($"MultiplayerManager: Failed to create room in Firebase: {task.Exception}");
-            }
-        });
-    }
-
-
-    public void JoinRoom(string roomName)
-    {
-        Debug.Log($"WebRTCManager: Joining room {roomName}");
-        this.roomName = roomName;
-        isHost = false;
-        database.Child("rooms").Child(roomName).Child("peers").Child(localPeerId).SetValueAsync(true).ContinueWith(task =>
-        {
-            if (task.IsCompleted && !task.IsFaulted)
-            {
-                Debug.Log($"WebRTCManager: Successfully joined room {roomName} in Firebase");
-                ListenForPeers();
-                ConnectToExistingPeers();
-            }
-            else
-            {
-                Debug.LogError($"WebRTCManager: Failed to join room in Firebase: {task.Exception}");
-            }
-        });
-    }
-
-    public void LeaveRoom()
-    {
-        if (string.IsNullOrEmpty(roomName)) return;
-
-        Debug.Log($"MultiplayerManager: Leaving room {roomName}");
-        foreach (var peer in peerConnections)
-        {
-            ClosePeerConnection(peer.Key);
-        }
-
-        database.Child("rooms").Child(roomName).Child("peers").Child(localPeerId).RemoveValueAsync().ContinueWith(task =>
-        {
-            if (task.IsCompleted && !task.IsFaulted)
-            {
-                Debug.Log($"MultiplayerManager: Successfully left room {roomName} in Firebase");
-            }
-            else
-            {
-                Debug.LogError($"MultiplayerManager: Failed to leave room in Firebase: {task.Exception}");
-            }
-        });
-        roomName = null;
-    }
-
-    private void ConnectToExistingPeers()
-    {
-        database.Child("rooms").Child(roomName).Child("peers").GetValueAsync().ContinueWith(task =>
-        {
-            if (task.IsCompleted && !task.IsFaulted && task.Result.Value != null)
-            {
-                foreach (var child in task.Result.Children)
-                {
-                    string peerId = child.Key;
-                    if (peerId != localPeerId && !peerConnections.ContainsKey(peerId))
-                    {
-                        CreatePeerConnection(peerId);
-                        StartCoroutine(CreateOffer(peerId));
-                    }
-                }
-            }
-        });
-    }
-
-    private void CreatePeerConnection(string peerId)
+    public void CreatePeerConnection(string peerId)
     {
         Debug.Log($"MultiplayerManager: Creating peer connection for {peerId}");
         RTCConfiguration config = default;
@@ -416,8 +369,8 @@ public class WebRTCManager : MonoBehaviour
         dataChannels[peerId] = dataChannel;
         dataChannel.OnMessage += (bytes) =>
         {
-            string message = System.Text.Encoding.UTF8.GetString(bytes);
-            OnMessageReceived?.Invoke(peerId, message);
+            //string message = System.Text.Encoding.UTF8.GetString(bytes);
+            //OnMessageReceived?.Invoke(peerId, message);
         };
     }
 
@@ -534,16 +487,11 @@ public class WebRTCManager : MonoBehaviour
     private void HandleDataMessage(string peerId, byte[] bytes)
     {
         string message = System.Text.Encoding.UTF8.GetString(bytes);
-        if (message == KEEP_ALIVE_MESSAGE && peerId != localPeerId)
-        {
-            Debug.Log($"MultiplayerManager: Received keep-alive message from {peerId}");
-            lastKeepAliveTime[peerId] = Time.time;
-        }
-        else
-        {
-            Debug.Log($"MultiplayerManager: Received message from {peerId}: {message}");
-            OnMessageReceived?.Invoke(peerId, message);
-        }
+
+        Debug.Log($"MultiplayerManager: Received message from {peerId}: {message}");
+        //OnMessageReceived?.Invoke(peerId, message);
+        MultiplayerManager.Instance.HandleWebRTCMessage(LocalWebRTCManager.Instance.LocalPeerId, message);
+
     }
 
 
@@ -572,17 +520,38 @@ public class WebRTCManager : MonoBehaviour
             }
         }
 
- 
+
     }
 
+    public void SendDataMessage(string targetPeerId, string message)
+    {
+        Debug.Log($"WebRTCManager: Sending data message to peer {targetPeerId}: {message}");
+        byte[] bytes = System.Text.Encoding.UTF8.GetBytes(message);
 
+        if (dataChannels.TryGetValue(targetPeerId, out RTCDataChannel channel))
+        {
+            if (channel.ReadyState == RTCDataChannelState.Open)
+            {
+                channel.Send(bytes);
+                Debug.Log($"WebRTCManager: Data message sent to peer {targetPeerId}");
+            }
+            else
+            {
+                Debug.LogWarning($"WebRTCManager: Cannot send data message to peer {targetPeerId}. Channel state: {channel.ReadyState}");
+            }
+        }
+        else
+        {
+            Debug.LogWarning($"WebRTCManager: No data channel found for peer {targetPeerId}");
+        }
+    }
 
     public List<string> GetConnectedPeers()
     {
         return new List<string>(peerConnections.Keys);
     }
 
-    private void ClosePeerConnection(string peerId)
+    public void ClosePeerConnection(string peerId)
     {
         Debug.Log($"MultiplayerManager: Closing peer connection for {peerId}");
 
@@ -675,18 +644,18 @@ public class WebRTCManager : MonoBehaviour
     }
 
     private void ProcessIceCandidateQueue(string peerId)
-{
-    if (iceCandidateQueue.TryGetValue(peerId, out var queue))
     {
-        Debug.Log($"MultiplayerManager: Processing queued ICE candidates for {peerId}. Count: {queue.Count}");
-        foreach (var candidate in queue)
+        if (iceCandidateQueue.TryGetValue(peerId, out var queue))
         {
-            peerConnections[peerId].AddIceCandidate(candidate);
-            Debug.Log($"MultiplayerManager: Added queued ICE candidate for {peerId}");
+            Debug.Log($"MultiplayerManager: Processing queued ICE candidates for {peerId}. Count: {queue.Count}");
+            foreach (var candidate in queue)
+            {
+                peerConnections[peerId].AddIceCandidate(candidate);
+                Debug.Log($"MultiplayerManager: Added queued ICE candidate for {peerId}");
+            }
+            iceCandidateQueue.Remove(peerId);
         }
-        iceCandidateQueue.Remove(peerId);
-    }
-}    // Add this class to help with JSON deserialization
+    }    // Add this class to help with JSON deserialization
 
     // Modify the ListenForIceCandidates method
     private void ListenForIceCandidates(string peerId)
@@ -712,8 +681,11 @@ public class WebRTCManager : MonoBehaviour
             ClosePeerConnection(peerId);
 
         }
-        LeaveRoom();
+        PeerManager.Instance.LeaveRoom();
     }
+
+
+
 }
 
 [Serializable]
