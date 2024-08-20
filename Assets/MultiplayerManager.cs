@@ -282,7 +282,7 @@ public class MultiplayerManager : MonoBehaviour
                 MultiBehaviour multiBehaviour = newObject.GetComponent<MultiBehaviour>();
                 if (multiBehaviour != null)
                 {
-                    //multiBehaviour.Initialize(multiplayerObjectOwners[objectId], objectId);
+                    multiBehaviour.Initialize(multiplayerObjectOwners[objectId], objectId);
                 }
                 else
                 {

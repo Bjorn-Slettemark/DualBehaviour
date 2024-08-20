@@ -38,12 +38,9 @@ public class MultiplayerLevelSO : GameLevelSO
             MultiBehaviour multiBehaviour = playerObject.GetComponent<MultiBehaviour>();
             if (multiBehaviour != null)
             {
-                //multiBehaviour.Initialize(WebRTCManager.Instance.LocalPeerId);
+                multiBehaviour.Initialize(WebRTCManager.Instance.LocalPeerId);
             }
-            else
-            {
-                Debug.LogError($"MultiBehaviour component not found on {playerPrefabName} prefab");
-            }
+
         }
         else
         {

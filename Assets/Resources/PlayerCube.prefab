@@ -149,7 +149,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectId: 
   ownerId: 
-  IsLocalPlayer: 0
+  IsLocalPlayer: 1
 --- !u!114 &-4773320676525786338
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -163,6 +163,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cubePrefab: {fileID: 4624060644224807863, guid: f8fc47388a18bb54eacdb23b29e05902, type: 3}
-  numberOfCubes: 100
-  spawnAreaSize: 100
+  numberOfCubes: 1
+  spawnAreaSize: 11
   spawnKey: 112

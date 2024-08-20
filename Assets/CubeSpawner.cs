@@ -25,7 +25,12 @@ public class CubeSpawner : MonoBehaviour
                 Random.Range(-spawnAreaSize / 2, spawnAreaSize / 2)
             );
 
-            Instantiate(cubePrefab, randomPosition, Quaternion.identity);
+            GameObject cubeGO = Instantiate(cubePrefab, randomPosition, Quaternion.identity);
+            MultiBehaviour multiBehaviour = cubeGO.GetComponent<MultiBehaviour>();
+            if (multiBehaviour != null)
+            {
+                multiBehaviour.Initialize(WebRTCManager.Instance.LocalPeerId);
+            }
         }
 
         Debug.Log($"Spawned {numberOfCubes} cubes in a {spawnAreaSize}x{spawnAreaSize} area.");

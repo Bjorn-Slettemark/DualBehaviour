@@ -15,7 +15,7 @@ public class SyncAttribute : Attribute
 
 public class MultiBehaviour : MonoBehaviour
 {
-    private const float INITIALIZATION_DELAY = 1f;
+    private const float INITIALIZATION_DELAY = 0.01f;
 
     [SerializeField] protected string objectId;
     [SerializeField] protected string ownerId;
@@ -38,12 +38,13 @@ public class MultiBehaviour : MonoBehaviour
         this.gameObject.name = this.gameObject.name.Replace("(Clone)", "");
         InitializeSyncedProperties();
         EventChannelManager.Instance.RegisterForChannel(gameObject, "LevelEventChannel", HandleLevelChannelMessage);
-        Initialize(WebRTCManager.Instance.LocalPeerId);
     }
+
+
 
     public virtual void Initialize(string ownerId, string objectId = null)
     {
-
+        
         StartCoroutine(DelayedInitialize(ownerId, objectId));
     }
 
@@ -63,7 +64,7 @@ public class MultiBehaviour : MonoBehaviour
         {
             SetObjectId(objectId);
         }
-
+        OnInitialized();
     }
 
     private void RequestObjectId()

@@ -8,25 +8,29 @@ using System.Globalization;
 
 public class PlayerCube : MultiBehaviour
 {
-    [Sync] public Vector3 Position { get; private set; }
-    [Sync] public Quaternion Rotation { get; private set; }
+    [Sync] public Vector3 Position { get;  set; }
+    [Sync] public Quaternion Rotation { get;  set; }
     public string PeerId { get; private set; }
 
     protected override void Awake()
     {
         base.Awake();
-        Position = transform.position;
-        Rotation = transform.rotation;
+
     }
 
-    private void Update()
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        //Position = transform.position;
+        //Rotation = transform.rotation;
+    }
+        private void Update()
     {
         
         if (isLocalPlayer)
         {
             HandleInput();
         }
-
         // Apply synced values
         transform.position = Position;
         transform.rotation = Rotation;
