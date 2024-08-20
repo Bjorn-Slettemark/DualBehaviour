@@ -56,11 +56,6 @@ public class WebRTCManager : MonoBehaviour
     }
  
 
-    public void ListenForPeers()
-    {
-        Debug.Log($"Setting up peer listener for room {roomName}");
-        database.Child("rooms").Child(roomName).Child("peers").ValueChanged += HandlePeersChanged;
-    }
 
     private void Start()
     {
@@ -267,6 +262,10 @@ public class WebRTCManager : MonoBehaviour
                     StartCoroutine(InitiateConnection(peerId));
                 }
             }
+            else
+            {
+                Debug.Log($"WebRTCManager: Skipping local peer - {peerId}");
+            }
         }
 
         // Check if the host is still in the room
@@ -311,23 +310,31 @@ public class WebRTCManager : MonoBehaviour
         pc.OnIceConnectionChange = state => HandleIceConnectionChange(peerId, state);
         pc.OnConnectionStateChange = state => HandleConnectionStateChange(peerId, state);
 
-        var dataChannel = pc.CreateDataChannel("data");
-        SetupDataChannel(peerId, dataChannel);
+        if (string.Compare(localPeerId, peerId) < 0)
+        {
+            var dataChannel = pc.CreateDataChannel("data");
+            SetupDataChannel(peerId, dataChannel);
+        }
 
         //StartCoroutine(CreateOffer(peerId));
         ListenForIceCandidates(peerId);
     }
-
     private IEnumerator CreateOffer(string peerId)
     {
-        Debug.Log($"MultiplayerManager: Creating offer for {peerId}");
+        Debug.Log($"Creating offer for {peerId}");
         var pc = peerConnections[peerId];
+
+        if (pc.SignalingState != RTCSignalingState.Stable)
+        {
+            Debug.LogWarning($"Cannot create offer for {peerId}, signaling state is {pc.SignalingState}");
+            yield break;
+        }
+
         var op = pc.CreateOffer();
         yield return op;
 
         if (!op.IsError)
         {
-            Debug.Log($"MultiplayerManager: Offer created successfully for {peerId}");
             yield return StartCoroutine(OnCreateOfferSuccess(pc, peerId, op.Desc));
         }
         else
@@ -336,38 +343,24 @@ public class WebRTCManager : MonoBehaviour
         }
 
         ListenForAnswer(peerId);
-        ListenForIceCandidates(peerId);
     }
-
 
     private IEnumerator OnCreateOfferSuccess(RTCPeerConnection pc, string peerId, RTCSessionDescription desc)
     {
-        Debug.Log($"MultiplayerManager: Setting local description for {peerId}");
+        Debug.Log($"Setting local description (offer) for {peerId}");
         var op = pc.SetLocalDescription(ref desc);
         yield return op;
 
         if (!op.IsError)
         {
-            Debug.Log($"MultiplayerManager: Local description set for {peerId}");
             string sdpMessage = JsonUtility.ToJson(new RTCSessionDescriptionInit
             {
                 sdp = desc.sdp,
                 type = desc.type.ToString().ToLower()
             });
 
-            Debug.Log($"MultiplayerManager: Sending offer to {peerId}");
-            database.Child("rooms").Child(roomName).Child("offers").Child(localPeerId).Child(peerId).SetValueAsync(sdpMessage).ContinueWith(task =>
-            {
-                if (task.IsCompleted && !task.IsFaulted)
-                {
-                    Debug.Log($"MultiplayerManager: Offer sent successfully to {peerId}");
-                    ListenForAnswer(peerId);
-                }
-                else
-                {
-                    Debug.LogError($"MultiplayerManager: Failed to send offer to {peerId}: {task.Exception}");
-                }
-            });
+            Debug.Log($"Sending offer to {peerId}");
+            database.Child("rooms").Child(roomName).Child("offers").Child(localPeerId).Child(peerId).SetValueAsync(sdpMessage);
         }
         else
         {
@@ -391,7 +384,6 @@ public class WebRTCManager : MonoBehaviour
             .ValueChanged += (sender, args) => HandleRemoteSessionDescription(peerId, args, RTCSdpType.Offer);
     }
 
-
     private void HandleRemoteSessionDescription(string peerId, ValueChangedEventArgs args, RTCSdpType type)
     {
         if (args.DatabaseError != null || args.Snapshot.Value == null) return;
@@ -401,8 +393,50 @@ public class WebRTCManager : MonoBehaviour
         var init = JsonUtility.FromJson<RTCSessionDescriptionInit>(sdpMessage);
 
         var pc = peerConnections[peerId];
-        var remoteDesc = new RTCSessionDescription { sdp = init.sdp, type = type };
-        StartCoroutine(SetRemoteDescriptionAndCreateAnswer(pc, peerId, remoteDesc));
+
+        if (type == RTCSdpType.Offer)
+        {
+            StartCoroutine(HandleOffer(pc, peerId, init));
+        }
+        else if (type == RTCSdpType.Answer)
+        {
+            StartCoroutine(HandleAnswer(pc, peerId, init));
+        }
+    }
+
+    private IEnumerator HandleOffer(RTCPeerConnection pc, string peerId, RTCSessionDescriptionInit offer)
+    {
+        Debug.Log($"Handling offer from {peerId}");
+        var remoteDesc = new RTCSessionDescription { sdp = offer.sdp, type = RTCSdpType.Offer };
+        var op = pc.SetRemoteDescription(ref remoteDesc);
+        yield return op;
+
+        if (!op.IsError)
+        {
+            yield return StartCoroutine(CreateAnswer(pc, peerId));
+        }
+        else
+        {
+            Debug.LogError($"Error setting remote offer: {op.Error.message}");
+        }
+    }
+
+    private IEnumerator HandleAnswer(RTCPeerConnection pc, string peerId, RTCSessionDescriptionInit answer)
+    {
+        Debug.Log($"Handling answer from {peerId}");
+        var remoteDesc = new RTCSessionDescription { sdp = answer.sdp, type = RTCSdpType.Answer };
+        var op = pc.SetRemoteDescription(ref remoteDesc);
+        yield return op;
+
+        if (!op.IsError)
+        {
+            Debug.Log($"Successfully set remote answer for peer {peerId}");
+            ProcessIceCandidateQueue(peerId);
+        }
+        else
+        {
+            Debug.LogError($"Error setting remote answer: {op.Error.message}");
+        }
     }
 
     private IEnumerator SetRemoteDescriptionAndCreateAnswer(RTCPeerConnection pc, string peerId, RTCSessionDescription remoteDesc)
@@ -430,13 +464,12 @@ public class WebRTCManager : MonoBehaviour
 
     private IEnumerator CreateAnswer(RTCPeerConnection pc, string peerId)
     {
-        Debug.Log($"MultiplayerManager: Creating answer for {peerId}");
+        Debug.Log($"Creating answer for {peerId}");
         var op = pc.CreateAnswer();
         yield return op;
 
         if (!op.IsError)
         {
-            Debug.Log($"MultiplayerManager: Answer created for {peerId}");
             yield return StartCoroutine(OnCreateAnswerSuccess(pc, peerId, op.Desc));
         }
         else
@@ -444,34 +477,22 @@ public class WebRTCManager : MonoBehaviour
             OnCreateSessionDescriptionError(op.Error);
         }
     }
-
     private IEnumerator OnCreateAnswerSuccess(RTCPeerConnection pc, string peerId, RTCSessionDescription desc)
     {
-        Debug.Log($"MultiplayerManager: Setting local description (answer) for {peerId}");
+        Debug.Log($"Setting local description (answer) for {peerId}");
         var op = pc.SetLocalDescription(ref desc);
         yield return op;
 
         if (!op.IsError)
         {
-            Debug.Log($"MultiplayerManager: Local description (answer) set for {peerId}");
             string answerMessage = JsonUtility.ToJson(new RTCSessionDescriptionInit
             {
                 sdp = desc.sdp,
                 type = desc.type.ToString().ToLower()
             });
 
-            Debug.Log($"MultiplayerManager: Sending answer to {peerId}");
-            database.Child("rooms").Child(roomName).Child("answers").Child(localPeerId).Child(peerId).SetValueAsync(answerMessage).ContinueWith(task =>
-            {
-                if (task.IsCompleted && !task.IsFaulted)
-                {
-                    Debug.Log($"MultiplayerManager: Answer sent successfully to {peerId}");
-                }
-                else
-                {
-                    Debug.LogError($"MultiplayerManager: Failed to send answer to {peerId}: {task.Exception}");
-                }
-            });
+            Debug.Log($"Sending answer to {peerId}");
+            database.Child("rooms").Child(roomName).Child("answers").Child(localPeerId).Child(peerId).SetValueAsync(answerMessage);
         }
         else
         {
@@ -479,7 +500,6 @@ public class WebRTCManager : MonoBehaviour
             OnSetSessionDescriptionError(ref error);
         }
     }
-
 
 
     public void AddDataChannel(string peerId, RTCDataChannel dataChannel)
@@ -502,7 +522,7 @@ public class WebRTCManager : MonoBehaviour
 
         Debug.Log($"WebRTCManager: Setting up data channel for {peerId}");
         dataChannels[peerId] = channel;
-
+        channel.OnOpen = () => Debug.Log($"Data channel opened for {peerId}");
         channel.OnClose = () =>
         {
             Debug.Log($"WebRTCManager: Data channel closed for {peerId}.");
@@ -512,15 +532,22 @@ public class WebRTCManager : MonoBehaviour
             }
         };
 
+        channel.OnError = (error) => Debug.LogError($"Data channel error for {peerId}: {error}");
         channel.OnMessage = message => HandleDataMessage(peerId, message);
     }
 
     private void HandleDataChannel(string peerId, RTCDataChannel channel)
     {
         Debug.Log($"MultiplayerManager: Received data channel for {peerId}");
-        SetupDataChannel(peerId, channel);
+        if (!dataChannels.ContainsKey(peerId))
+        {
+            SetupDataChannel(peerId, channel);
+        }
+        else
+        {
+            Debug.Log($"Data channel for {peerId} already exists. Using existing channel.");
+        }
     }
-
 
 
     private void HandleIceConnectionChange(string peerId, RTCIceConnectionState state)
@@ -593,9 +620,16 @@ public class WebRTCManager : MonoBehaviour
         {
             if (!dataChannels.ContainsKey(peerId) || dataChannels[peerId].ReadyState == RTCDataChannelState.Closed)
             {
-                var dataChannel = pc.CreateDataChannel("data");
-                SetupDataChannel(peerId, dataChannel);
-                Debug.Log($"MultiplayerManager: Created new data channel for {peerId}");
+                if (string.Compare(localPeerId, peerId) < 0)  // Only create if we're the 'lower' peer
+                {
+                    var dataChannel = pc.CreateDataChannel("data");
+                    SetupDataChannel(peerId, dataChannel);
+                    Debug.Log($"MultiplayerManager: Created new data channel for {peerId}");
+                }
+                else
+                {
+                    Debug.Log($"MultiplayerManager: Waiting for {peerId} to create new data channel");
+                }
             }
             else
             {
@@ -607,7 +641,6 @@ public class WebRTCManager : MonoBehaviour
             Debug.LogError($"MultiplayerManager: Failed to reconnect. No peer connection found for {peerId}");
         }
     }
-
     private void HandleDataMessage(string peerId, byte[] bytes)
     {
         string message = System.Text.Encoding.UTF8.GetString(bytes);
@@ -615,7 +648,7 @@ public class WebRTCManager : MonoBehaviour
         Debug.Log($"MultiplayerManager: Received message from {peerId}: {message}");
         //OnMessageReceived?.Invoke(peerId, message);
         
-        MultiplayerManager.Instance.HandleWebRTCMessage(LocalWebRTCManager.Instance.LocalPeerId, message);
+        MultiplayerManager.Instance.HandleWebRTCMessage(peerId, message);
 
     }
 
@@ -625,29 +658,23 @@ public class WebRTCManager : MonoBehaviour
         Debug.Log($"WebRTCManager: Sending data message to all peers: {message}");
         byte[] bytes = System.Text.Encoding.UTF8.GetBytes(message);
 
-        // Send to local peer
-        //LocalPeerConnectionSetup.Instance.SendLocalMessage(message);
-        //Debug.Log("WebRTCManager: Data message sent to local peer");
-
-        // Send to remote peers
         foreach (var kvp in dataChannels)
         {
             string peerId = kvp.Key;
             RTCDataChannel channel = kvp.Value;
             if (channel.ReadyState == RTCDataChannelState.Open)
             {
-                channel.Send(bytes);
-                Debug.Log($"WebRTCManager: Data message sent to remote peer {peerId}");
+
+                    channel.Send(bytes);
+                    Debug.Log($"WebRTCManager: Data message sent to remote peer {peerId} + {message}");
+
             }
             else
             {
                 Debug.LogWarning($"WebRTCManager: Cannot send data message to remote peer {peerId}. Channel state: {channel.ReadyState}");
             }
         }
-
-
     }
-
     public void SendDataMessage(string targetPeerId, string message)
     {
         Debug.Log($"WebRTCManager: Sending data message to peer {targetPeerId}: {message}");
@@ -657,8 +684,15 @@ public class WebRTCManager : MonoBehaviour
         {
             if (channel.ReadyState == RTCDataChannelState.Open)
             {
-                channel.Send(bytes);
-                Debug.Log($"WebRTCManager: Data message sent to peer {targetPeerId}");
+                try
+                {
+                    channel.Send(bytes);
+                    Debug.Log($"WebRTCManager: Data message sent to peer {targetPeerId}");
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"Error sending message to {targetPeerId}: {e.Message}");
+                }
             }
             else
             {
@@ -670,7 +704,6 @@ public class WebRTCManager : MonoBehaviour
             Debug.LogWarning($"WebRTCManager: No data channel found for peer {targetPeerId}");
         }
     }
-
     public List<string> GetConnectedPeers()
     {
         return new List<string>(peerConnections.Keys);

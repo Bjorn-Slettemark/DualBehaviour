@@ -1,9 +1,15 @@
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEditor;
 
 public class MultiplayerLevelSO : GameLevelSO
 {
     [SerializeField] private string playerPrefabName = "PlayerCube"; // Name of the prefab in Resources folder
+
+
+
 
     public override void EnterLevel()
     {
@@ -13,29 +19,25 @@ public class MultiplayerLevelSO : GameLevelSO
                                .Select(go => go.transform)
                                .ToList();
 
-        // Register for level events
-        EventChannelManager.Instance.RegisterForChannel(null, "LevelChannel", HandleLevelEvent);
 
-        // Spawn local player
         SpawnLocalPlayer();
 
-        Debug.Log($"Entered multiplayer level. Local peer channel: {WebRTCManager.Instance.LocalPeerChannelName}");
+        // Start the loading process
+        MultiplayerManager.Instance.BroadcastEventToAllPeers($"LevelEventChannel:LoadingLevelDone");
+
     }
 
     private void SpawnLocalPlayer()
     {
         Transform spawnPosition = GetRandomSpawnPoint();
         GameObject playerPrefab = Resources.Load<GameObject>(playerPrefabName);
-
         if (playerPrefab != null)
         {
             GameObject playerObject = Instantiate(playerPrefab, spawnPosition.position, Quaternion.identity);
             MultiBehaviour multiBehaviour = playerObject.GetComponent<MultiBehaviour>();
-
             if (multiBehaviour != null)
             {
-                Debug.Log("Setting ownerId: " + WebRTCManager.Instance.LocalPeerId);
-               multiBehaviour.Initialize(WebRTCManager.Instance.LocalPeerId);
+                multiBehaviour.Initialize(WebRTCManager.Instance.LocalPeerId);
             }
             else
             {
@@ -48,12 +50,7 @@ public class MultiplayerLevelSO : GameLevelSO
         }
     }
 
-    private void HandleLevelEvent(string eventData)
-    {
-        // This method is now primarily for debugging or additional level-specific logic
-        // MultiBehaviour will handle most network-related events
-        Debug.Log($"Received level event: {eventData}");
-    }
+
 
     private Transform GetRandomSpawnPoint()
     {
@@ -63,8 +60,8 @@ public class MultiplayerLevelSO : GameLevelSO
     public override void ExitLevel()
     {
         base.ExitLevel();
-        EventChannelManager.Instance.UnregisterFromChannel(null, "LevelChannel");
     }
+
 
     public override void LevelUpdate()
     {

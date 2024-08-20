@@ -20,6 +20,7 @@ public abstract class GameLevelSO : ScriptableObject
     {
         return loadingScreenPrefab;
     }
+  
     // Method to be called when entering the state
     public virtual void EnterLevel()
     {
@@ -37,4 +38,5 @@ public abstract class GameLevelSO : ScriptableObject
     // Abstract method for state-specific functionality
     public abstract void LevelUpdate();
     // Abstract method for state-specific functionality
+
 }

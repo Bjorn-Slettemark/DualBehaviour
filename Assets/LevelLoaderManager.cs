@@ -23,6 +23,7 @@ public class LevelLoaderManager : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
+        EventChannelManager.Instance.RegisterChannel(this.gameObject, levelEventChannel, HandleLevelEvents);
 
         EventChannelManager.Instance.RegisterChannel(this.gameObject, levelEventChannel, LoadLevelEvents);
     }
@@ -36,6 +37,16 @@ public class LevelLoaderManager : MonoBehaviour
                 LoadLevel(gameLevel);
                 break; // Exit the loop once the matching level is found and initiated for loading
             }
+        }
+    }
+
+    private void HandleLevelEvents(string eventData)
+    {
+        string[] parts = eventData.Split(':');
+        if (parts.Length >= 2 && parts[0] == "ChangeLevel")
+        {
+            string levelName = parts[1];
+            LoadLevelEvents(levelName);
         }
     }
 

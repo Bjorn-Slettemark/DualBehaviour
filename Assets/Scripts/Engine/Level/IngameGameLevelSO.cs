@@ -16,6 +16,5 @@ public class IngameGameLevelSO : GameLevelSO
     public override void LevelUpdate()
     {
     }
-
-
+ 
 }

@@ -1,9 +1,11 @@
 using UnityEngine;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
 using System.Globalization;
+
 
 [AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
 public class SyncAttribute : Attribute
@@ -14,6 +16,8 @@ public class SyncAttribute : Attribute
 
 public class MultiBehaviour : MonoBehaviour
 {
+    private const float INITIALIZATION_DELAY = 1f;
+
     [SerializeField] private string objectId;
     [SerializeField] private string ownerId;
     private Dictionary<string, object> syncedValues = new Dictionary<string, object>();
@@ -21,29 +25,39 @@ public class MultiBehaviour : MonoBehaviour
 
     public string ObjectId => objectId;
     public string OwnerId => ownerId;
+    private bool objectIdRequested = false;
 
     private void Awake()
     {
         InitializeSyncedProperties();
+        EventChannelManager.Instance.RegisterForChannel(gameObject, "LevelEventChannel", HandleLevelChannelMessage);
+
     }
 
     public void Initialize(string ownerId, string objectId = null)
     {
+        StartCoroutine(DelayedInitialize(ownerId, objectId));
+    }
+    private IEnumerator DelayedInitialize(string ownerId, string objectId = null)
+    {
+        yield return new WaitForSeconds(INITIALIZATION_DELAY);
+
         this.ownerId = ownerId;
-        if (objectId != null)
+        if (objectId == null && ownerId == WebRTCManager.Instance.LocalPeerId && !objectIdRequested)
+        {
+            objectIdRequested = true;
+            RequestObjectId();
+        }
+        else
         {
             SetObjectId(objectId);
         }
-        else if (ownerId == WebRTCManager.Instance.LocalPeerId)
-        {
-            RequestObjectId();
-        }
-        EventChannelManager.Instance.RegisterForChannel(gameObject, "LevelChannel", HandleLevelChannelMessage);
     }
+
 
     private void RequestObjectId()
     {
-        MultiplayerManager.Instance.BroadcastEventToAllPeers($"LevelChannel:RequestMultiplayerObjectId:{ownerId}");
+        MultiplayerManager.Instance.BroadcastEventToAllPeers($"LevelEventChannel:RequestMultiplayerObjectId:{ownerId}");
     }
 
     private void HandleLevelChannelMessage(string eventData)
@@ -54,24 +68,25 @@ public class MultiBehaviour : MonoBehaviour
         {
             Debug.Log("Setting objectid: " + parts[2]);
             SetObjectId(parts[2]);
-            
+
         }
+
     }
 
     public void SetObjectId(string id)
     {
-        if (!isInitialized)
+        if (!isInitialized && id != null)
         {
             objectId = id;
             isInitialized = true;
             SubscribeToSyncEvents();
-            //if (ownerId == WebRTCManager.Instance.LocalPeerId)
-            //{
-            //    MultiplayerManager.Instance.CreateMultiplayerObject(objectId, gameObject.name);
-            //}
+            if (ownerId == WebRTCManager.Instance.LocalPeerId)
+            {
+                MultiplayerManager.Instance.CreateMultiplayerObject(objectId, gameObject.name);
+            }
             Debug.Log($"[MultiBehaviour] Initialized: ObjectId={objectId}, OwnerId={ownerId}");
         }
-        else
+        else if (isInitialized)
         {
             Debug.LogWarning($"[MultiBehaviour] Attempted to set ObjectId after initialization: {id}");
         }
@@ -264,7 +279,7 @@ public class MultiBehaviour : MonoBehaviour
     }
     private void OnDestroy()
     {
-        EventChannelManager.Instance.UnregisterFromChannel(gameObject, "LevelChannel");
+        EventChannelManager.Instance.UnregisterFromChannel(gameObject, "LevelEventChannel");
         UnsubscribeFromSyncEvents();
     }
 }
