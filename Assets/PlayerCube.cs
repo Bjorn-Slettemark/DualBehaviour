@@ -11,21 +11,18 @@ public class PlayerCube : MultiBehaviour
     [Sync] public Vector3 Position { get; private set; }
     [Sync] public Quaternion Rotation { get; private set; }
     public string PeerId { get; private set; }
-    public bool IsLocalPlayer { get; private set; }
 
-    public void Initialize(string peerId, bool isLocal)
+    protected override void Awake()
     {
-        PeerId = peerId;
-        IsLocalPlayer = isLocal;
+        base.Awake();
         Position = transform.position;
         Rotation = transform.rotation;
-        SetObjectId(peerId); // Set the ObjectId to be the same as the PeerId
-        Debug.Log($"PlayerCube initialized: PeerId={PeerId}, IsLocal={IsLocalPlayer}, ObjectId={ObjectId}");
     }
 
     private void Update()
     {
-        if (IsLocalPlayer)
+        
+        if (isLocalPlayer)
         {
             HandleInput();
         }

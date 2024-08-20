@@ -5,21 +5,20 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
 using System.Globalization;
-
+using UnityEditor;
 
 [AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
 public class SyncAttribute : Attribute
 {
     // You can add additional properties here if needed in the future
-    // For now, we'll keep it simple
 }
 
 public class MultiBehaviour : MonoBehaviour
 {
     private const float INITIALIZATION_DELAY = 1f;
 
-    [SerializeField] private string objectId;
-    [SerializeField] private string ownerId;
+    [SerializeField] protected string objectId;
+    [SerializeField] protected string ownerId;
     private Dictionary<string, object> syncedValues = new Dictionary<string, object>();
     private bool isInitialized = false;
 
@@ -27,22 +26,34 @@ public class MultiBehaviour : MonoBehaviour
     public string OwnerId => ownerId;
     private bool objectIdRequested = false;
 
-    private void Awake()
+    public bool isLocalPlayer
     {
+        get { return IsLocalPlayer; }
+        set { IsLocalPlayer = value; }
+    }
+    [SerializeField] private bool IsLocalPlayer;
+
+    protected virtual void Awake()
+    {
+        this.gameObject.name = this.gameObject.name.Replace("(Clone)", "");
         InitializeSyncedProperties();
         EventChannelManager.Instance.RegisterForChannel(gameObject, "LevelEventChannel", HandleLevelChannelMessage);
-
+        Initialize(WebRTCManager.Instance.LocalPeerId);
     }
 
-    public void Initialize(string ownerId, string objectId = null)
+    public virtual void Initialize(string ownerId, string objectId = null)
     {
+
         StartCoroutine(DelayedInitialize(ownerId, objectId));
     }
+
     private IEnumerator DelayedInitialize(string ownerId, string objectId = null)
     {
         yield return new WaitForSeconds(INITIALIZATION_DELAY);
 
         this.ownerId = ownerId;
+        IsLocalPlayer = (ownerId == WebRTCManager.Instance.LocalPeerId);
+
         if (objectId == null && ownerId == WebRTCManager.Instance.LocalPeerId && !objectIdRequested)
         {
             objectIdRequested = true;
@@ -52,8 +63,8 @@ public class MultiBehaviour : MonoBehaviour
         {
             SetObjectId(objectId);
         }
-    }
 
+    }
 
     private void RequestObjectId()
     {
@@ -62,15 +73,17 @@ public class MultiBehaviour : MonoBehaviour
 
     private void HandleLevelChannelMessage(string eventData)
     {
-        Debug.Log("MultiBehaviour is getting the levelchannel: " + eventData);
         string[] parts = eventData.Split(':');
         if (parts[0] == "NewMultiplayerObjectId" && parts[1] == ownerId && !isInitialized)
         {
-            Debug.Log("Setting objectid: " + parts[2]);
             SetObjectId(parts[2]);
-
         }
-
+    }
+    protected virtual void OnInitialized()
+    {
+        // This method can be overridden in derived classes to perform additional initialization
+        Debug.Log($"[MultiBehaviour] OnInitialized: ObjectId={objectId}, OwnerId={ownerId}, IsLocalPlayer={IsLocalPlayer}");
+        SubscribeToSyncEvents();
     }
 
     public void SetObjectId(string id)
@@ -79,56 +92,33 @@ public class MultiBehaviour : MonoBehaviour
         {
             objectId = id;
             isInitialized = true;
-            SubscribeToSyncEvents();
-            if (ownerId == WebRTCManager.Instance.LocalPeerId)
+            if (IsLocalPlayer)
             {
                 MultiplayerManager.Instance.CreateMultiplayerObject(objectId, gameObject.name);
             }
-            Debug.Log($"[MultiBehaviour] Initialized: ObjectId={objectId}, OwnerId={ownerId}");
+            Debug.Log($"[MultiBehaviour] Initialized: ObjectId={objectId}, OwnerId={ownerId}, IsLocalPlayer={IsLocalPlayer}");
+            OnInitialized();
         }
         else if (isInitialized)
         {
             Debug.LogWarning($"[MultiBehaviour] Attempted to set ObjectId after initialization: {id}");
         }
     }
-    //public void SetOwnerId(string id)
-    //{
-    //    if (ownerId != id)
-    //    {
-    //        UnsubscribeFromSyncEvents();
-    //        ownerId = id;
-    //        SubscribeToSyncEvents();
-    //        Debug.Log($"[MultiBehaviour] Set new OwnerId: {ownerId}");
-    //    }
-    //}
 
-    private void InitializeSyncedProperties()
-    {
-        var properties = GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-            .Where(prop => Attribute.IsDefined(prop, typeof(SyncAttribute)));
 
-        foreach (var property in properties)
-        {
-            syncedValues[property.Name] = property.GetValue(this);
-            Debug.Log($"[MultiBehaviour] Initialized synced property: {property.Name} = {syncedValues[property.Name]}");
-        }
-    }
 
     private void SubscribeToSyncEvents()
     {
-        string channelName = MultiplayerManager.Instance.GetPeerChannelName(LocalWebRTCManager.Instance.LocalPeerId);
+        string channelName = MultiplayerManager.Instance.GetPeerChannelName(ownerId);
         EventChannelManager.Instance.RegisterForChannel(gameObject, channelName, HandleSyncMessage);
         Debug.Log($"[MultiBehaviour] Subscribed to channel: {channelName}");
     }
 
     private void UnsubscribeFromSyncEvents()
     {
-        if (!string.IsNullOrEmpty(ownerId))
-        {
-            string channelName = MultiplayerManager.Instance.GetPeerChannelName(ownerId);
-            EventChannelManager.Instance.UnregisterFromChannel(gameObject, channelName);
-            Debug.Log($"[MultiBehaviour] Unsubscribed from channel: {channelName}");
-        }
+        string channelName = MultiplayerManager.Instance.GetPeerChannelName(ownerId);
+        EventChannelManager.Instance.UnregisterFromChannel(gameObject, channelName);
+        Debug.Log($"[MultiBehaviour] Unsubscribed from channel: {channelName}");
     }
 
     private void HandleSyncMessage(string message)
@@ -145,7 +135,6 @@ public class MultiBehaviour : MonoBehaviour
             // Check if this message is for this object
             if (messageObjectId != objectId)
             {
-                // This message is not for this object, ignore it
                 return;
             }
 
@@ -153,6 +142,7 @@ public class MultiBehaviour : MonoBehaviour
             if (property != null && Attribute.IsDefined(property, typeof(SyncAttribute)))
             {
                 object newValue = DeserializeValue(valueString, property.PropertyType);
+                Debug.Log(newValue.ToString() + "promp");
                 UpdateSyncedValue(propertyName, newValue);
             }
             else
@@ -166,9 +156,7 @@ public class MultiBehaviour : MonoBehaviour
         }
     }
 
-
-
-    public void UpdateSyncedValue(string propertyName, object newValue)
+    private void UpdateSyncedValue(string propertyName, object newValue)
     {
         if (!syncedValues.ContainsKey(propertyName) || !object.Equals(syncedValues[propertyName], newValue))
         {
@@ -177,26 +165,37 @@ public class MultiBehaviour : MonoBehaviour
             property?.SetValue(this, newValue);
             Debug.Log($"[MultiBehaviour] Updated {propertyName} to {newValue}");
         }
-        else
-        {
-            Debug.Log($"[MultiBehaviour] No change in {propertyName}, current value: {newValue}");
-        }
     }
 
     protected void RequestSyncedValueUpdate<T>(string propertyName, T newValue)
     {
         Debug.Log($"[MultiBehaviour] Requesting synced value update: {propertyName} = {newValue}");
-        string message = $"{LocalWebRTCManager.Instance.LocalPeerId}:{objectId}:{propertyName}:{SerializeValue(newValue)}";
+        string message = $"{WebRTCManager.Instance.LocalPeerId}:{objectId}:{propertyName}:{SerializeValue(newValue)}";
         MultiplayerManager.Instance.BroadcastEventToAllPeers(message);
+
+        // Update local value immediately
     }
 
+    private void InitializeSyncedProperties()
+    {
+        var properties = GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+            .Where(prop => Attribute.IsDefined(prop, typeof(SyncAttribute)));
+
+        foreach (var property in properties)
+        {
+            syncedValues[property.Name] = property.GetValue(this);
+            Debug.Log($"[MultiBehaviour] Initialized synced property: {property.Name} = {syncedValues[property.Name]}");
+        }
+    }
     private string SerializeValue(object value)
     {
         if (value == null)
             return "null";
 
         if (value is Vector3 vector3Value)
-            return $"v3:{vector3Value.x},{vector3Value.y},{vector3Value.z}";
+            return $"v3:{vector3Value.x.ToString(CultureInfo.InvariantCulture)}," +
+                   $"{vector3Value.y.ToString(CultureInfo.InvariantCulture)}," +
+                   $"{vector3Value.z.ToString(CultureInfo.InvariantCulture)}";
 
         if (value is Quaternion quaternionValue)
             return $"q:{quaternionValue.x},{quaternionValue.y},{quaternionValue.z},{quaternionValue.w}";
@@ -225,13 +224,17 @@ public class MultiBehaviour : MonoBehaviour
         string[] parts = value.Split(new[] { ':' }, 2);
         if (parts.Length != 2)
             throw new ArgumentException("Invalid serialized value format");
-
+        foreach (string item in parts)
+        {
+            Debug.Log(value + " ops: " +item);
+        }
         string typePrefix = parts[0];
         string data = parts[1];
 
         switch (typePrefix)
         {
             case "v3":
+
                 if (targetType != typeof(Vector3))
                     throw new ArgumentException("Type mismatch: expected Vector3");
                 string[] vectorParts = data.Split(',');
@@ -277,6 +280,8 @@ public class MultiBehaviour : MonoBehaviour
                 throw new ArgumentException($"Unknown type prefix: {typePrefix}");
         }
     }
+
+
     private void OnDestroy()
     {
         EventChannelManager.Instance.UnregisterFromChannel(gameObject, "LevelEventChannel");

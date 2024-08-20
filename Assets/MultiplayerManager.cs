@@ -79,7 +79,7 @@ public class MultiplayerManager : MonoBehaviour
 
     public void BroadcastLocalPeer(string senderPeerId, string message)
     {
-        string channelName = $"PeerChannel_{senderPeerId}";
+        string channelName = $"PeerChannel:{senderPeerId}";
         EventChannelManager.Instance.RaiseEvent(channelName, message);
     }
 
@@ -112,9 +112,9 @@ public class MultiplayerManager : MonoBehaviour
         var allChannels = EventChannelManager.Instance.EventChannels;
         foreach (var channel in allChannels)
         {
-            if (channel.name.StartsWith("PeerChannel_"))
+            if (channel.name.StartsWith("PeerChannel:"))
             {
-                string peerId = channel.name.Substring("PeerChannel_".Length);
+                string peerId = channel.name.Substring("PeerChannel:".Length);
                 if (!peers.Contains(peerId) && peerId != localPeerId)
                 {
                     RemovePeerChannel(peerId);
@@ -141,49 +141,61 @@ public class MultiplayerManager : MonoBehaviour
 
     public string GetPeerChannelName(string peerId)
     {
-        return $"PeerChannel_{peerId}";
+        return $"PeerChannel:{peerId}";
     }
-
 
     public void HandleWebRTCMessage(string senderPeerId, string message)
     {
-        Debug.Log($"Received WebRTC message from {senderPeerId}: {message}");
+        Debug.Log($"[MultiplayerManager] Received WebRTC message from {senderPeerId}: {message}");
 
         int colonIndex = message.IndexOf(':');
         if (colonIndex != -1)
         {
             string channelName = message.Substring(0, colonIndex);
             string eventData = message.Substring(colonIndex + 1);
-
+            Debug.Log(channelName + " " + senderPeerId + " " + message + " !!!!!!!!!!");
             if (channelName == "LevelEventChannel")
             {
-                Debug.Log("LevelEventChannel recieved a message!" + eventData);
+                Debug.Log("[MultiplayerManager] LevelEventChannel received a message: " + eventData);
                 HandleLevelChannelMessage(senderPeerId, eventData);
             }
-            else if (EventChannelManager.Instance.channelsByName.ContainsKey(channelName))
+            else if (senderPeerId == channelName)
+            {
+                Debug.LogWarning("Yeeehaw motherfucker...");
+                    string peerChannelName = GetPeerChannelName(senderPeerId);
+  
+                EventChannelManager.Instance.RaiseEvent(peerChannelName, message);
+                Debug.Log($"[MultiplayerManager] Raised event on peer channel: {peerChannelName}, Message: {message}");
+            }
+            else if (EventChannelManager.Instance.ChannelExists(channelName))
             {
                 EventChannelManager.Instance.RaiseEvent(channelName, eventData);
+                Debug.Log($"[MultiplayerManager] Raised event on channel: {channelName}, Message: {eventData}");
             }
             else
             {
-                Debug.LogWarning($"Attempted to raise event on non-existent channel: {channelName}");
+                Debug.LogWarning($"[MultiplayerManager] Attempted to raise event on non-existent channel: {channelName}");
             }
         }
         else
         {
-            // Handle general peer message
-            string peerChannelName = $"PeerChannel_{senderPeerId}";
-            if (EventChannelManager.Instance.channelsByName.ContainsKey(peerChannelName))
-            {
-                EventChannelManager.Instance.RaiseEvent(peerChannelName, message);
-            }
-            else
-            {
-                Debug.LogWarning($"Attempted to raise event on non-existent peer channel: {peerChannelName}");
-            }
+            // If there's no colon, treat it as a regular peer message
+            string peerChannelName = GetPeerChannelName(senderPeerId);
+            EnsurePeerChannelExists(senderPeerId);
+            EventChannelManager.Instance.RaiseEvent(peerChannelName, message);
+            Debug.Log($"[MultiplayerManager] Raised event on peer channel: {peerChannelName}, Message: {message}");
         }
     }
 
+    private void EnsurePeerChannelExists(string peerId)
+    {
+        string channelName = GetPeerChannelName(peerId);
+        if (!EventChannelManager.Instance.ChannelExists(channelName))
+        {
+            EventChannelManager.Instance.CreateChannelIfNotExists(channelName);
+            Debug.Log($"[MultiplayerManager] Created event channel for peer: {peerId}");
+        }
+    }
 
     public void HandleLevelChannelMessage(string senderPeerId, string eventData)
     {
@@ -262,7 +274,7 @@ public class MultiplayerManager : MonoBehaviour
 
         if (multiplayerObjectOwners[objectId] != WebRTCManager.Instance.LocalPeerId)
         {
-            GameObject prefab = Resources.Load<GameObject>("PlayerCube");
+            GameObject prefab = Resources.Load<GameObject>(objectName);
             if (prefab != null)
             {
                 GameObject newObject = Instantiate(prefab);
@@ -270,7 +282,7 @@ public class MultiplayerManager : MonoBehaviour
                 MultiBehaviour multiBehaviour = newObject.GetComponent<MultiBehaviour>();
                 if (multiBehaviour != null)
                 {
-                    multiBehaviour.Initialize(multiplayerObjectOwners[objectId], objectId);
+                    //multiBehaviour.Initialize(multiplayerObjectOwners[objectId], objectId);
                 }
                 else
                 {

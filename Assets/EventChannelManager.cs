@@ -96,7 +96,11 @@ public class EventChannelManager : MonoBehaviour
             UnregisterChannel(subscriber, channel);
         }
     }
-
+    // Add this new method
+    public bool ChannelExists(string channelName)
+    {
+        return channelsByName.ContainsKey(channelName);
+    }
     public void RegisterChannel(GameObject subscriber, GameEventChannelSO channel, System.Action<string> callback)
     {
         if (channel == null) return;

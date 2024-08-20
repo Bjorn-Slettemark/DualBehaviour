@@ -34,10 +34,11 @@ public class MultiplayerLevelSO : GameLevelSO
         if (playerPrefab != null)
         {
             GameObject playerObject = Instantiate(playerPrefab, spawnPosition.position, Quaternion.identity);
+            //playerObject.name = playerPrefabName;
             MultiBehaviour multiBehaviour = playerObject.GetComponent<MultiBehaviour>();
             if (multiBehaviour != null)
             {
-                multiBehaviour.Initialize(WebRTCManager.Instance.LocalPeerId);
+                //multiBehaviour.Initialize(WebRTCManager.Instance.LocalPeerId);
             }
             else
             {

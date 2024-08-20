@@ -64,7 +64,7 @@ public class WebRTCManager : MonoBehaviour
         database = FirebaseDatabase.DefaultInstance.RootReference;
 
         localPeerId = LocalWebRTCManager.Instance.LocalPeerId;
-        localPeerChannelName = "PeerChannel_" + LocalPeerId;
+        localPeerChannelName = "PeerChannel:" + LocalPeerId;
         peerConnections = WebRTCManager.Instance.peerConnections;
 
 
