@@ -1,117 +1,156 @@
-using UnityEngine;
+//using UnityEngine;
 
-public class PlayerController : MonoBehaviour
-{
-    public float moveSpeed = 5f;
-    public float rotationSpeed = 10f;
+//public class PlayerController : MultiBehaviour
+//{
+//    public float moveSpeed = 5f;
+//    public float rotationSpeed = 10f;
 
-    private CharacterController characterController;
+//    private CharacterController characterController;
 
-    public GunController gunController; // Reference to the GunController component
+//    public GunController gunControllerRef; // Reference to the GunController component
+//    [SerializeField] public GameObject gunAttachment;
 
-    private Vector3 movement;
-    private bool positionLoaded = false;
+//    [Sync] public Vector3 Position { get; set; }
+//    [Sync] public Quaternion Rotation { get; set; }
+//    public Vector3 spawnPos;
+//    public Quaternion spawnRot;
+//    private Vector3 movement;
 
-    [SerializeField]
-    private GameEventChannelSO saveEventChannel;
-    [SerializeField]
-    private GameEventChannelSO loadEventChannel;
-    [SerializeField]
-    private PlayerDataSO playerData;
+//    [SerializeField]
+//    private GameEventChannelSO saveEventChannel;
+//    [SerializeField]
+//    private GameEventChannelSO loadEventChannel;
+//    [SerializeField]
+//    private PlayerDataSO playerData;
 
-    private void Start()
-    {
-        characterController = GetComponent<CharacterController>();
+//    protected override void Awake()
+//    {
+//        base.Awake();
+//        characterController = GetComponent<CharacterController>();
+//        spawnPos = transform.position;
+//        spawnRot = transform.rotation;
+//    }
 
-        // Subscribe to the event when game data is loaded. Adjust "GameEventChannel" and "GameDataLoaded" as needed.
-        if (EventChannelManager.Instance != null)
-        {
-            EventChannelManager.Instance.RegisterEvent(gameObject, saveEventChannel, "PlayerSave", SavePlayerData);
+//    protected override void OnInitialized()
+//    {
+//        base.OnInitialized();
 
-            EventChannelManager.Instance.RegisterEvent(gameObject, loadEventChannel, "PlayerData", UpdatePlayerPositionFromEventData);
-        }
-    }
 
-    void Update()
-    {
 
-        // Check if position has been loaded, to skip one update cycle
-        if (positionLoaded)
-        {
-            positionLoaded = false;
-            return;
-        }
+//        if (isLocalPlayer)
+//        {
+//            // Subscribe to event channels
+//            if (EventChannelManager.Instance != null)
+//            {
+//                EventChannelManager.Instance.SubscribeEvent(gameObject, saveEventChannel, "PlayerSave", SavePlayerData);
+//                EventChannelManager.Instance.SubscribeEvent(gameObject, loadEventChannel, "PlayerData", UpdatePlayerPositionFromEventData);
+//            }
 
-        //playerData.playerPosition = this.transform.position;
 
-        // Input handling for movement in 3D
-        movement.x = Input.GetAxis("Horizontal");
-        movement.z = Input.GetAxis("Vertical");
+//        }
 
-        if (Input.GetButton("Fire1") && Time.timeScale != 0)
-        {
-            gunController.AttemptShoot();
-        }
+//        // Spawn and initialize GunController
+//        SpawnGunController();
 
-        // Apply gravity manually
-        if (!characterController.isGrounded)
-        {
-            movement.y += Physics.gravity.y * Time.deltaTime;
-        }
-        else
-        {
-            movement.y = 0f; // Reset the Y movement when grounded to prevent accumulating gravity
-        }
+//        Position = spawnPos;
+//        Rotation = spawnRot;
+//    }
 
-        // Move the player using the CharacterController
-        characterController.Move(movement * moveSpeed * Time.deltaTime);
+//    void Update()
+//    {
+//        if (isLocalPlayer)
+//        {
+//            HandleInput();
+//        }
 
-        // Handle rotation to face the direction of movement
-        HandleRotation();
-    }
+//        ApplyMovement();
+//    }
 
-    void SavePlayerData(string eventName)
-    {
-        Debug.Log(eventName + "!!!!");
-        playerData.playerPosition = this.transform.position;
-        SaveLoadManager.Instance.SaveGame(playerData);
-    }
-    // This method will be called when the event is raised
-    void UpdatePlayerPositionFromEventData(string gameDataName)
-    {
-        positionLoaded = false;
+//    void HandleInput()
+//    {
+//        movement.x = Input.GetAxis("Horizontal");
+//        movement.z = Input.GetAxis("Vertical");
 
-        // Assuming gameDataName can be used to identify or retrieve the relevant PlayerData
-        // This part needs customization based on how your GameDataSOs are structured and how PlayerData is retrieved
-        Debug.Log("LOAD!!" + playerData.playerPosition);
-        ;
+//        if (Input.GetButton("Fire1") && Time.timeScale != 0 && gunControllerRef != null)
+//        {
+//            gunControllerRef.AttemptShoot();
+//        }
 
-        if (playerData != null)
-        {
-            //SaveLoadManager.Instance.(playerData)
-            LoadPosition(playerData.playerPosition);
-        }
-    }
-    void HandleRotation()
-    {
-        Vector3 direction = new Vector3(movement.x, 0, movement.z);
-        if (direction != Vector3.zero)
-        {
-            Quaternion toRotation = Quaternion.LookRotation(direction, Vector3.up);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.deltaTime * 100);
-        }
-    }
+//        // Apply gravity manually
+//        if (!characterController.isGrounded)
+//        {
+//            movement.y += Physics.gravity.y * Time.deltaTime;
+//        }
+//        else
+//        {
+//            movement.y = 0f;
+//        }
 
-    // Method to apply force to the player
-    public void ApplyForce(Vector3 force)
-    {
-        characterController.Move(force * Time.deltaTime);
-    }
-    public void LoadPosition(Vector3 loadedPosition)
-    {
-        characterController.enabled = false; // Disable to set position outside bounds
-        transform.position = loadedPosition;
-        characterController.enabled = true; // Re-enable
-        positionLoaded = true;
-    }
-}
+//        Vector3 newPosition = Position + transform.TransformDirection(movement) * moveSpeed * Time.deltaTime;
+//        RequestSyncedValueUpdate(nameof(Position), newPosition);
+
+//        // Handle rotation
+//        if (movement != Vector3.zero)
+//        {
+//            Quaternion newRotation = Quaternion.LookRotation(movement, Vector3.up);
+//            RequestSyncedValueUpdate(nameof(Rotation), newRotation);
+//        }
+//    }
+
+//    void ApplyMovement()
+//    {
+//        transform.position = Position;
+//        transform.rotation = Rotation;
+
+//        // Use CharacterController for collision detection
+//        characterController.Move(movement * moveSpeed * Time.deltaTime);
+//    }
+
+//    void SpawnGunController()
+//    {
+//        if (gunControllerRef == null)
+//        {
+//            GameObject gunController = Resources.Load<GameObject>("GunController");
+
+//            Debug.Log("Spawning " + gunController.name);
+//            GameObject gun = Instantiate(gunController, gunAttachment.transform.position, Quaternion.identity, gunAttachment.transform);
+//            //playerObject.name = playerPrefabName;
+//            MultiBehaviour multiBehaviour = gun.GetComponent<MultiBehaviour>();
+//            if (multiBehaviour != null)
+//            {
+//                multiBehaviour.Initialize(WebRTCEngine.Instance.LocalPeerId);
+//            }
+//            gunControllerRef = gun.GetComponent<GunController>();
+//        }
+//    }
+
+//    void SavePlayerData(string eventName)
+//    {
+//        Debug.Log(eventName + "!!!!");
+//        playerData.playerPosition = Position;
+//        SaveLoadManager.Instance.SaveGame(playerData);
+//    }
+
+//    void UpdatePlayerPositionFromEventData(string gameDataName)
+//    {
+//        Debug.Log("LOAD!!" + playerData.playerPosition);
+
+//        if (playerData != null)
+//        {
+//            LoadPosition(playerData.playerPosition);
+//        }
+//    }
+
+//    public void ApplyForce(Vector3 force)
+//    {
+//        Vector3 newPosition = Position + force * Time.deltaTime;
+//        RequestSyncedValueUpdate(nameof(Position), newPosition);
+//    }
+
+//    public void LoadPosition(Vector3 loadedPosition)
+//    {
+//        characterController.enabled = false;
+//        RequestSyncedValueUpdate(nameof(Position), loadedPosition);
+//        characterController.enabled = true;
+//    }
+//}

@@ -3,10 +3,10 @@ using Unity.WebRTC;
 using System;
 using System.Collections;
 
-public class LocalWebRTCManager : MonoBehaviour
+public class LocalWebRTCEngine : MonoBehaviour
 {
-    private static LocalWebRTCManager _instance;
-    public static LocalWebRTCManager Instance => _instance;
+    private static LocalWebRTCEngine _instance;
+    public static LocalWebRTCEngine Instance => _instance;
 
     private RTCPeerConnection localPeer;
     private RTCPeerConnection remotePeer;
@@ -98,7 +98,7 @@ public class LocalWebRTCManager : MonoBehaviour
 
         // Add only the remote peer to WebRTCManager
         //WebRTCManager.Instance.AddPeerConnection(RemotePeerId, remotePeer);
-        WebRTCManager.Instance.AddDataChannel(LocalWebRTCManager.Instance.LocalPeerId, remoteDataChannel);
+        WebRTCEngine.Instance.AddDataChannel(LocalWebRTCEngine.Instance.LocalPeerId, remoteDataChannel);
         OnLocalConnectionEstablished?.Invoke();
 
     }
@@ -143,11 +143,11 @@ public class LocalWebRTCManager : MonoBehaviour
         channel.OnMessage = bytes =>
         {
             string message = System.Text.Encoding.UTF8.GetString(bytes);
-            Debug.Log($"{peerName} received message: {message}");
+            //Debug.Log($"{peerName} received message: {message}");
 
             if (peerName == "LocalPeer")
             {
-                MultiplayerManager.Instance.HandleWebRTCMessage(LocalWebRTCManager.Instance.LocalPeerId, message);
+                NetworkEngine.Instance.HandleWebRTCMessage(message);
 
                 // Forward local messages directly to MultiplayerManager
             }

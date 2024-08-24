@@ -70,7 +70,7 @@ public class EventChannelManagerEditor : Editor
                     if (!string.IsNullOrEmpty(eventNameToRaise) && selectedChannelIndexForRaisingEvent >= 0 && selectedChannelIndexForRaisingEvent < channelNames.Count)
                     {
                         GameEventChannelSO channel = manager.EventChannels[selectedChannelIndexForRaisingEvent];
-                        manager.RaiseEvent(channel, eventNameToRaise);
+                        manager.RaiseEvent(channel.name, eventNameToRaise);
                         eventNameToRaise = ""; // Clear the input field after raising the event
                     }
                 }

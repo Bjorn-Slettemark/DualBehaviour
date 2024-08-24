@@ -6,10 +6,7 @@ using UnityEditor;
 
 public class MultiplayerLevelSO : GameLevelSO
 {
-    [SerializeField] private string playerPrefabName = "PlayerCube"; // Name of the prefab in Resources folder
-
-
-
+    [SerializeField] private string playerPrefabName = "Cube"; // Name of the prefab in Resources folder
 
     public override void EnterLevel()
     {
@@ -18,41 +15,13 @@ public class MultiplayerLevelSO : GameLevelSO
         spawnPoints = GameObject.FindGameObjectsWithTag("Spawnpoint")
                                .Select(go => go.transform)
                                .ToList();
-
-
         SpawnLocalPlayer();
-
-        // Start the loading process
-        MultiplayerManager.Instance.BroadcastEventToAllPeers($"LevelEventChannel:LoadingLevelDone");
-
     }
 
     private void SpawnLocalPlayer()
     {
-        Transform spawnPosition = GetRandomSpawnPoint();
-        GameObject playerPrefab = Resources.Load<GameObject>(playerPrefabName);
-        if (playerPrefab != null)
-        {
-            GameObject playerObject = Instantiate(playerPrefab, spawnPosition.position, Quaternion.identity);
-            //playerObject.name = playerPrefabName;
-            MultiBehaviour multiBehaviour = playerObject.GetComponent<MultiBehaviour>();
-            if (multiBehaviour != null)
-            {
-                multiBehaviour.Initialize(WebRTCManager.Instance.LocalPeerId);
-            }
-
-        }
-        else
-        {
-            Debug.LogError($"Player prefab '{playerPrefabName}' not found in Resources folder");
-        }
-    }
-
-
-
-    private Transform GetRandomSpawnPoint()
-    {
-        return spawnPoints[Random.Range(0, spawnPoints.Count)];
+        Transform RandomSpawnPoint = spawnPoints[Random.Range(0, spawnPoints.Count)];
+        MultiplayerManager.Instance.RequestMultiplayerObject(RandomSpawnPoint.transform.position, Quaternion.identity, playerPrefabName);
     }
 
     public override void ExitLevel()
@@ -60,6 +29,11 @@ public class MultiplayerLevelSO : GameLevelSO
         base.ExitLevel();
     }
 
+    public override void LoadingLevel()
+    {
+        base.LoadingLevel();
+
+    }
 
     public override void LevelUpdate()
     {

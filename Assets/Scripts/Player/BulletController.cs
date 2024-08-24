@@ -1,57 +1,71 @@
-using UnityEngine;
+//using UnityEngine;
 
-public class BulletController : MonoBehaviour
-{
-    public float speed = 20f;
-    public float damage = 10f; // The damage this bullet will deal
-    public float maxRange = 10f; // Maximum distance the bullet can travel
+//public class BulletController : MultiBehaviour
+//{
+//    public float speed = 20f;
+//    public float damage = 10f;
+//    public float maxRange = 10f;
+//    private Vector3 startPosition;
 
-    private Vector3 startPosition;
+//    [Sync] public Vector3 Position { get; set; }
+//    [Sync] public Quaternion Rotation { get; set; }
 
-    void Start()
-    {
-        startPosition = transform.position; // Store the starting position of the bullet
-    }
+//    protected override void OnInitialized()
+//    {
+//        base.OnInitialized();
+//        startPosition = transform.position;
+//        Position = startPosition;
+//        Rotation = transform.rotation;
+//    }
 
-    void Update()
-    {
-        transform.Translate(Vector3.right * speed * Time.deltaTime); // Use Vector3 for 3D movement
+//    void Update()
+//    {
+//        if (isLocalPlayer)
+//        {
+//            Vector3 newPosition = Position + transform.right * speed * Time.deltaTime;
+//            RequestSyncedValueUpdate(nameof(Position), newPosition);
 
-        // Check if the bullet has exceeded its maximum range
-        if (Vector3.Distance(startPosition, transform.position) > maxRange)
-        {
-            Destroy(gameObject);
-        }
-    }
+//            if (Vector3.Distance(startPosition, newPosition) > maxRange)
+//            {
+//                // Request destruction of the bullet
+//                Destroy(this.gameObject);
+//            }
+//        }
 
-    void OnTriggerEnter(Collider hitInfo)
-    {
-        // Check if the hit object has a HealthSystem component
-        AISenseSystem aISense = hitInfo.GetComponent<AISenseSystem>();
+//        // Apply the synced position and rotation
+//        transform.position = Position;
+//        transform.rotation = Rotation;
+//    }
 
-        HealthSystem healthSystem = hitInfo.GetComponent<HealthSystem>();
-        if (healthSystem != null)
-        {
-            // Damage the hit object
-            healthSystem.TakeDamage(damage);
-        }
-        if (aISense != null)
-        {
-            // Damage the hit object
-            aISense.OnHitReceived?.Invoke();
-        }
-        // Destroy the bullet after hitting something
-        Destroy(gameObject);
-    }
+//    void OnTriggerEnter(Collider hitInfo)
+//    {
+//        if (isLocalPlayer)
+//        {
+//            AISenseSystem aISense = hitInfo.GetComponent<AISenseSystem>();
+//            HealthSystem healthSystem = hitInfo.GetComponent<HealthSystem>();
 
+//            if (healthSystem != null)
+//            {
+//                healthSystem.TakeDamage(damage);
+//            }
 
-    public void SetDamage(float damage)
-    {
-        this.damage = damage;
-    }
+//            if (aISense != null)
+//            {
+//                aISense.OnHitReceived?.Invoke();
+//            }
 
-    public void SetSpeed(float speed)
-    {
-        this.speed = speed;
-    }
-}
+//            // Request destruction of the bullet
+//            Destroy(this.gameObject);
+//                }
+//    }
+
+//    public void SetDamage(float newDamage)
+//    {
+//        damage = newDamage;
+//    }
+
+//    public void SetSpeed(float newSpeed)
+//    {
+//        speed = newSpeed;
+//    }
+//}

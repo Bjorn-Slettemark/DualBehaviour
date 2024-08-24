@@ -1,24 +1,40 @@
 using UnityEngine;
-using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Linq;
-using System.Globalization;
-
 
 public class MultiplayerTestCubeSpawn : MultiBehaviour
 {
-    [Sync] public Vector3 Position { get; private set; }
-    [Sync] public Quaternion Rotation { get; private set; }
-    public string PeerId { get; private set; }
+    public float moveSpeed = 5f;
+    public float rotateSpeed = 100f;
 
-    protected override void Awake()
+    [Sync] private float someOtherValue;
+
+    protected override void Update()
     {
-        base.Awake();
-        Position = transform.position;
-        Rotation = transform.rotation;
+        base.Update();
+
+        if (IsOwner())
+        {
+            HandleInput();
+            someOtherValue += Time.deltaTime;
+            UpdateSyncField(nameof(someOtherValue), someOtherValue);
+        }
+
+        Debug.Log(someOtherValue);
     }
 
- 
+    private void HandleInput()
+    {
+        float horizontal = Input.GetAxis("Horizontal");
+        float vertical = Input.GetAxis("Vertical");
+        Vector3 movement = new Vector3(horizontal, 0f, vertical).normalized * moveSpeed * Time.deltaTime;
 
+        if (movement != Vector3.zero)
+        {
+            // Update position
+            transform.position += movement;
+
+            // Update rotation
+            Quaternion targetRotation = Quaternion.LookRotation(movement);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotateSpeed * Time.deltaTime);
+        }
+    }
 }

@@ -14,6 +14,7 @@ public class EventChannelManager : MonoBehaviour
     private Dictionary<GameEventChannelSO, Dictionary<string, System.Action<string>>> globalSubscriptions = new Dictionary<GameEventChannelSO, Dictionary<string, System.Action<string>>>();
 
     public List<EventHistory> eventHistory = new List<EventHistory>();
+    public Dictionary<string, GameEventChannelSO> channelsByName = new Dictionary<string, GameEventChannelSO>();
 
     public struct EventHistory
     {
@@ -66,44 +67,34 @@ public class EventChannelManager : MonoBehaviour
 
     }
 
-    private void PopulateChannelsByName()
-    {
-        channelsByName.Clear();
-        foreach (var channel in eventChannels)
-        {
-            if (channel != null && !string.IsNullOrEmpty(channel.name))
-            {
-                channelsByName[channel.name] = channel;
-            }
-            else
-            {
-                Debug.LogWarning("Found a null or unnamed channel in eventChannels list.");
-            }
-        }
-    }
-    public void RegisterForAllChannels(GameObject subscriber, System.Action<string> callback)
+    // Subscription
+
+    public void SubscribeForAllChannels(GameObject subscriber, System.Action<string> callback)
     {
         foreach (var channel in eventChannels)
         {
-            RegisterChannel(subscriber, channel, callback);
+            SubscribeChannel(subscriber, channel.name, callback);
         }
     }
 
-    public void UnregisterForAllChannels(GameObject subscriber)
+    public void UnsubscribeForAllChannels(GameObject subscriber)
     {
         foreach (var channel in eventChannels)
         {
-            UnregisterChannel(subscriber, channel);
+            UnSubscribeChannel(subscriber, channel.name);
         }
     }
-    // Add this new method
-    public bool ChannelExists(string channelName)
+
+    public void SubscribeChannel(GameObject subscriber, string channelName, System.Action<string> callback)
     {
-        return channelsByName.ContainsKey(channelName);
-    }
-    public void RegisterChannel(GameObject subscriber, GameEventChannelSO channel, System.Action<string> callback)
-    {
-        if (channel == null) return;
+        if (string.IsNullOrEmpty(channelName)) return;
+
+        if (!channelsByName.TryGetValue(channelName, out GameEventChannelSO channel))
+        {
+            Debug.LogWarning($"Channel '{channelName}' does not exist. Creating it.");
+            RegisterNewChannel(channelName);
+            channel = channelsByName[channelName];
+        }
 
         if (subscriber == null)
         {
@@ -133,9 +124,10 @@ public class EventChannelManager : MonoBehaviour
         channel.RegisterListenerForAllEvents(callback);
     }
 
-
-    public void UnregisterChannel(GameObject subscriber, GameEventChannelSO channel)
+    public void UnSubscribeChannel(GameObject subscriber, string channelName)
     {
+        if (!channelsByName.TryGetValue(channelName, out GameEventChannelSO channel)) return;
+
         if (!subscriptions.ContainsKey(subscriber) || !subscriptions[subscriber].ContainsKey(channel)) return;
 
         const string allEventsKey = "*";
@@ -155,7 +147,8 @@ public class EventChannelManager : MonoBehaviour
             }
         }
     }
-    public void RegisterEvent(GameObject subscriber, GameEventChannelSO channel, string eventName, System.Action<string> callback)
+    
+    public void SubscribeEvent(GameObject subscriber, GameEventChannelSO channel, string eventName, System.Action<string> callback)
     {
         if (channel == null) return;
 
@@ -174,7 +167,7 @@ public class EventChannelManager : MonoBehaviour
         subscriptions[subscriber][channel][eventName] = callback;
     }
 
-    public void UnregisterEvent(GameObject subscriber, GameEventChannelSO channel, string eventName)
+    public void UnsubscribeEvent(GameObject subscriber, GameEventChannelSO channel, string eventName)
     {
         if (channel == null || !subscriptions.ContainsKey(subscriber) || !subscriptions[subscriber].ContainsKey(channel) || !subscriptions[subscriber][channel].ContainsKey(eventName))
         {
@@ -195,19 +188,59 @@ public class EventChannelManager : MonoBehaviour
             }
         }
     }
+    
 
-    public void RaiseEvent(GameEventChannelSO channel, string eventDescriptor)
+    // Manage Channels
+    public void RaiseEvent(string channelName, string eventName)
     {
-        string[] parts = eventDescriptor.Split(':');
-        string eventName = parts[0];
-        string senderName = parts.Length > 1 ? parts[1] : "Unknown";
-
-        if (channel != null)
+        if (channelsByName.TryGetValue(channelName, out GameEventChannelSO channel))
         {
-            eventHistory.Add(new EventHistory(channel.name, eventName, senderName));
             channel.RaiseEvent(eventName);
+            eventHistory.Add(new EventHistory(channelName, eventName, "System"));
+
+            //Debug.Log($"Raised event '{eventName}' on channel '{channelName}'");
+        }
+        else
+        {
+            Debug.LogWarning($"Attempted to raise event '{eventName}' on non-existent channel '{channelName}'");
         }
     }
+
+    public bool ChannelExists(string channelName)
+    {
+        return channelsByName.ContainsKey(channelName);
+    }
+
+    public void RegisterNewChannel(string channelName)
+    {
+        if (!channelsByName.ContainsKey(channelName))
+        {
+            GameEventChannelSO newChannel = ScriptableObject.CreateInstance<GameEventChannelSO>();
+            newChannel.name = channelName;
+
+            channelsByName[channelName] = newChannel;
+            eventChannels.Add(newChannel);
+
+            Debug.Log($"Created new channel: {channelName}");
+        }
+    }
+
+    private void PopulateChannelsByName()
+    {
+        channelsByName.Clear();
+        foreach (var channel in eventChannels)
+        {
+            if (channel != null && !string.IsNullOrEmpty(channel.name))
+            {
+                channelsByName[channel.name] = channel;
+            }
+            else
+            {
+                Debug.LogWarning("Found a null or unnamed channel in eventChannels list.");
+            }
+        }
+    }
+
 
     private void OnDestroy()
     {
@@ -267,71 +300,5 @@ public class EventChannelManager : MonoBehaviour
 
 
 
-    public Dictionary<string, GameEventChannelSO> channelsByName = new Dictionary<string, GameEventChannelSO>();
 
-    public void CreateChannelIfNotExists(string channelName)
-    {
-        if (!channelsByName.ContainsKey(channelName))
-        {
-            GameEventChannelSO newChannel = ScriptableObject.CreateInstance<GameEventChannelSO>();
-            newChannel.name = channelName;
-
-            channelsByName[channelName] = newChannel;
-            eventChannels.Add(newChannel);
-
-            Debug.Log($"Created new channel: {channelName}");
-        }
-    }
-
-    public void RegisterForChannel(GameObject subscriber, string channelName, Action<string> callback)
-    {
-        CreateChannelIfNotExists(channelName);
-
-        GameEventChannelSO channel = channelsByName[channelName];
-        RegisterChannel(subscriber, channel, callback);
-        Debug.Log($"Registered for all events on channel '{channelName}', Subscriber: {(subscriber == null ? "Global" : subscriber.name)}");
-    }
-
-
-    public void UnregisterFromChannel(GameObject subscriber, string channelName)
-    {
-        if (channelsByName.TryGetValue(channelName, out GameEventChannelSO channel))
-        {
-            UnregisterChannel(subscriber, channel);
-            Debug.Log($"Unregistered from all events on channel '{channelName}'");
-        }
-    }
-
-    public void RegisterForEvent(GameObject subscriber, string channelName, string eventName, Action<string> callback)
-    {
-        CreateChannelIfNotExists(channelName);
-
-        GameEventChannelSO channel = channelsByName[channelName];
-        RegisterEvent(subscriber, channel, eventName, callback);
-        Debug.Log($"Registered for event '{eventName}' on channel '{channelName}'");
-    }
-
-    public void UnregisterFromEvent(GameObject subscriber, string channelName, string eventName)
-    {
-        if (channelsByName.TryGetValue(channelName, out GameEventChannelSO channel))
-        {
-            UnregisterEvent(subscriber, channel, eventName);
-            Debug.Log($"Unregistered from event '{eventName}' on channel '{channelName}'");
-        }
-    }
-
-    public void RaiseEvent(string channelName, string eventName)
-    {
-        if (channelsByName.TryGetValue(channelName, out GameEventChannelSO channel))
-        {
-            channel.RaiseEvent(eventName);
-            eventHistory.Add(new EventHistory(channelName, eventName, "System"));
-
-            Debug.Log($"Raised event '{eventName}' on channel '{channelName}'");
-        }
-        else
-        {
-            Debug.LogWarning($"Attempted to raise event '{eventName}' on non-existent channel '{channelName}'");
-        }
-    }
 }

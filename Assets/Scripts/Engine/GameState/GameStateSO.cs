@@ -13,13 +13,13 @@ public abstract class GameStateSO : ScriptableObject
     public virtual void EnterState()
     {
         // Use gameState.ToString() to ensure dynamic state name is passed
-        EventChannelManager.Instance.RaiseEvent(gameStateEventChannel, gameState.ToString());
+        EventChannelManager.Instance.RaiseEvent(gameStateEventChannel.name, gameState.ToString());
     }
 
     // Method to be called when exiting the state
     public virtual void ExitState()
     {
-        EventChannelManager.Instance.RaiseEvent(gameStateEventChannel, "ExitState");
+        EventChannelManager.Instance.RaiseEvent(gameStateEventChannel.name, "ExitState");
     }
 
     // Abstract method for state-specific functionality

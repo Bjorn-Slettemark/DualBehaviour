@@ -7,8 +7,8 @@ public class LevelChangeButton : MonoBehaviour
     public void ChangeLevel(GameLevelSO eventLevelSO)
     {
 
-       //LevelLoaderManager.Instance.LoadLevel(eventLevelSO);
-        MultiplayerManager.Instance.BroadcastEventToAllPeers($"LevelEventChannel:ChangeLevel:MultiplayerTest");
+        //LevelLoaderManager.Instance.LoadLevel(eventLevelSO);
+        MultiplayerManager.Instance.RequestLevelChange(eventLevelSO.name);
 
 
 

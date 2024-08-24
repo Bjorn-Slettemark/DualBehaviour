@@ -7,10 +7,10 @@ using Firebase.Database;
 using System.Linq;
 
 
-public class WebRTCManager : MonoBehaviour
+public class WebRTCEngine : MonoBehaviour
 {
-    private static WebRTCManager _instance;
-    public static WebRTCManager Instance => _instance;
+    private static WebRTCEngine _instance;
+    public static WebRTCEngine Instance => _instance;
 
     public Dictionary<string, RTCPeerConnection> peerConnections = new Dictionary<string, RTCPeerConnection>();
     private Dictionary<string, RTCDataChannel> dataChannels = new Dictionary<string, RTCDataChannel>();
@@ -63,9 +63,9 @@ public class WebRTCManager : MonoBehaviour
         // Perform any necessary initialization here
         database = FirebaseDatabase.DefaultInstance.RootReference;
 
-        localPeerId = LocalWebRTCManager.Instance.LocalPeerId;
+        localPeerId = LocalWebRTCEngine.Instance.LocalPeerId;
         localPeerChannelName = "PeerChannel:" + LocalPeerId;
-        peerConnections = WebRTCManager.Instance.peerConnections;
+        peerConnections = WebRTCEngine.Instance.peerConnections;
 
 
         Debug.Log($"WebRTCManager: Local Peer ID is {localPeerId}");
@@ -94,7 +94,7 @@ public class WebRTCManager : MonoBehaviour
                 database.Child("rooms").Child(roomName).Child("host").SetValueAsync(localPeerId);
                 //WebRTCManager.Instance.ListenForPeers();
                 //ListenForPeers();
-                database.Child("rooms").Child(roomName).Child("peers").ValueChanged += WebRTCManager.Instance.HandlePeersChanged;
+                database.Child("rooms").Child(roomName).Child("peers").ValueChanged += WebRTCEngine.Instance.HandlePeersChanged;
 
             }
             else
@@ -123,9 +123,9 @@ public class WebRTCManager : MonoBehaviour
             {
                 Debug.Log($"WebRTCManager: Successfully joined room {roomName} in Firebase");
                 //WebRTCManager.Instance.ListenForPeers();
-                database.Child("rooms").Child(roomName).Child("peers").ValueChanged += WebRTCManager.Instance.HandlePeersChanged;
+                database.Child("rooms").Child(roomName).Child("peers").ValueChanged += WebRTCEngine.Instance.HandlePeersChanged;
 
-                WebRTCManager.Instance.ConnectToExistingPeers();
+                WebRTCEngine.Instance.ConnectToExistingPeers();
             }
             else
             {
@@ -141,7 +141,7 @@ public class WebRTCManager : MonoBehaviour
         Debug.Log($"WebRTCManager: Leaving room {roomName}");
         foreach (var peer in peerConnections)
         {
-            WebRTCManager.Instance.ClosePeerConnection(peer.Key);
+            WebRTCEngine.Instance.ClosePeerConnection(peer.Key);
         }
 
         if (isHost)
@@ -258,7 +258,7 @@ public class WebRTCManager : MonoBehaviour
                 if (!peerConnections.ContainsKey(peerId))
                 {
                     Debug.Log($"WebRTCManager: New peer found - {peerId}");
-                    WebRTCManager.Instance.CreatePeerConnection(peerId);
+                    WebRTCEngine.Instance.CreatePeerConnection(peerId);
                     StartCoroutine(InitiateConnection(peerId));
                 }
             }
@@ -276,7 +276,7 @@ public class WebRTCManager : MonoBehaviour
                 string hostPeerId = task.Result.Value.ToString();
                 if (!peers.Contains(hostPeerId))
                 {
-                    WebRTCManager.Instance.HandleHostMigration();
+                    WebRTCEngine.Instance.HandleHostMigration();
                 }
             }
         });
@@ -285,7 +285,7 @@ public class WebRTCManager : MonoBehaviour
         // Remove connections for peers that are no longer in the room
         foreach (var peer in peerConnections.Keys.ToList())
         {
-            if (!peers.Contains(peer) && peer != LocalWebRTCManager.Instance.RemotePeerId)
+            if (!peers.Contains(peer) && peer != LocalWebRTCEngine.Instance.RemotePeerId)
             {
                 Debug.Log($"MultiplayerManager: Peer left - {peer}");
                 ClosePeerConnection(peer);
@@ -644,18 +644,15 @@ public class WebRTCManager : MonoBehaviour
     private void HandleDataMessage(string peerId, byte[] bytes)
     {
         string message = System.Text.Encoding.UTF8.GetString(bytes);
+        //Debug.Log("Webrtc engine got the message: " + message);
 
-        Debug.Log($"MultiplayerManager: Received message from {peerId}: {message}");
-        //OnMessageReceived?.Invoke(peerId, message);
-        
-        MultiplayerManager.Instance.HandleWebRTCMessage(peerId, message);
+        NetworkEngine.Instance.HandleWebRTCMessage(message);
 
     }
 
 
     public void SendDataMessage(string message)
     {
-        Debug.Log($"WebRTCManager: Sending data message to all peers: {message}");
         byte[] bytes = System.Text.Encoding.UTF8.GetBytes(message);
 
         foreach (var kvp in dataChannels)
@@ -664,10 +661,7 @@ public class WebRTCManager : MonoBehaviour
             RTCDataChannel channel = kvp.Value;
             if (channel.ReadyState == RTCDataChannelState.Open)
             {
-
                     channel.Send(bytes);
-                    Debug.Log($"WebRTCManager: Data message sent to remote peer {peerId} + {message}");
-
             }
             else
             {
@@ -677,7 +671,6 @@ public class WebRTCManager : MonoBehaviour
     }
     public void SendDataMessage(string targetPeerId, string message)
     {
-        Debug.Log($"WebRTCManager: Sending data message to peer {targetPeerId}: {message}");
         byte[] bytes = System.Text.Encoding.UTF8.GetBytes(message);
 
         if (dataChannels.TryGetValue(targetPeerId, out RTCDataChannel channel))

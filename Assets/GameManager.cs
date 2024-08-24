@@ -14,8 +14,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        EventChannelManager.Instance.RegisterChannel(this.gameObject, gameStateEventChannel, ChannelEvent);
-        EventChannelManager.Instance.RegisterChannel(this.gameObject, playerEventChannel, ChannelEvent);
+        EventChannelManager.Instance.SubscribeChannel(this.gameObject, gameStateEventChannel.name, ChannelEvent);
+        EventChannelManager.Instance.SubscribeChannel(this.gameObject, playerEventChannel.name, ChannelEvent);
 
     }
 

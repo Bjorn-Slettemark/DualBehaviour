@@ -13,6 +13,8 @@ public abstract class GameLevelSO : ScriptableObject
 
     public List<Transform> spawnPoints;
 
+    public bool loadingDone = false;
+
     [SerializeField]
     private GameEventChannelSO levelEventChannel;
 
@@ -24,14 +26,19 @@ public abstract class GameLevelSO : ScriptableObject
     // Method to be called when entering the state
     public virtual void EnterLevel()
     {
-        EventChannelManager.Instance.RaiseEvent(levelEventChannel, "EnterLevel");
+        EventChannelManager.Instance.RaiseEvent(levelEventChannel.name, "EnterLevel");
         // Additional enter logic
     }
 
+    public virtual void LoadingLevel()
+    {
+        EventChannelManager.Instance.RaiseEvent(levelEventChannel.name, "LoadingLevel");
+        // Additional enter logic
+    }
     // Method to be called when exiting the state
     public virtual void ExitLevel()
     {
-        EventChannelManager.Instance.RaiseEvent(levelEventChannel, "ExitLevel");
+        EventChannelManager.Instance.RaiseEvent(levelEventChannel.name, "ExitLevel");
         // Additional exit logic
     }
 

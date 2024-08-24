@@ -11,7 +11,7 @@ public class IngameGameLevelSO : GameLevelSO
     {
         base.EnterLevel();
         Debug.Log("Entering level" + gameLevelName + " , spawning player");
-        EventChannelManager.Instance.RaiseEvent(playerEventChannel, "SpawnPlayer");
+        EventChannelManager.Instance.RaiseEvent(playerEventChannel.name, "SpawnPlayer");
     }
     public override void LevelUpdate()
     {

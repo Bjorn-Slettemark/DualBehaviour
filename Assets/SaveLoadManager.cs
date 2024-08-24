@@ -32,8 +32,8 @@ public class SaveLoadManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        EventChannelManager.Instance.RegisterChannel(this.gameObject, saveEventChannel, SaveEvent);
-        EventChannelManager.Instance.RegisterChannel(this.gameObject, loadEventChannel, LoadEvent);
+        EventChannelManager.Instance.SubscribeChannel(this.gameObject, saveEventChannel.name, SaveEvent);
+        EventChannelManager.Instance.SubscribeChannel(this.gameObject, loadEventChannel.name, LoadEvent);
 
 
     }

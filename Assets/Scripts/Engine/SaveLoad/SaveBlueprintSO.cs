@@ -17,7 +17,7 @@ public class SaveBlueprintSO : ScriptableObject
     public void Save()
     {
         // Custom save logic here
-        EventChannelManager.Instance.RaiseEvent(saveEventChannel, "PlayerSave");
+        EventChannelManager.Instance.RaiseEvent(saveEventChannel.name, "PlayerSave");
     }
 
     // Method to execute load logic
@@ -25,7 +25,7 @@ public class SaveBlueprintSO : ScriptableObject
     {
         // Custom load logic here
         // Example: SaveLoadManager.Instance.LoadGame(gameDataSO);
-        EventChannelManager.Instance.RaiseEvent(loadEventChannel, "PlayerData");
+        EventChannelManager.Instance.RaiseEvent(loadEventChannel.name, "PlayerData");
 
     }
 }

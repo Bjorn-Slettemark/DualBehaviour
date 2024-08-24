@@ -25,5 +25,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  loadingDone: 0
   levelEventChannel: {fileID: 11400000, guid: c1111422abca47c4094f29068d8f6f54, type: 2}
-  playerPrefab: {fileID: 3836095995112535584, guid: dce287df40f5e734eb6c2719f94a196d, type: 3}
+  playerPrefabName: Cube

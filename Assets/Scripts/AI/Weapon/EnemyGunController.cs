@@ -56,11 +56,11 @@ public class EnemyGunController : MonoBehaviour
             GameObject bullet = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
 
             // Set the bullet's damage
-            BulletController bulletController = bullet.GetComponent<BulletController>();
-            if (bulletController != null)
-            {
-                bulletController.SetDamage(damage); // Set the bullet's damage
-            }
+            //BulletController bulletController = bullet.GetComponent<BulletController>();
+            //if (bulletController != null)
+            //{
+            //    bulletController.SetDamage(damage); // Set the bullet's damage
+            //}
         }
     }
 }

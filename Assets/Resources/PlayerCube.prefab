@@ -163,6 +163,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cubePrefab: {fileID: 4624060644224807863, guid: f8fc47388a18bb54eacdb23b29e05902, type: 3}
-  numberOfCubes: 1
-  spawnAreaSize: 11
+  numberOfCubes: 2
+  spawnAreaSize: 2
   spawnKey: 112

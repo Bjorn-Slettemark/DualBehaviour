@@ -24,7 +24,7 @@ public class AIBehaviorMelee : MonoBehaviour, IAIBehavior
     private StateMachine<States, Driver> fsm;
 
     private NavMeshAgent navMeshAgent;
-    private SwordController swordController;
+    //private SwordController swordController;
     public bool aggressive { get; set; }
 
     private void Awake()
@@ -45,7 +45,7 @@ public class AIBehaviorMelee : MonoBehaviour, IAIBehavior
         navMeshAgent = GetComponent<NavMeshAgent>();
         navMeshAgent.speed = chaseSpeed;
 
-        swordController = GetComponentInChildren<SwordController>();
+        //swordController = GetComponentInChildren<SwordController>();
 
 
        
@@ -127,7 +127,7 @@ public class AIBehaviorMelee : MonoBehaviour, IAIBehavior
 
     private void Attacking_Enter()
     {
-        swordController.StartSwinging();
+        //swordController.StartSwinging();
         Invoke("EndAttackCooldown", attackDuration);
     }
 

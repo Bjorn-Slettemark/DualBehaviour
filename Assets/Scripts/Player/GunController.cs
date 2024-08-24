@@ -1,67 +1,78 @@
-using UnityEngine;
+//using UnityEngine;
+//using UnityEngine.UIElements;
 
-public class GunController : MonoBehaviour
-{
-    public Transform firePoint;
-    public GameObject projectilePrefab;
-    public float fireRate = 1f;
-    public float damage = 10f;
-    public float rotationSpeed = 10f;
+//public class GunController : MultiBehaviour
+//{
+//    [Sync] public Quaternion Rotation { get; set; }
+//    public Transform firePoint;
+//    public GameObject projectilePrefab;
+//    public float fireRate = 1f;
+//    public float damage = 10f;
+//    public float rotationSpeed = 10f;
+//    private float timeUntilFire = 0f;
+//    private Camera cam;
 
-    private float timeUntilFire = 0f;
-    private Camera cam;
+//    protected override void OnInitialized()
+//    {
+//        base.OnInitialized();
+//        cam = Camera.main;
+//    }
 
-    void Start()
-    {
-        cam = Camera.main;
-    }
+//    void Update()
+//    {
+//        if (isLocalPlayer)
+//        {
+//            RotateGunTowardsMouse();
+//        }
+//    }
 
-    void Update()
-    {
-       RotateGunTowardsMouse();
-    }
+//    public void AttemptShoot()
+//    {
+//        if (isLocalPlayer && Time.time >= timeUntilFire)
+//        {
+//            timeUntilFire = Time.time + 1f / fireRate;
+//            Shoot();
+//        }
+//    }
 
-    public void AttemptShoot()
-    {
-        // Check if the current time is greater than or equal to the time until the next shot is allowed
-        if (Time.time >= timeUntilFire)
-        {
-            // Update timeUntilFire to the current time plus the interval derived from fireRate
-            timeUntilFire = Time.time + 1f / fireRate;
-            Shoot();
-        }
-    }
+//    void RotateGunTowardsMouse()
+//    {
+//        Plane groundPlane = new Plane(Vector3.up, transform.position);
+//        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+//        if (groundPlane.Raycast(ray, out float hitDist))
+//        {
+//            Vector3 targetPoint = ray.GetPoint(hitDist);
+//            Quaternion targetRotation = Quaternion.LookRotation(targetPoint - transform.position);
+//            targetRotation.x = 0;
+//            targetRotation.z = 0;
+//            Quaternion newRot = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+//            RequestSyncedValueUpdate(nameof(Rotation), newRot);
+//            transform.rotation = Rotation;
+//        }
+//    }
 
+//    private void Shoot()
+//    {
+//        // Instantiate the projectile
+//        GameObject projectileObject = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
 
-    void RotateGunTowardsMouse()
-    {
-        // Create a plane at the gun's position facing up
-        Plane groundPlane = new Plane(Vector3.up, transform.position);
+//        // Get the BulletController component
+//        BulletController bulletController = projectileObject.GetComponent<BulletController>();
 
-        // Generate a ray from the cursor position
-        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+//        if (bulletController != null)
+//        {
+//            // Initialize the bullet as a MultiBehaviour
+//            bulletController.Initialize(WebRTCEngine.Instance.LocalPeerId);
 
-        // Determine the point where the cursor ray intersects the plane
-        float hitDist;
-        if (groundPlane.Raycast(ray, out hitDist))
-        {
-            // Find the point along the ray that hits the calculated distance
-            Vector3 targetPoint = ray.GetPoint(hitDist);
+//            // Set initial properties
+//            bulletController.SetDamage(damage);
+//            // You can set other properties here if needed, like speed
 
-            // Determine the target rotation. This is the rotation if the gun looks at the target point
-            Quaternion targetRotation = Quaternion.LookRotation(targetPoint - transform.position);
-
-            // Set the gun's rotation to this new rotation but only rotate around Y axis
-            targetRotation.x = 0;
-            targetRotation.z = 0;
-
-            // Smoothly rotate towards the target point
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-        }
-    }
-
-    private void Shoot()
-    {
-        Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
-    }
-}
+//            // Notify other clients about the new projectile
+//        }
+//        else
+//        {
+//            Debug.LogError("BulletController component not found on the projectile prefab!");
+//        }
+//    }
+//}

@@ -23,12 +23,12 @@ public class LevelLoaderManager : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
-        EventChannelManager.Instance.RegisterChannel(this.gameObject, levelEventChannel, HandleLevelEvents);
+        EventChannelManager.Instance.SubscribeChannel(this.gameObject, levelEventChannel.name, HandleLevelEvents);
 
-        EventChannelManager.Instance.RegisterChannel(this.gameObject, levelEventChannel, LoadLevelEvents);
+        EventChannelManager.Instance.SubscribeChannel(this.gameObject, levelEventChannel.name, LoadLevel);
     }
 
-    public void LoadLevelEvents(string eventName)
+    public void LoadLevel(string eventName)
     {
         foreach (var gameLevel in gameLevels)
         {
@@ -46,7 +46,7 @@ public class LevelLoaderManager : MonoBehaviour
         if (parts.Length >= 2 && parts[0] == "ChangeLevel")
         {
             string levelName = parts[1];
-            LoadLevelEvents(levelName);
+            LoadLevel(levelName);
         }
     }
 
@@ -67,7 +67,7 @@ public class LevelLoaderManager : MonoBehaviour
     private IEnumerator LoadLevelAsync(string levelName)
     {
         if (this == null) yield break;
-        EventChannelManager.Instance.RaiseEvent(levelEventChannel, "LevelLoading");
+        EventChannelManager.Instance.RaiseEvent(levelEventChannel.name, "LevelLoading");
 
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(levelName);
         asyncLoad.allowSceneActivation = false;
@@ -86,16 +86,17 @@ public class LevelLoaderManager : MonoBehaviour
         {
             Destroy(instantiatedLoadingScreenPrefab);
             instantiatedLoadingScreenPrefab = null;
+            currentLevel.LoadingLevel();
         }
 
         // Notify the rest of the game that the level has loaded
-        EventChannelManager.Instance.RaiseEvent(levelEventChannel, "LevelLoaded");
+        EventChannelManager.Instance.RaiseEvent(levelEventChannel.name, "LevelLoaded");
 
         currentLevel.EnterLevel(); // Assume GameLevelSO has an EnterLevel method to initialize the level
     }
 
     void OnDestroy()
     {
-        EventChannelManager.Instance.UnregisterChannel(this.gameObject, levelEventChannel);
+        EventChannelManager.Instance.UnSubscribeChannel(this.gameObject, levelEventChannel.name);
     }
 }

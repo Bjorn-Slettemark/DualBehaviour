@@ -22,6 +22,6 @@ public class MultiplayerChannelManager : MonoBehaviour
     public void BroadcastEvent(string channelName, string eventData)
     {
         string message = $"{channelName}:{eventData}";
-        WebRTCManager.Instance.SendDataMessage(message);
+        WebRTCEngine.Instance.SendDataMessage(message);
     }
 }

@@ -15,7 +15,7 @@ public class SpawnNotifier : MonoBehaviour
     {
         if (playerEventChannel != null)
         {
-            EventChannelManager.Instance.RaiseEvent(playerEventChannel, "PlayerSpawned");
+            EventChannelManager.Instance.RaiseEvent(playerEventChannel.name, "PlayerSpawned");
             //eventChannel.RaiseEvent(eventName);
             //Debug.Log($"{gameObject.name} has spawned, event {eventName} raised.");
         }
