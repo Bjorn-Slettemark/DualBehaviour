@@ -644,7 +644,7 @@ public class WebRTCEngine : MonoBehaviour
     private void HandleDataMessage(string peerId, byte[] bytes)
     {
         string message = System.Text.Encoding.UTF8.GetString(bytes);
-        //Debug.Log("Webrtc engine got the message: " + message);
+        Debug.Log("Webrtc engine got the message: " + message);
 
         NetworkEngine.Instance.HandleWebRTCMessage(message);
 

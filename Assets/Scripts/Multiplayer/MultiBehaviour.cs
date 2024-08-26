@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Reflection;
 using System;
+using System.Linq;
 
 public class MultiBehaviour : MonoBehaviour
 {
@@ -12,16 +13,15 @@ public class MultiBehaviour : MonoBehaviour
     public string OwnerPeerId { get => ownerPeerId; set => ownerPeerId = value; }
 
     private Dictionary<string, FieldInfo> syncFields = new Dictionary<string, FieldInfo>();
-    private Dictionary<string, object> syncReferences = new Dictionary<string, object>();
-    private const float SyncInterval = 0.1f; // Adjust as needed
-    private float nextSyncTime;
+    private Dictionary<string, Func<object>> getters = new Dictionary<string, Func<object>>();
+    private Dictionary<string, Action<object>> setters = new Dictionary<string, Action<object>>();
 
     protected virtual void Awake()
     {
         CollectSyncFields();
     }
 
-    public virtual void Initialize(int objectId, string ownerPeerId)
+    public void Initialize(int objectId, string ownerPeerId)
     {
         ObjectId = objectId;
         OwnerPeerId = ownerPeerId;
@@ -30,148 +30,66 @@ public class MultiBehaviour : MonoBehaviour
 
     protected virtual void OnInitialized() { }
 
-    private void CollectSyncFields()
-    {
-        FieldInfo[] fields = GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-        foreach (var field in fields)
-        {
-            if (Attribute.IsDefined(field, typeof(SyncAttribute)))
-            {
-                syncFields[field.Name] = field;
-            }
-        }
-    }
-
-    protected virtual void Update()
-    {
-        if (IsOwner() && Time.time >= nextSyncTime)
-        {
-            SyncVariables();
-            nextSyncTime = Time.time + SyncInterval;
-        }
-    }
-
     public bool IsOwner()
     {
         return OwnerPeerId == LocalWebRTCEngine.Instance.LocalPeerId;
     }
 
-    protected void SetSyncReference(string fieldName, object reference)
+    private void CollectSyncFields()
     {
-        syncReferences[fieldName] = reference;
+        syncFields = GetType()
+            .GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
+            .Where(field => Attribute.IsDefined(field, typeof(SyncAttribute)))
+            .ToDictionary(field => field.Name, field => field);
     }
 
-    private void SyncVariables()
+    protected void SetSyncLink(string fieldName, Func<object> getter, Action<object> setter)
     {
-        Dictionary<string, object> syncData = new Dictionary<string, object>();
-        foreach (var kvp in syncFields)
+        if (syncFields.ContainsKey(fieldName))
         {
-            string fieldName = kvp.Key;
-            FieldInfo field = kvp.Value;
-
-            if (syncReferences.TryGetValue(fieldName, out object reference))
-            {
-                syncData[fieldName] = reference;
-            }
-            else
-            {
-                syncData[fieldName] = field.GetValue(this);
-            }
+            getters[fieldName] = getter;
+            setters[fieldName] = setter;
+            Debug.Log($"Sync link set for {fieldName}");
         }
-        if (syncData.Count > 0)
+        else
         {
-            string extraData = SerializeSyncData(syncData);
-            NetworkMessage syncMessage = NetworkMessageFactory.CreateSyncObjectMessage(
-                ObjectId,
-                transform.position,
-                transform.rotation,
-                extraData
-            );
-
-            NetworkEngine.Instance.BroadcastEventToAllPeers(syncMessage);
+            Debug.LogWarning($"Attempted to set sync link for non-synced field: {fieldName}");
         }
     }
+
 
     public virtual void ReceiveSyncUpdate(NetworkMessage message)
     {
-        string extraData = message.GetData<string>("ExtraData");
-        if (!string.IsNullOrEmpty(extraData))
+        foreach (var field in syncFields)
         {
-            Dictionary<string, object> syncData = DeserializeSyncData(extraData);
-            ApplySyncUpdate(syncData);
-        }
+            string fieldName = field.Key;
+            FieldInfo fieldInfo = field.Value;
 
-        // Update transform
-        Vector3 position = message.GetData<Vector3>("Position");
-        Quaternion rotation = message.GetData<Quaternion>("Rotation");
-
-        if (!IsOwner())
-        {
-            transform.position = position;
-            transform.rotation = rotation;
-        }
-    }
-
-    private void ApplySyncUpdate(Dictionary<string, object> syncData)
-    {
-        foreach (var kvp in syncData)
-        {
-            if (syncFields.TryGetValue(kvp.Key, out FieldInfo field))
+            object value = message.GetData<object>(fieldName);
+            if (value != null)
             {
-                field.SetValue(this, kvp.Value);
+                UpdateSyncField(fieldName, value);
             }
         }
     }
-
-    protected void UpdateSyncField<T>(string fieldName, T value)
+    protected void UpdateSyncField(string fieldName, object value)
     {
         if (syncFields.TryGetValue(fieldName, out FieldInfo field))
         {
             field.SetValue(this, value);
-            if (IsOwner())
+            if (setters.TryGetValue(fieldName, out Action<object> setter))
             {
-                SyncVariables();
+                setter(value);
             }
-        }
-    }
 
-    private string SerializeSyncData(Dictionary<string, object> syncData)
-    {
-        List<string> serializedFields = new List<string>();
-        foreach (var kvp in syncData)
+            Debug.Log($"Sync field updated: {fieldName} = {value}");
+        }
+        else
         {
-            string serializedValue = NetworkUtility.SerializeValue(kvp.Value);
-            serializedFields.Add($"{kvp.Key}={serializedValue}");
+            Debug.LogWarning($"Attempted to update non-synced field: {fieldName}");
         }
-        return string.Join(":", serializedFields);
     }
 
-    private Dictionary<string, object> DeserializeSyncData(string extraData)
-    {
-        Dictionary<string, object> result = new Dictionary<string, object>();
-        string[] fields = extraData.Split(':');
-        for (int i = 0; i < fields.Length; i++)
-        {
-            string[] keyValue = fields[i].Split('=');
-            if (keyValue.Length == 2)
-            {
-                string key = keyValue[0];
-                string serializedValue = keyValue[1];
-
-                if (i + 1 < fields.Length && !fields[i + 1].Contains('='))
-                {
-                    serializedValue += ":" + fields[++i];
-                }
-
-                if (syncFields.TryGetValue(key, out FieldInfo fieldInfo))
-                {
-                    object deserializedValue = NetworkUtility.DeserializeValue(serializedValue, fieldInfo.FieldType);
-                    result[key] = deserializedValue;
-                }
-            }
-        }
-        return result;
-    }
 }
 
 [AttributeUsage(AttributeTargets.Field)]

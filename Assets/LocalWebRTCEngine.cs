@@ -144,6 +144,7 @@ public class LocalWebRTCEngine : MonoBehaviour
         {
             string message = System.Text.Encoding.UTF8.GetString(bytes);
             //Debug.Log($"{peerName} received message: {message}");
+            Debug.Log("Local Webrtc engine got the message: " + message);
 
             if (peerName == "LocalPeer")
             {

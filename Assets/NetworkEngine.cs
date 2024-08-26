@@ -57,7 +57,7 @@ public class NetworkEngine : MonoBehaviour
     {
         if (WebRTCEngine.Instance.IsHost)
         {
-            NetworkMessage message = NetworkMessageFactory.LevelChange(localPeerId, levelName);
+            NetworkMessage message = NetworkMessageFactory.CreateLevelChange(localPeerId, levelName);
             BroadcastEventToAllPeers(message);
         }
         else
@@ -69,7 +69,7 @@ public class NetworkEngine : MonoBehaviour
     public void BroadcastEventToAllPeers(NetworkMessage message)
     {
         string serializedMessage = message.Serialize();
-        Debug.Log($"Broadcasting message: {serializedMessage}"); // Add this line
+        Debug.Log("Outgoing DATA serialized message: " + serializedMessage);
 
         // Use the existing method to send the serialized message
         WebRTCEngine.Instance.SendDataMessage(serializedMessage);
@@ -90,6 +90,7 @@ public class NetworkEngine : MonoBehaviour
 
     public void HandleWebRTCMessage(string message)
     {
+
         MultiplayerManager.Instance.HandleIncomingMessage(message);
     }
 

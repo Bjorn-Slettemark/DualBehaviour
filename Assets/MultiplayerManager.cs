@@ -31,7 +31,7 @@ public class MultiplayerManager : MonoBehaviour
     public void RequestLevelChange(string levelName)
     {
         string localPeerId = LocalWebRTCEngine.Instance.LocalPeerId;
-        NetworkMessage message = NetworkMessageFactory.LevelChange(localPeerId, levelName);
+        NetworkMessage message = NetworkMessageFactory.CreateLevelChange(localPeerId, levelName);
         NetworkEngine.Instance.BroadcastEventToAllPeers(message);
     }
     public void RequestMultiplayerObject(Vector3 position, Quaternion rotation, string prefabName)
@@ -50,10 +50,11 @@ public class MultiplayerManager : MonoBehaviour
 
     public void HandleIncomingMessage(string serializedMessage)
     {
-        //Debug.Log($"Received serialized message: {serializedMessage}");
+        Debug.Log($"Received serialized message: {serializedMessage}");
         try
         {
             NetworkMessage message = NetworkMessage.Deserialize(serializedMessage);
+            Debug.Log("Incoming DATA deserialized message: " + message.GetData<string>("Data"));
 
             switch (message.MessageType)
             {
@@ -149,7 +150,6 @@ public class MultiplayerManager : MonoBehaviour
 
             MultiBehaviour networkObject = spawnedObject.GetComponent<MultiBehaviour>();
             networkObjects[objectId] = networkObject;
-
 
             networkObject.Initialize(objectId, ownerPeerId);
 

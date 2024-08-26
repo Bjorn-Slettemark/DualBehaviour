@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Collections.Generic;
 using UnityEditor.VersionControl;
 using System.Linq;
+using UnityEngine.UIElements;
 
 public static class NetworkUtility
 {
@@ -260,17 +261,18 @@ public static class NetworkMessageFactory
             .AddData("ExtraData", extraData);
     }
 
-    public static NetworkMessage LevelChange(string localPeerId, string levelName)
+    public static NetworkMessage CreateLevelChange(string localPeerId, string levelName)
     {
         return NetworkMessage.Create("LevelEventChannel", "ChangeLevel", localPeerId)
             .AddData("LevelName", levelName);
     }
 
-    public static NetworkMessage CreateSyncObjectMessage(int objectId, Vector3 position, Quaternion rotation, string extraData)
+    public static NetworkMessage CreatePlayerObjectMessage(int objectId, Vector3 position, Quaternion rotation, Quaternion turretRotation, string data)
     {
         return NetworkMessage.Create("LevelEventChannel", "SyncObject", LocalWebRTCEngine.Instance.LocalPeerId, objectId)
             .AddData("Position", position)
             .AddData("Rotation", rotation)
-            .AddData("ExtraData", extraData); 
+            .AddData("TurretRotation", turretRotation);
+
     }
 }
