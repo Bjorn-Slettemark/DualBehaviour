@@ -3,7 +3,6 @@ using UnityEditor;
 using System.Collections.Generic;
 using System.Linq;
 
-[CustomPropertyDrawer(typeof(GameEventChannelSO), true)] // Ensure it applies to derived types as well.
 public class GameEventChannelDrawer : PropertyDrawer
 {
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -33,7 +32,7 @@ public class GameEventChannelDrawer : PropertyDrawer
             GameEventChannelSO currentChannel = property.objectReferenceValue as GameEventChannelSO;
             if (EventChannelManager.Instance != null)
             {
-                List<GameEventChannelSO> channels = EventChannelManager.Instance.EventChannels;
+                List<GameEventChannelSO> channels = EventChannelManager.Instance.AllChannels;
                 int currentIndex = channels != null ? channels.IndexOf(currentChannel) : -1;
                 List<string> channelNames = channels != null ? channels.ConvertAll(ch => ch.name) : new List<string>();
 

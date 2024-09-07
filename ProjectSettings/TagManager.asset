@@ -16,10 +16,10 @@ TagManager:
   - UI
   - Enemy
   - Ground
-  - 
-  - 
-  - 
-  - 
+  - Bullet
+  - RemotePlayers
+  - RemoteBullets
+  - Environment
   - 
   - 
   - 

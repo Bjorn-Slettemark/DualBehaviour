@@ -3,7 +3,6 @@ using UnityEditor;
 using System.Collections.Generic;
 using System.Linq;
 
-[CustomEditor(typeof(EventChannelManager))]
 public class EventChannelManagerEditor : Editor
 {
     private Vector2 scrollPosition;
@@ -50,9 +49,9 @@ public class EventChannelManagerEditor : Editor
 
         EventChannelManager manager = (EventChannelManager)target;
 
-        if (manager.EventChannels != null)
+        if (manager.AllChannels != null)
         {
-            channelNames = manager.EventChannels.Select(channel => channel.name).ToList();
+            channelNames = manager.AllChannels.Select(channel => channel.name).ToList();
         }
 
         if (channelNames.Any())
@@ -69,7 +68,7 @@ public class EventChannelManagerEditor : Editor
                 {
                     if (!string.IsNullOrEmpty(eventNameToRaise) && selectedChannelIndexForRaisingEvent >= 0 && selectedChannelIndexForRaisingEvent < channelNames.Count)
                     {
-                        GameEventChannelSO channel = manager.EventChannels[selectedChannelIndexForRaisingEvent];
+                        GameEventChannelSO channel = manager.AllChannels[selectedChannelIndexForRaisingEvent];
                         manager.RaiseEvent(channel.name, eventNameToRaise);
                         eventNameToRaise = ""; // Clear the input field after raising the event
                     }
@@ -88,10 +87,6 @@ public class EventChannelManagerEditor : Editor
                     DrawEventHistory(manager);
                 }
 
-                if (GUILayout.Button("Clear Event History"))
-                {
-                    manager.ClearEventHistory();
-                }
             }
         }
     }
@@ -99,19 +94,19 @@ public class EventChannelManagerEditor : Editor
     private void DrawEventHistory(EventChannelManager manager)
     {
         scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition, GUILayout.Height(200));
-        foreach (var history in manager.eventHistory)
-        {
-            int channelIndex = channelNames.IndexOf(history.ChannelName);
-            if (channelIndex != -1)
-            {
-                bool isChannelSelected = (channelMask == -1) || ((channelMask & (1 << channelIndex)) != 0);
-                if (isChannelSelected)
-                {
-                    string timeOnly = history.Timestamp.ToString("mm:ss");
-                    EditorGUILayout.LabelField($"{timeOnly}, {history.ChannelName}, {history.EventName}, Sender: {history.SenderName}");
-                }
-            }
-        }
+        //foreach (var history in manager.GetEventHistory())
+        //{
+        //    int channelIndex = channelNames.IndexOf(history.ChannelName);
+        //    if (channelIndex != -1)
+        //    {
+        //        bool isChannelSelected = (channelMask == -1) || ((channelMask & (1 << channelIndex)) != 0);
+        //        if (isChannelSelected)
+        //        {
+        //            string timeOnly = history.Timestamp.ToString("mm:ss");
+        //            EditorGUILayout.LabelField($"{timeOnly}, {history.ChannelName}, {history.EventName}, Sender: {history.SenderName}");
+        //        }
+        //    }
+        //}
         EditorGUILayout.EndScrollView();
     }
 

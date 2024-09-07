@@ -7,16 +7,22 @@
       "dependencies": {},
       "hash": "82f78879316817dc5c7f8703352f5660a22ec3d4"
     },
+    "com.unity.2d.sprite": {
+      "version": "1.0.0",
+      "depth": 0,
+      "source": "builtin",
+      "dependencies": {}
+    },
     "com.unity.addressables": {
       "version": "1.21.20",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.scriptablebuildpipeline": "1.21.22",
         "com.unity.modules.assetbundle": "1.0.0",
-        "com.unity.modules.imageconversion": "1.0.0",
         "com.unity.modules.jsonserialize": "1.0.0",
+        "com.unity.modules.imageconversion": "1.0.0",
         "com.unity.modules.unitywebrequest": "1.0.0",
+        "com.unity.scriptablebuildpipeline": "1.21.22",
         "com.unity.modules.unitywebrequestassetbundle": "1.0.0"
       },
       "url": "https://packages.unity.com"
@@ -52,8 +58,8 @@
       "source": "registry",
       "dependencies": {
         "com.unity.burst": "1.6.6",
-        "com.unity.nuget.mono-cecil": "1.11.4",
-        "com.unity.test-framework": "1.1.31"
+        "com.unity.test-framework": "1.1.31",
+        "com.unity.nuget.mono-cecil": "1.11.4"
       },
       "url": "https://packages.unity.com"
     },
@@ -128,9 +134,9 @@
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.settings-manager": "1.0.3",
+        "com.unity.modules.imgui": "1.0.0",
         "com.unity.modules.physics": "1.0.0",
-        "com.unity.modules.imgui": "1.0.0"
+        "com.unity.settings-manager": "1.0.3"
       },
       "url": "https://packages.unity.com"
     },
@@ -237,9 +243,9 @@
       "depth": 0,
       "source": "registry",
       "dependencies": {
+        "com.unity.modules.audio": "1.0.0",
         "com.unity.modules.director": "1.0.0",
         "com.unity.modules.animation": "1.0.0",
-        "com.unity.modules.audio": "1.0.0",
         "com.unity.modules.particlesystem": "1.0.0"
       },
       "url": "https://packages.unity.com"
@@ -282,6 +288,28 @@
         "com.unity.modules.audio": "1.0.0"
       },
       "hash": "0314250c5e8f55bbeb8ee8d55958cd56f1199325"
+    },
+    "com.unity.xr.legacyinputhelpers": {
+      "version": "2.1.10",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.modules.vr": "1.0.0",
+        "com.unity.modules.xr": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.xr.management": {
+      "version": "4.5.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.modules.vr": "1.0.0",
+        "com.unity.modules.xr": "1.0.0",
+        "com.unity.modules.subsystems": "1.0.0",
+        "com.unity.xr.legacyinputhelpers": "2.1.7"
+      },
+      "url": "https://packages.unity.com"
     },
     "com.veriorpies.parrelsync": {
       "version": "https://github.com/VeriorPies/ParrelSync.git?path=/ParrelSync",

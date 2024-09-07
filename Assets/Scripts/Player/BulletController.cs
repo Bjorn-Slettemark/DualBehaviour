@@ -6,66 +6,111 @@
 //    public float damage = 10f;
 //    public float maxRange = 10f;
 //    private Vector3 startPosition;
+//    [Sync] private Vector3 synchedPosition;
+//    [Sync] private Vector3 synchedVelocity;
+//    private bool isDestroyed = false;
 
-//    [Sync] public Vector3 Position { get; set; }
-//    [Sync] public Quaternion Rotation { get; set; }
+//    private void Start()
+//    {
+//        startPosition = transform.position;
+//        synchedPosition = startPosition;
+//        synchedVelocity = transform.forward * speed;
 
+//        SetSyncLink(nameof(synchedPosition),
+//            () => synchedPosition,
+//            value => synchedPosition = (Vector3)value);
+//    }
 //    protected override void OnInitialized()
 //    {
 //        base.OnInitialized();
-//        startPosition = transform.position;
-//        Position = startPosition;
-//        Rotation = transform.rotation;
+ 
+
 //    }
 
 //    void Update()
 //    {
-//        if (isLocalPlayer)
-//        {
-//            Vector3 newPosition = Position + transform.right * speed * Time.deltaTime;
-//            RequestSyncedValueUpdate(nameof(Position), newPosition);
+//        if (isDestroyed) return;
 
-//            if (Vector3.Distance(startPosition, newPosition) > maxRange)
-//            {
-//                // Request destruction of the bullet
-//                Destroy(this.gameObject);
-//            }
+//        if (IsOwner())
+//        {
+//            MoveBullet();
+//            CheckRange();
+//            SyncPosition();
+//        }
+//        else
+//        {
+//            // Non-owner clients interpolate based on synced position and velocity
+//            synchedPosition += synchedVelocity * Time.deltaTime;
 //        }
 
-//        // Apply the synced position and rotation
-//        transform.position = Position;
-//        transform.rotation = Rotation;
+//        // Update the actual position for all clients
+//        transform.position = synchedPosition;
+//    }
+
+//    private void MoveBullet()
+//    {
+//        synchedPosition += synchedVelocity * Time.deltaTime;
+//        //transform.forward = synchedVelocity.normalized;
+//    }
+
+//    private void CheckRange()
+//    {
+//        if (Vector3.Distance(startPosition, synchedPosition) > maxRange)
+//        {
+//            DestroyBullet();
+//        }
+//    }
+
+//    private void SyncPosition()
+//    {
+//        NetworkMessage message = NetworkMessageFactory.CreatePlayerObjectMessage(
+//            ObjectId,
+//            synchedPosition,
+//            Quaternion.LookRotation(synchedVelocity),
+//            Quaternion.identity,
+//            isDestroyed.ToString()
+//        );
+//        NetworkEngine.Instance.BroadcastEventToAllPeers(message);
 //    }
 
 //    void OnTriggerEnter(Collider hitInfo)
 //    {
-//        if (isLocalPlayer)
+//        if (!IsOwner() && !isDestroyed)
 //        {
-//            AISenseSystem aISense = hitInfo.GetComponent<AISenseSystem>();
 //            HealthSystem healthSystem = hitInfo.GetComponent<HealthSystem>();
-
 //            if (healthSystem != null)
 //            {
 //                healthSystem.TakeDamage(damage);
 //            }
-
-//            if (aISense != null)
+//            AISenseSystem aiSense = hitInfo.GetComponent<AISenseSystem>();
+//            if (aiSense != null)
 //            {
-//                aISense.OnHitReceived?.Invoke();
+//                aiSense.OnHitReceived?.Invoke();
 //            }
-
-//            // Request destruction of the bullet
-//            Destroy(this.gameObject);
-//                }
+//            DestroyBullet();
+//        }
 //    }
 
-//    public void SetDamage(float newDamage)
+//    private void DestroyBullet()
 //    {
-//        damage = newDamage;
+//        if (isDestroyed) return;
+//        isDestroyed = true;
+//        NetworkMessage destroyMessage = NetworkMessageFactory.CreateDestroyObjectMessage(ObjectId);
+//        NetworkEngine.Instance.BroadcastEventToAllPeers(destroyMessage);
+//        // You might want to add a delay before actually destroying the object
+//        // to ensure the message is sent
+//        Destroy(gameObject, 0.1f);
 //    }
 
-//    public void SetSpeed(float newSpeed)
+//    public override void ReceiveSyncUpdate(NetworkMessage message)
 //    {
-//        speed = newSpeed;
+//        Vector3? position = message.GetData<Vector3?>("Position");
+//        if (position.HasValue)
+//            UpdateSyncField(nameof(synchedPosition), position.Value);
+
+//        Quaternion? rotation = message.GetData<Quaternion?>("Rotation");
+//        if (rotation.HasValue)
+//            synchedVelocity = rotation.Value * Vector3.forward * speed;
+
 //    }
 //}

@@ -27,4 +27,4 @@ MonoBehaviour:
   - {fileID: 0}
   loadingDone: 0
   levelEventChannel: {fileID: 11400000, guid: c1111422abca47c4094f29068d8f6f54, type: 2}
-  playerPrefabName: Cube
+  playerPrefabName: AE86

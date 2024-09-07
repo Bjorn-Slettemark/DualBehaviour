@@ -1,17 +1,55 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LevelChangeButton : MonoBehaviour
 {
+    [SerializeField] private Button changeLevelButton;
+    public MultiplayerLevelSO desiredLevelSO;
 
-    private GameLevelSO desiredLevelSO;
-    public void ChangeLevel(GameLevelSO eventLevelSO)
+    private void Start()
     {
+        changeLevelButton.onClick.AddListener(AttemptLevelChange);
+        UpdateButtonInteractability();
+        PlayerManager.Instance.OnPlayersReadyChanged += UpdateButtonInteractability;
+    }
 
-        //LevelLoaderManager.Instance.LoadLevel(eventLevelSO);
-        MultiplayerManager.Instance.RequestLevelChange(eventLevelSO.name);
+    private void OnDestroy()
+    {
+        PlayerManager.Instance.OnPlayersReadyChanged -= UpdateButtonInteractability;
+    }
 
+    public void SetDesiredLevel(MultiplayerLevelSO eventLevelSO)
+    {
+        desiredLevelSO = eventLevelSO;
+    }
 
+    private void AttemptLevelChange()
+    {
+        ChangeLevel(desiredLevelSO);
 
-        // Assuming GameManager has a method to change levels that accepts a level name or identifier
+        if (PlayerManager.Instance.AreAllPlayersReady())
+        {
+        }
+        else
+        {
+            Debug.Log("Cannot change level: Not all players are ready");
+        }
+    }
+
+    public void ChangeLevel(MultiplayerLevelSO level)
+    {
+        if (desiredLevelSO != null)
+        {
+            EventChannelManager.Instance.RaiseNetworkEvent("LevelEventChannel", "ChangeLevel:" + level.sceneName);
+        }
+        else
+        {
+            Debug.LogError("Desired level SO is not set");
+        }
+    }
+
+    private void UpdateButtonInteractability()
+    {
+        changeLevelButton.interactable = PlayerManager.Instance.AreAllPlayersReady();
     }
 }

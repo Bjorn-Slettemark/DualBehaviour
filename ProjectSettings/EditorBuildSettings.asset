@@ -14,5 +14,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MultiplayerTest.unity
     guid: 09461f96ba846a04ea6bef2823ee89e1
-  m_configObjects: {}
+  - enabled: 1
+    path: Assets/Scenes/Sandbox.unity
+    guid: 8cb1d3421866afe46a12a3908b6a1204
+  m_configObjects:
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 01b3287ca32825047bb2d6be06c11286, type: 2}
   m_UseUCBPForAssetBundles: 0

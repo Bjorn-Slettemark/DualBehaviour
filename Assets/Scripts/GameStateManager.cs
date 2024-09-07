@@ -67,7 +67,7 @@ public class GameStateManager : MonoBehaviour
             ChangeState(initialState); // Change to initialState as usual
         }
 
-        EventChannelManager.Instance.SubscribeForAllChannels(this.gameObject, eventCheck);
+        EventChannelManager.Instance.SubscribeToChannel("GameStateChannel", eventCheck);
 
 
 
@@ -148,7 +148,7 @@ public class GameStateManager : MonoBehaviour
 
     private void OnDisable()
     {
-        EventChannelManager.Instance.UnsubscribeForAllChannels(this.gameObject);
+        EventChannelManager.Instance.UnsubscribeFromChannel("GameStateChannel", eventCheck);
         if (Instance == this)
         {
             Instance = null;  // Clear the static instance if this object is disabled
