@@ -39,7 +39,7 @@ public class MultiplayerLevelSO : GameLevelSO
     {
         if (!WebRTCEngine.Instance.IsHost) return;
 
-        List<PlayerManager.PlayerInfo> playersToSpawn = PlayerManager.Instance.GetPlayersNeedingSpawn();
+        List<PlayerManager.PlayerInfo> playersToSpawn = PlayerManager.Instance.players;
         List<Transform> availableSpawnPoints = new List<Transform>(spawnPoints);
 
         foreach (var player in playersToSpawn)

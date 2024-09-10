@@ -11,6 +11,7 @@ public class MultiplayerManager : MonoBehaviour
     private const string MultiplayerChannelName = "MultiplayerChannel";
     private const string PrefabResourcePath = "MultiplayerPrefabs/";
     private List<Transform> spawnPoints = new List<Transform>();
+    private HashSet<string> knownPeers = new HashSet<string>();
 
     private void Awake()
     {
@@ -28,6 +29,9 @@ public class MultiplayerManager : MonoBehaviour
 
     private void Start()
     {
+        WebRTCEngine.Instance.OnPeerListUpdated += HandlePeerListUpdated;
+
+
         if (WebRTCEngine.Instance.IsHost)
         {
             SubscribeToAllPeerChannels();
@@ -52,37 +56,35 @@ public class MultiplayerManager : MonoBehaviour
             SubscribeToPeerChannel(peerId);
         }
     }
+    private void HandlePeerListUpdated(List<string> peerIds)
+    {
+        var newPeers = peerIds.Except(knownPeers).ToList();
+
+        foreach (var newPeerId in newPeers)
+        {
+            Debug.Log($"New peer detected: {newPeerId}");
+            if (WebRTCEngine.Instance.IsHost)
+            {
+                // Host sends current player info to all peers
+                PlayerManager.Instance.SendAllPlayerInfo();
+            }
+            else if (newPeerId == WebRTCEngine.Instance.LocalPeerId)
+            {
+                // If we're the new peer, request player info update
+                PlayerManager.Instance.RequestPlayerInfo();
+            }
+        }
+
+        knownPeers = new HashSet<string>(peerIds);
+    }
+
 
     private void SubscribeToPeerChannel(string peerId)
     {
         string channelName = NetworkEngine.Instance.GetPeerChannelName(peerId);
-        EventChannelManager.Instance.SubscribeToChannel(channelName, HandlePeerMessage);
+        //EventChannelManager.Instance.SubscribeToChannel(channelName, HandlePeerMessage);
     }
 
-    private void HandlePeerMessage(string message)
-    {
-        string[] parts = message.Split(':');
-        if (parts.Length < 3) return;
-
-        string messageType = parts[0];
-        string senderPeerId = parts[1];
-
-        switch (messageType)
-        {
-            case "SetPlayerInfo":
-                if (parts.Length == 4)
-                {
-                    string playerName = parts[2];
-                    string prefabName = parts[3];
-                    PlayerManager.Instance.SetPlayerInfo(senderPeerId, playerName, prefabName);
-                    if (PlayerManager.Instance.AreAllPlayersReady())
-                    {
-                        SpawnPlayers();
-                    }
-                }
-                break;
-        }
-    }
 
     private void OnMultiplayerChannelEvent(string eventData)
     {
@@ -215,42 +217,15 @@ public class MultiplayerManager : MonoBehaviour
         return null;
     }
 
-    private void SpawnPlayers()
-    {
-        if (!WebRTCEngine.Instance.IsHost) return;
 
-        FindSpawnPoints();
-
-        if (spawnPoints.Count == 0) return;
-
-        List<Transform> availableSpawnPoints = new List<Transform>(spawnPoints);
-        var playersToSpawn = PlayerManager.Instance.GetPlayersNeedingSpawn();
-
-        foreach (var player in playersToSpawn)
-        {
-            if (availableSpawnPoints.Count > 0)
-            {
-                int spawnIndex = Random.Range(0, availableSpawnPoints.Count);
-                Transform spawnPoint = availableSpawnPoints[spawnIndex];
-                RequestObjectSpawn(player.prefabName, spawnPoint.position, spawnPoint.forward);
-                availableSpawnPoints.RemoveAt(spawnIndex);
-            }
-        }
-    }
-
-    private void FindSpawnPoints()
-    {
-        spawnPoints = new List<Transform>(GameObject.FindGameObjectsWithTag("Spawnpoint").Select(go => go.transform));
-
-        if (spawnPoints.Count == 0)
-        {
-            Debug.LogError("No spawn points found! Make sure to tag spawn points with 'Spawnpoint'");
-        }
-    }
 
 
     private void OnDestroy()
     {
+        if (WebRTCEngine.Instance != null)
+        {
+            WebRTCEngine.Instance.OnPeerListUpdated -= HandlePeerListUpdated;
+        }
         EventChannelManager.Instance.UnsubscribeFromChannel(MultiplayerChannelName, OnMultiplayerChannelEvent);
     }
 }

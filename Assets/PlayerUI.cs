@@ -1,100 +1,129 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
 
 public class PlayerUI : MonoBehaviour
 {
     [SerializeField] private TMP_InputField nameInputField;
     [SerializeField] private Button[] characterButtons;
-    [SerializeField] private Button setReadyButton;
-    [SerializeField] private Image setReadyButtonImage;
+    [SerializeField] private Button readyButton;
     [SerializeField] private Color readyColor = Color.green;
     [SerializeField] private Color notReadyColor = Color.red;
-    [SerializeField] private Color selectedButtonColor = Color.yellow; // New selection color
+    [SerializeField] private Color selectedCharacterColor = Color.yellow;
     private string selectedPrefabName;
     private bool isReady = false;
-    private const string PlayerChannelName = "MultiplayerChannel";
-    private Color[] originalButtonColors; // To store original button colors
+    private Button lastSelectedCharacterButton;
 
     private void Start()
     {
+        if (!ValidateComponents())
+        {
+            Debug.LogError("PlayerUI: Some components are not assigned. Please check the Inspector.");
+            return;
+        }
         InitializeUI();
+    }
+
+    private bool ValidateComponents()
+    {
+        return nameInputField != null && characterButtons != null && characterButtons.Length > 0 && readyButton != null;
     }
 
     private void InitializeUI()
     {
-        originalButtonColors = new Color[characterButtons.Length];
-        for (int i = 0; i < characterButtons.Length; i++)
+        foreach (var button in characterButtons)
         {
-            string prefabName = characterButtons[i].name;
-            int index = i; // Capture the index for the lambda
-            characterButtons[i].onClick.AddListener(() => SelectCharacter(prefabName, index));
-            originalButtonColors[i] = characterButtons[i].image.color; // Store original color
+            button.onClick.AddListener(() => SelectCharacter(button));
         }
-        setReadyButton.onClick.AddListener(SetPlayerReady);
+        readyButton.onClick.AddListener(ToggleReady);
         UpdateReadyButtonColor();
         nameInputField.onValueChanged.AddListener(UpdateName);
+        string savedName = PlayerPrefs.GetString("PlayerName", "");
+        if (!string.IsNullOrEmpty(savedName))
+        {
+            nameInputField.text = savedName;
+            UpdateName(savedName);
+        }
     }
 
-    private void SelectCharacter(string prefabName, int selectedIndex)
+    private void SelectCharacter(Button selectedButton)
     {
-        selectedPrefabName = prefabName;
-        Debug.Log($"Selected character: {prefabName}");
-
-        // Update button colors
-        for (int i = 0; i < characterButtons.Length; i++)
+        if (lastSelectedCharacterButton != null)
         {
-            if (i == selectedIndex)
-            {
-                characterButtons[i].image.color = selectedButtonColor;
-            }
-            else
-            {
-                characterButtons[i].image.color = originalButtonColors[i];
-            }
+            lastSelectedCharacterButton.GetComponent<Image>().color = Color.white;
         }
 
-        UpdateReadyButtonInteractability();
+        selectedPrefabName = selectedButton.name;
+        lastSelectedCharacterButton = selectedButton;
+        selectedButton.GetComponent<Image>().color = selectedCharacterColor;
+
+        Debug.Log($"Selected character: {selectedPrefabName}");
+        UpdatePlayerInfo();
     }
 
     private void UpdateName(string newName)
     {
+        PlayerPrefs.SetString("PlayerName", newName);
+        UpdatePlayerInfo();
+    }
+
+    private void UpdatePlayerInfo()
+    {
+        if (!string.IsNullOrEmpty(nameInputField.text) && !string.IsNullOrEmpty(selectedPrefabName))
+        {
+            PlayerManager.Instance.SetLocalPlayerInfo(nameInputField.text, selectedPrefabName, isReady);
+        }
         UpdateReadyButtonInteractability();
     }
 
-    private void UpdateReadyButtonInteractability()
-    {
-        setReadyButton.interactable = !string.IsNullOrEmpty(nameInputField.text) && !string.IsNullOrEmpty(selectedPrefabName);
-    }
-
-    private void SetPlayerReady()
+    private void ToggleReady()
     {
         if (string.IsNullOrEmpty(nameInputField.text) || string.IsNullOrEmpty(selectedPrefabName))
         {
-            Debug.LogWarning("Cannot set player ready: Name or character not selected");
+            Debug.LogWarning("Cannot toggle ready: Name or character not selected");
             return;
         }
-        string localPeerId = WebRTCEngine.Instance.LocalPeerId;
-        // Send player info message
-        string playerInfoMessage = $"PlayerInfo:{localPeerId}:{nameInputField.text}:{selectedPrefabName}";
-        EventChannelManager.Instance.RaiseNetworkEvent(PlayerChannelName, playerInfoMessage);
-        // Send player ready message
-        string playerReadyMessage = $"PlayerReady:{localPeerId}";
-        EventChannelManager.Instance.RaiseNetworkEvent(PlayerChannelName, playerReadyMessage);
-        isReady = true;
+        isReady = !isReady;
+        UpdatePlayerInfo();
         UpdateReadyButtonColor();
-        setReadyButton.interactable = false;
-        Debug.Log($"Player {nameInputField.text} is ready with character {selectedPrefabName}");
-
-        // Disable all character buttons when ready
-        foreach (Button button in characterButtons)
+        if (isReady)
         {
-            button.interactable = false;
+            PlayerManager.Instance.SetPlayerReady(WebRTCEngine.Instance.LocalPeerId);
         }
+        else
+        {
+            PlayerManager.Instance.SetPlayerNotReady(WebRTCEngine.Instance.LocalPeerId);
+        }
+        Debug.Log($"Player {nameInputField.text} ready status toggled to: {isReady}");
     }
 
     private void UpdateReadyButtonColor()
     {
-        setReadyButtonImage.color = isReady ? readyColor : notReadyColor;
+        Image buttonImage = readyButton.GetComponent<Image>();
+        if (buttonImage != null)
+        {
+            buttonImage.color = isReady ? readyColor : notReadyColor;
+        }
+        TextMeshProUGUI buttonText = readyButton.GetComponentInChildren<TextMeshProUGUI>();
+        if (buttonText != null)
+        {
+            buttonText.text = isReady ? "Ready" : "Not Ready";
+        }
+    }
+
+    private void UpdateReadyButtonInteractability()
+    {
+        readyButton.interactable = !string.IsNullOrEmpty(nameInputField.text) && !string.IsNullOrEmpty(selectedPrefabName);
+    }
+
+    private void Update()
+    {
+        // Ensure the last selected character button stays visually selected
+        if (lastSelectedCharacterButton != null &&
+            EventSystem.current.currentSelectedGameObject != lastSelectedCharacterButton.gameObject)
+        {
+            lastSelectedCharacterButton.GetComponent<Image>().color = selectedCharacterColor;
+        }
     }
 }

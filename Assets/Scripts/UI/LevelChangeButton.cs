@@ -8,14 +8,19 @@ public class LevelChangeButton : MonoBehaviour
 
     private void Start()
     {
+        if (changeLevelButton == null)
+        {
+            Debug.LogError("Change Level Button not assigned in the inspector!");
+            return;
+        }
+
         changeLevelButton.onClick.AddListener(AttemptLevelChange);
         UpdateButtonInteractability();
-        PlayerManager.Instance.OnPlayersReadyChanged += UpdateButtonInteractability;
     }
 
-    private void OnDestroy()
+    private void Update()
     {
-        PlayerManager.Instance.OnPlayersReadyChanged -= UpdateButtonInteractability;
+        UpdateButtonInteractability();
     }
 
     public void SetDesiredLevel(MultiplayerLevelSO eventLevelSO)
@@ -25,20 +30,19 @@ public class LevelChangeButton : MonoBehaviour
 
     private void AttemptLevelChange()
     {
-        ChangeLevel(desiredLevelSO);
-
-        if (PlayerManager.Instance.AreAllPlayersReady())
+        if (PlayerManager.Instance.AreAllPlayersReady() && WebRTCEngine.Instance.IsHost)
         {
+            ChangeLevel(desiredLevelSO);
         }
         else
         {
-            Debug.Log("Cannot change level: Not all players are ready");
+            Debug.Log("Cannot change level: Not all conditions are met");
         }
     }
 
     public void ChangeLevel(MultiplayerLevelSO level)
     {
-        if (desiredLevelSO != null)
+        if (level != null)
         {
             EventChannelManager.Instance.RaiseNetworkEvent("LevelEventChannel", "ChangeLevel:" + level.sceneName);
         }
@@ -50,6 +54,15 @@ public class LevelChangeButton : MonoBehaviour
 
     private void UpdateButtonInteractability()
     {
-        changeLevelButton.interactable = PlayerManager.Instance.AreAllPlayersReady();
+        bool canChangeLevelAreAllPlayersReady = PlayerManager.Instance.AreAllPlayersReady();
+        bool isHost = WebRTCEngine.Instance.IsHost;
+
+
+        changeLevelButton.interactable = canChangeLevelAreAllPlayersReady && isHost;
+
+        if (changeLevelButton.interactable)
+        {
+            Debug.Log($"Level change button is interactable. All players ready: {canChangeLevelAreAllPlayersReady}, Is host: {isHost}, Player count: {PlayerManager.Instance.players.Count}");
+        }
     }
 }
